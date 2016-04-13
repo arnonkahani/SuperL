@@ -8,15 +8,15 @@ import BE.Contact;
 import BE.Product;
 import BL.SupplierManager;
 
-
-
 public class supplierView {
 	
 	private SupplierManager _sp;
 	private Scanner scn;
+	private viewUtils _vu;
 	
 	public void createSupplier(){
-		clear();
+		
+		_vu.clear();
 		System.out.println("Supplier Creation");
 		System.out.println("Please enter supplier name:");
 		String name = scn.nextLine();
@@ -45,6 +45,7 @@ public class supplierView {
 	}
 	
 	public Product createProduct(){
+		_vu.clear();
 		System.out.println("Please enter producer name:");
 		String producername = scn.nextLine();
 
@@ -64,45 +65,19 @@ public class supplierView {
 		 
 	}
 	
-	public Product supplierProduct(){
+	public void supplierProduct(){
+		_vu.clear();
 		System.out.println("Please enter producer name:");
 		String supllierID = scn.nextLine();
 		System.out.println("The products of this supplier are:");
-		 return givesAllSupllierProduct(supllierID);	
-	}
-	
-	private void printList(Enum [] list)
-	{
-		for (int i = 0; i < list.length; i++) {
-			System.out.println((i+1) +". " + list[i].name());
-		}
-	}
-	private void printList(String [] list)
-	{
-		for (int i = 0; i < list.length; i++) {
-			System.out.println((i+1) +". " + list[i]);
+		
+		ArrayList<Product> supllierPro = new ArrayList<>();
+		supllierPro=givesAllSupllierProduct(supllierID);
+		for (int j = 0; j < supllierPro.size(); j++) {
+			System.out.println(supllierPro.get(j));
 		}
 	}
 	
-	private void clear()
-	{
-		final String operatingSystem = System.getProperty("os.name");
+	
 
-		if (operatingSystem .contains("Windows")) {
-		    try {
-				Runtime.getRuntime().exec("cls");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else {
-		    try {
-				Runtime.getRuntime().exec("clear");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 }
