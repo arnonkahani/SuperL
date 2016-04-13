@@ -25,16 +25,16 @@ public class SupplyAgreement {
 	}
 	private Supplier _sup;
 	private SupplyType _sType;
-	private Day _day;
+	private ArrayList<Day> _day;
 	private DelevryType _dType;
 	private ArrayList<Discount> _discounts;
 	private ArrayList<ProductPrice> _prices;
 	
-	public SupplyAgreement(Supplier _sup, SupplyType _sType, Day _day, DelevryType _dType,
+	public SupplyAgreement(Supplier _sup, SupplyType _sType, ArrayList<Day> day, DelevryType _dType,
 			ArrayList<Discount> discounts, ArrayList<ProductPrice> products) {
 		this._sup = _sup;
 		this._sType = _sType;
-		this._day = _day;
+		this._day = day;
 		this._dType = _dType;
 		this._discounts = discounts;
 		this._prices = products;
@@ -56,11 +56,11 @@ public class SupplyAgreement {
 		this._sType = _sType;
 	}
 
-	public Day get_day() {
+	public ArrayList<Day> get_day() {
 		return _day;
 	}
 
-	public void set_day(Day _day) {
+	public void set_day(ArrayList<Day> _day) {
 		this._day = _day;
 	}
 

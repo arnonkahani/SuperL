@@ -2,6 +2,7 @@ package BL;
 
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import BE.*;
 import DB.Database;
@@ -13,8 +14,8 @@ public class SupplyAgreementManager {
 	{
 		_db=db;
 	}
-	public void createSupllyAgreement(String supId,SupplyType supplyType,
-			Day day,DelevryType delevryType,ArrayList<Discount> discounts,ArrayList<ProductPrice> products){
+	public void createSupllyAgreement(String supId,SupplyAgreement.SupplyType supplyType,
+			ArrayList<SupplyAgreement.Day> day,SupplyAgreement.DelevryType delevryType,ArrayList<Discount> discounts,ArrayList<ProductPrice> products){
 		Supplier sp = _db.getSupplier(supId);
 		SupplyAgreement sa = new SupplyAgreement(sp, supplyType, day, delevryType,discounts,products);
 		_db.insertSupplyAgreement(sa);
@@ -48,6 +49,12 @@ public class SupplyAgreementManager {
 	
 	public SupplyAgreement getSupplyAgreement(String samID) {
 		return _db.getSupplyAgreement(samID);
+	}
+	public ArrayList<ProductPrice> getProducts(String supplyAgreementID, Set<String> set) {
+		SupplyAgreement sa = getSupplyAgreement(supplyAgreementID);
+		ArrayList<ProductPrice> list = sa.get_prices();
+		list.removeIf(p -> !set.contains(p.get_product().get_name()));
+		return list;
 	}
 
 }

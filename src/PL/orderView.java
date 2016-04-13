@@ -15,18 +15,26 @@ public class orderView {
 	private OrderManager _om;
 	private Scanner scn;
 	private viewUtils _vu;
+	private supplyAgreementView _sav;
 	
 	public void createOrder(){
 		_vu.clear();
 		System.out.println("Please enter suplly areement:");
 		String supllyagreement=scn.nextLine();
-		
+		String[] products = _sav.showAllProducts(supllyagreement);
+		if(products == null)
+		{
+			System.out.println("No products to order");
+			System.out.println("Press enter to return");
+			scn.nextLine();
+			return;
+		}
 		System.out.println("Please enter number of products at the order:");
 		int n=scn.nextInt();
 		Hashtable<String, Integer> product_table  = new Hashtable<String, Integer>();
 		for(int i=0;i<n;i++){
-			System.out.println("Please enter product id :");
-			String m=scn.nextLine();
+			System.out.println("Please enter product number :");
+			String m=products[_vu.listChoose(products)];
 			System.out.println("Please enter amount of the product :");
 			int l=scn.nextInt();
 			product_table.put(m,l);

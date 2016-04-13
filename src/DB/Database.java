@@ -229,6 +229,21 @@ public class Database {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void add(Order or) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList<Order> searchOrder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Order> searchOrder(String columnName, String query) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 	
