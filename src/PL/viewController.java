@@ -78,7 +78,7 @@ public class viewController {
 		
 	}
 	private void searchMenu() {
-		String menu[] = {"Supplier","Producer","Order","Product","Supply Agreement","Quit"};
+		String menu[] = {"Supplier","Producer","Order","Product","Supply Agreement","Return"};
 		int choise = -1;
 		while(true)
 		{
@@ -87,14 +87,21 @@ public class viewController {
 			switch(choise)
 			{
 			case 1:
-				createMenu();
+				_sv.supplierSearch();
 				break;
 			case 2:
-				searchMenu();
+				_sv.producerSearch();
 				break;
 			case 3:
-				otherMenu();
+				_ov.searchMenu();
+				break;
 			case 4:
+				_sv.productSearch();
+				break;
+			case 5:
+				_sav.searchMenu();
+				break;
+			case 6:
 				return;
 			}
 		}
