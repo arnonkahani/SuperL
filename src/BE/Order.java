@@ -12,6 +12,7 @@ public class Order {
 	private Date _date;
 	private ArrayList<ProductPrice> _amountProduct = new ArrayList<>();
 	private float _price = 0;
+	
 	public Order(SupplyAgreement samID,Date date,ArrayList<ProductPrice> amountProduct,float price) {
 		this._samID = samID;
 		this._date = date;

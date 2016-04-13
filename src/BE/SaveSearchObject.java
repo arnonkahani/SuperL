@@ -1,3 +1,4 @@
+package BE;
 
 public interface SaveSearchObject {
 

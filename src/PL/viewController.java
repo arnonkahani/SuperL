@@ -17,20 +17,27 @@ public class viewController {
 	private Scanner scn;
 	private SupplierManager _sp;
 	private SupplyAgreementManager _sam ;
+	private supplyAgreementView _sav;
 	private OrderManager _om;
+	private viewUtils _vu;
+	private supplierView _sv;
 	
 	public viewController(){
+		_vu = new viewUtils();
+		_sav = new supplyAgreementView(_vu, _sam);
+		_sv = new supplierView();
 		
 		run();
 	}
 	public void run()
 	{
-		System.out.println("Menu");
-		String menu[] = {"Create","Search","Print Order","Quit"};
+		
+		String menu[] = {"Create","Search","Other","Quit"};
 		int choise = -1;
 		while(true)
 		{
-		choise = listChoose(menu);
+		System.out.println("Main Menu");
+		choise = _vu.listChoose(menu);
 			switch(choise)
 			{
 			case 1:
@@ -40,40 +47,96 @@ public class viewController {
 				searchMenu();
 				break;
 			case 3:
-				printOrderMenu();
+				otherMenu();
 			case 4:
 				return;
 			}
 		}
 	}
 	
-	private void printOrderMenu() {
-		// TODO Auto-generated method stub
-		
-	}
-	private void searchMenu() {
-		// TODO Auto-generated method stub
-		
-	}
-	private void createMenu() {
-		clear();
-		System.out.println("Creation Menu");
-		String menu[] = {"Supplier","Product","Supply Agreement","Return"};
+	private void otherMenu() {
+		_vu.clear();
+		String menu[] = {"Print Order","Supllied Products From Supplier","Return"};
 		int choise = -1;
 		while(true)
 		{
-		choise = listChoose(menu);
+			System.out.println("Other Menu");
+			choise = _vu.listChoose(menu);
 			switch(choise)
 			{
 			case 1:
-				createSupplier();
+				_sv.supplierProduct();
+				break;
+			case 2:
+				_sv.createProduct();
+				break;
+			case 3:
+				return;
+			}
+		}
+		
+	}
+	private void searchMenu() {
+		String menu[] = {"Supplier","Producer","Order","Product","Supply Agreement","Quit"};
+		int choise = -1;
+		while(true)
+		{
+		System.out.println("Search Menu");
+		choise = _vu.listChoose(menu);
+			switch(choise)
+			{
+			case 1:
+				createMenu();
 				break;
 			case 2:
 				searchMenu();
 				break;
 			case 3:
+				otherMenu();
+			case 4:
+				return;
+			}
+		}
+		
+	}
+	private void createMenu() {
+<<<<<<< Updated upstream
+		clear();
+		System.out.println("Creation Menu");
+		String menu[] = {"Supplier","Product","Supply Agreement","Return"};
+=======
+		_vu.clear();
+		
+		String menu[] = {"Supplier","Product","Supply Agreement","Order","Return"};
+>>>>>>> Stashed changes
+		int choise = -1;
+		while(true)
+		{
+			System.out.println("Creation Menu");
+			choise = _vu.listChoose(menu);
+			switch(choise)
+			{
+			case 1:
+				_sv.createSupplier();
+				break;
+			case 2:
+<<<<<<< Updated upstream
+				searchMenu();
+				break;
+			case 3:
 				printOrderMenu();
 			case 4:
+=======
+				_sv.createProduct();
+				break;
+			case 3:
+				_sav.createSupplyAgreement();
+				break;
+			case 4:
+				createOrder();
+				break;
+			case 5:
+>>>>>>> Stashed changes
 				return;
 			}
 		}
@@ -81,6 +144,7 @@ public class viewController {
 	}
 	
 	
+<<<<<<< Updated upstream
 	private int listChoose(String[] menu) {
 		int choise = -1;
 		boolean error = false;
@@ -177,6 +241,8 @@ public class viewController {
 	private void clear()
 	{
 		final String operatingSystem = System.getProperty("os.name");
+=======
+>>>>>>> Stashed changes
 
 		if (operatingSystem .contains("Windows")) {
 		    try {

@@ -22,12 +22,14 @@ public class supplyAgreementView {
 	}
 	public void createSupplyAgreement(){
 		
-		
+		_vu.clear();
+		System.out.println("Create Supplier Agreement");
 		System.out.println("Please enter supplierID:");
 		String supplierid = scn.nextLine();
 		
 		System.out.println("Please enter number of SupplyType:");
-		String supplytype = scn.nextLine();
+		_vu.printList(SupplyAgreement.SupplyType.values());
+		int st = _vu.listChoose(SupplyAgreement.SupplyType.values());
 		
 		System.out.println("Please enter number of days of delevery or enter 0 if there is not day:");
 		int j=scn.nextInt();
@@ -58,7 +60,7 @@ public class supplyAgreementView {
 			ArrayList<String> day = null;
 		}
 		
-		System.out.println("Please enter number of products at the delevery:");
+		System.out.println("Please enter number of products at the agreement:");
 		int n=scn.nextInt();
 		Hashtable<String, Float> product_table  = new Hashtable<String, Float>();
 		for(int i=0;i<n;i++){
@@ -76,11 +78,12 @@ public class supplyAgreementView {
 				dicount.add(createDiscount());
 			}
 		
-		_sam.createSupplyAgreement(supplierid,supplytype,day,product_table,dicount);	
+		_sam.createSupplyAgreement(supplierid,SupplyAgreement.SupplyType.values()[st],daysChoosen,product_table,dicount);	
 	}
 	
 	
 	private Discount createDiscount(){
+		_vu.clear();
 		System.out.println("Please enter product id:");
 		String productid = scn.nextLine();
 		System.out.println("Please enter amount:");

@@ -85,5 +85,25 @@ public class viewUtils {
 		}
 		return choise;
 	}
+	
+	public int listChoose(Enum[] menu) {
+		int choise = -1;
+		boolean error = false;
+		while(choise<0 || choise > menu.length-1){
+			if(error){
+				System.out.println("Out of range try again");
+				error = false;
+			}
+			printList(menu);
+			choise = scn.nextInt();
+			if(choise<0 || choise > menu.length-1)
+			{
+				error = true;
+				clear();
+			}
+				
+		}
+		return choise;
+	}
 
 }
