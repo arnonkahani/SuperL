@@ -13,6 +13,16 @@ public class SupplyAgreement {
 	public enum Day {
 		sunday,monday,tuesday,wednesday,thursday,friday,saturday;
 	}
+	public enum Search{
+		SuppID("sup");
+		
+		public final String columnName;       
+
+	    private Search(String s) {
+	    	columnName = s;
+	    }
+	    
+	}
 	private Supplier _sup;
 	private SupplyType _sType;
 	private Day _day;

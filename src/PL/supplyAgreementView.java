@@ -95,4 +95,27 @@ public class supplyAgreementView {
 	}
 	
 	
+	public void searchMenu(){
+		_vu.clear();
+		ArrayList<String> menu = _vu.getNamesOfEnum(SupplyAgreement.Search.values());
+		menu.add("Return");
+		_vu.clear();
+		int choise = -1;
+		String query;
+		while(true)
+		{
+			System.out.println("Supply Agreement Search Menu");
+			choise = _vu.listChoose(menu);
+			if(choise == menu.size()-1)
+				return;
+			else{
+				query = scn.nextLine();
+				_vu.showResult(_sam.search(choise,query));
+				}
+			}
+		}
+	}
+
+	
+	
 }

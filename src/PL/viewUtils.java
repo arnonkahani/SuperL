@@ -1,6 +1,7 @@
 package PL;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class viewUtils {
@@ -66,6 +67,12 @@ public class viewUtils {
 			System.out.println((i+1) +". " + list[i]);
 		}
 	}
+	public void printList(ArrayList<String> list)
+	{
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println((i+1) +". " + list.get(i));
+		}
+	}
 	public int listChoose(String[] menu) {
 		int choise = -1;
 		boolean error = false;
@@ -77,6 +84,26 @@ public class viewUtils {
 			printList(menu);
 			choise = scn.nextInt();
 			if(choise<0 || choise > menu.length-1)
+			{
+				error = true;
+				clear();
+			}
+				
+		}
+		return choise;
+	}
+	
+	public int listChoose(ArrayList<String> menu) {
+		int choise = -1;
+		boolean error = false;
+		while(choise<0 || choise > menu.size()-1){
+			if(error){
+				System.out.println("Out of range try again");
+				error = false;
+			}
+			printList(menu);
+			choise = scn.nextInt();
+			if(choise<0 || choise > menu.size()-1)
 			{
 				error = true;
 				clear();
@@ -104,6 +131,30 @@ public class viewUtils {
 				
 		}
 		return choise;
+	}
+	
+	public void showResult(ArrayList<Object> result){
+		clear();
+		System.out.println("Search Results");
+		if(result == null)
+			System.out.println("There are no onjects matching this search");
+		else{
+			for (int i = 0; i < result.size(); i++) {
+				System.out.println("---------------- " + (i + 1) + "---------------- ");
+				System.out.println(result.get(i));
+			}
+		System.out.println("Press enter to return");
+		scn.hasNext();
+		}
+		
+	}
+	
+	public ArrayList<String> getNamesOfEnum(Enum[] list){
+		ArrayList<String> ret_list = new ArrayList<>();
+		for (int i = 0; i < list.length; i++) {
+			ret_list.add(list[i].name());
+		}
+		return ret_list;
 	}
 
 }

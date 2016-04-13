@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import BE.Contact;
+import BE.Order;
 import BL.OrderManager;
 
 public class orderView {
@@ -51,6 +52,26 @@ public class orderView {
 			System.out.println(order.get(j));
 		}
 	}
+	
+	public void searchMenu(){
+		_vu.clear();
+		ArrayList<String> menu = _vu.getNamesOfEnum(Order.Search.values());
+		menu.add("Return");
+		_vu.clear();
+		int choise = -1;
+		String query;
+		while(true)
+		{
+			System.out.println("Order Search Menu");
+			choise = _vu.listChoose(menu);
+			if(choise == menu.size()-1)
+				return;
+			else{
+				query = scn.nextLine();
+				_vu.showResult(_om.search(choise,query));
+				}
+			}
+		}
 	
 	
 }
