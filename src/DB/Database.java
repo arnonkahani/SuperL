@@ -229,6 +229,11 @@ public class Database {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Product getProduct(String pid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 	
