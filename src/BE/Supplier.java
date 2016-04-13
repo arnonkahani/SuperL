@@ -4,6 +4,16 @@ import java.util.ArrayList;
 
 public class Supplier {
 
+	public enum Search{
+		ComppanyNumber("CN"),SupplierName("Name");
+		
+		public final String columnName;       
+
+	    private Search(String s) {
+	    	columnName = s;
+	    }
+	}
+	
 	private String _CN;
 	private String _name;
 	private int paymentMethod;
