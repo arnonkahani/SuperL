@@ -79,5 +79,75 @@ public class supplierView {
 	}
 	
 	
-
+	
+	
+	
+	
+	
+	
+	public void productSearch(){
+		_vu.clear();
+		ArrayList<String> menu = _vu.getNamesOfEnum(Product.Search.values());
+		menu.add("Return");
+		_vu.clear();
+		int choise = -1;
+		String query;
+		while(true)
+		{
+			System.out.println("Product Search Menu");
+			choise = _vu.listChoose(menu);
+			if(choise == menu.size()-1)
+				return;
+			else{
+				query = scn.nextLine();
+				_vu.showResult(_sp.search(choise,query));
+				}
+			}
+		}
+	
+	
+	
+	
+	
+	
+	public void producerSearch(){
+		_vu.clear();
+		ArrayList<String> menu = _vu.getNamesOfEnum(Producer.Search.values());
+		menu.add("Return");
+		_vu.clear();
+		int choise = -1;
+		String query;
+		while(true)
+		{
+			System.out.println("Producer Search Menu");
+			choise = _vu.listChoose(menu);
+			if(choise == menu.size()-1)
+				return;
+			else{
+				query = scn.nextLine();
+				_vu.showResult(_sp.search(choise,query));
+				}
+			}
+	}	
+	
+	
+	public void supplierSearch(){
+		_vu.clear();
+		ArrayList<String> menu = _vu.getNamesOfEnum(Supplier.Search.values());
+		menu.add("Return");
+		_vu.clear();
+		int choise = -1;
+		String query;
+		while(true)
+		{
+			System.out.println("Supllier Search Menu");
+			choise = _vu.listChoose(menu);
+			if(choise == menu.size()-1)
+				return;
+			else{
+				query = scn.nextLine();
+				_vu.showResult(_sp.search(choise,query));
+				}
+			}
+	}
 }
