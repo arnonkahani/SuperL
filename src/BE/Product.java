@@ -1,6 +1,18 @@
 package BE;
 
 public class Product {
+	
+
+	public enum Search{
+		ProductName("Name"),ProducerName("ProducerName"),ProducerId("pId");
+		
+		public final String columnName;       
+
+	    private Search(String s) {
+	    	columnName = s;
+	    }
+	}
+	
 	private String _name;
 	private int _weight;
 	private int _daysOfvaid;

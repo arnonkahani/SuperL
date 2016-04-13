@@ -44,7 +44,7 @@ public class supplierView {
 		}
 	}
 	
-	public Product createProduct(){
+	public void createProduct(){
 		_vu.clear();
 		System.out.println("Please enter producer name:");
 		String producername = scn.nextLine();
@@ -61,8 +61,13 @@ public class supplierView {
 		System.out.println("Please enter supplierID:");
 		String supplierid = scn.nextLine();
 		
-		return _sp.createProduct(producername,productname,dayofvalid,weight,supplierid);
-		 
+		
+		try{
+			_sp.createProduct(producername,productname,dayofvalid,weight,supplierid);
+		}
+		catch(Exception e){
+			
+		}		 
 	}
 	
 	public void supplierProduct(){
@@ -71,20 +76,13 @@ public class supplierView {
 		String supllierID = scn.nextLine();
 		System.out.println("The products of this supplier are:");
 		
-		ArrayList<Product> supllierPro = new ArrayList<>();
-		supllierPro=givesAllSupllierProduct(supllierID);
+		ArrayList<Product> supllierPro = getAllSupllierProduct(supllierID);
 		for (int j = 0; j < supllierPro.size(); j++) {
 			System.out.println(supllierPro.get(j));
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+
 	public void productSearch(){
 		_vu.clear();
 		ArrayList<String> menu = _vu.getNamesOfEnum(Product.Search.values());
@@ -104,10 +102,6 @@ public class supplierView {
 				}
 			}
 		}
-	
-	
-	
-	
 	
 	
 	public void producerSearch(){

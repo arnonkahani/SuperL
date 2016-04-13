@@ -13,6 +13,7 @@ public class SupplyAgreement {
 	public enum Day {
 		sunday,monday,tuesday,wednesday,thursday,friday,saturday;
 	}
+
 	public enum Search{
 		SuppID("sup");
 		
