@@ -44,5 +44,9 @@ public class SupplierManager {
 		
 	}
 	
+	public Product givesAllSupllierProduct(String id){
+		//to-do;
+	}
+	
 	
 }
