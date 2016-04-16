@@ -7,30 +7,23 @@ import java.util.ArrayList;
 
 public class Order {
 
-	public enum Search{
-		SuppID("sup");
-		
-		public final String columnName;       
-
-	    private Search(String s) {
-	    	columnName = s;
-	    }
-	    
-	}
-	
+	private String orderID;
 	private SupplyAgreement _samID;
 	private int _weight;
 	private Date _date;
-	private ArrayList<ProductPrice> _amountProduct = new ArrayList<>();
+	private ArrayList<OrderProduct> _amountProduct = new ArrayList<>();
 	private float _price = 0;
 	
-	public Order(SupplyAgreement samID,Date date,ArrayList<ProductPrice> amountProduct,float price) {
+	public Order(SupplyAgreement samID,Date date,ArrayList<OrderProduct> amountProduct,float price) {
 		this._samID = samID;
 		this._date = date;
-		for (ProductPrice product : amountProduct) {
-			_amountProduct.add(new ProductPrice(product));
-			_weight = _weight + (product.get_product().get_weight()*product.get_amount());
+		for (OrderProduct product : amountProduct) {
+			_amountProduct.add(product);
+			_weight = _weight + (product.getAgreementProduct().get_product().get_product().get_weight()*product.getAmount());
 		}
+	}
+	public Order() {
+		// TODO Auto-generated constructor stub
 	}
 	public SupplyAgreement get_samID() {
 		return _samID;
@@ -50,10 +43,10 @@ public class Order {
 	public void set_date(Date _date) {
 		this._date = _date;
 	}
-	public ArrayList<ProductPrice> get_amountProduct() {
+	public ArrayList<OrderProduct> get_amountProduct() {
 		return _amountProduct;
 	}
-	public void set_amountProduct(ArrayList<ProductPrice> _amountProduct) {
+	public void set_amountProduct(ArrayList<OrderProduct> _amountProduct) {
 		this._amountProduct = _amountProduct;
 	}
 	public float get_price() {
@@ -72,10 +65,18 @@ public class Order {
 				+ "Product    Amount     Price\n"
 				+ "---------------------------- \n";
 		String productlist = "";
-		for (ProductPrice product : get_amountProduct()) {
-			productlist = productlist + product.get_product().get_name() + " | " + product.get_amount() + " | " + product.get_price() +"\n";
+		for (OrderProduct product : get_amountProduct()) {
+			productlist = productlist + product.getAgreementProduct().get_product().get_product().get_name() + " | " + product.getAmount() + " | " + product.getPrice() +"\n";
 		}
 		return str + productlist;
 	}
+	public String getOrderID() {
+		return orderID;
+	}
+	public void setOrderID(String orderID) {
+		this.orderID = orderID;
+	}
+	
+
 	
 }

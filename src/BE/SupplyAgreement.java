@@ -14,31 +14,24 @@ public class SupplyAgreement {
 		sunday,monday,tuesday,wednesday,thursday,friday,saturday;
 	}
 
-	public enum Search{
-		SuppID("sup");
-		
-		public final String columnName;       
-
-	    private Search(String s) {
-	    	columnName = s;
-	    }
-	    
-	}
+	private String _supplyID;
 	private Supplier _sup;
 	private SupplyType _sType;
 	private ArrayList<Day> _day;
 	private DelevryType _dType;
-	private ArrayList<Discount> _discounts;
-	private ArrayList<ProductPrice> _prices;
 	
-	public SupplyAgreement(Supplier _sup, SupplyType _sType, ArrayList<Day> day, DelevryType _dType,
-			ArrayList<Discount> discounts, ArrayList<ProductPrice> products) {
+	private ArrayList<AgreementProduct> _prices;
+	
+	public SupplyAgreement(Supplier _sup, SupplyType _sType, ArrayList<Day> day, DelevryType _dType, ArrayList<AgreementProduct> products) {
 		this._sup = _sup;
 		this._sType = _sType;
 		this._day = day;
 		this._dType = _dType;
-		this._discounts = discounts;
 		this._prices = products;
+	}
+
+	public SupplyAgreement() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public Supplier get_sup() {
@@ -73,20 +66,38 @@ public class SupplyAgreement {
 		this._dType = _dType;
 	}
 
-	public ArrayList<Discount> get_discounts() {
-		return _discounts;
-	}
 
-	public void set_discounts(ArrayList<Discount> _discounts) {
-		this._discounts = _discounts;
-	}
-
-	public ArrayList<ProductPrice> get_prices() {
+	public ArrayList<AgreementProduct> get_prices() {
 		return _prices;
 	}
 
-	public void set_prices(ArrayList<ProductPrice> _prices) {
+	public void set_prices(ArrayList<AgreementProduct> _prices) {
 		this._prices = _prices;
+	}
+
+	public void set_day(String string) {
+		_day = new ArrayList<>();
+		for (int i = 0; i < string.length(); i++) {
+			_day.add(Day.values()[Integer.parseInt(String.valueOf(string.charAt(i)))]);
+		}		
+	}
+
+	public void set_dType(String string) {
+		_dType = DelevryType.valueOf(string);
+		
+	}
+
+	public void set_sType(String string) {
+		_sType = SupplyType.valueOf(string);
+		
+	}
+
+	public String get_supplyID() {
+		return _supplyID;
+	}
+
+	public void set_supplyID(String _supplyID) {
+		this._supplyID = _supplyID;
 	}
 
 	

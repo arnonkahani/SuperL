@@ -1,60 +1,95 @@
 package BL;
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import BE.*;
-import DB.Database;
+import BE.SupplyAgreement.*;
+import DB.DB;
 
 public class SupplyAgreementManager {
-	private Database _db;
-	
-	public SupplyAgreementManager(Database db)
-	{
+	private DB _db;
+	private SupplierManager _sm;
+	public SupplyAgreementManager(DB db){
 		_db=db;
 	}
-	public void createSupllyAgreement(String supId,SupplyAgreement.SupplyType supplyType,
-			ArrayList<SupplyAgreement.Day> day,SupplyAgreement.DelevryType delevryType,ArrayList<Discount> discounts,ArrayList<ProductPrice> products){
-		Supplier sp = _db.getSupplier(supId);
-		SupplyAgreement sa = new SupplyAgreement(sp, supplyType, day, delevryType,discounts,products);
-		_db.insertSupplyAgreement(sa);
-		
-		
+
+	public void createSupplyAgreement(String supplierID, SupplyType supplyType, ArrayList<Day> supplyDays,
+			DelevryType delevryType, ArrayList<Discount> discount, HashMap<String, Float> productMap) throws Exception{
+
+	Supplier sp = _sm.getSupplier(supplierID);
+	ArrayList<AgreementProduct> products = new ArrayList<>();
+	ArrayList<SupplierProduct> supplierProducts = sp.get_products();
+	supplierProducts.removeIf(p -> !productMap.keySet().contains(p.get_serial_number()));
+	for (SupplierProduct supplierProduct : supplierProducts) {
+		products.add(new AgreementProduct(supplierProduct, productMap.get(supplierProduct.get_serial_number())));
+	}
+	if(productMap.size() != products.size())
+		throw new Exception();
+	
+	SupplyAgreement sa = new SupplyAgreement(sp, supplyType, supplyDays, delevryType,products);
+	_db.insert(sa);
+	
 	}
 	
-	
-	public float calculateDiscount(String samID,ArrayList<ProductPrice> amounts) {
+	public float calculateDiscount(String samID,ArrayList<OrderProduct> orderProducts) throws SQLException {
 		float price = 0;
-		SupplyAgreement sam = _db.getSupplyAgreement(samID);
-		for (ProductPrice product : amounts) {
-			product.set_price(calculateDiscount(product,product.get_amount(),sam.get_discounts()));
-			 price = price + product.get_price()*product.get_amount();
+		SupplyAgreement sam = getSupplyAgreement(samID);
+		for (OrderProduct product : orderProducts) {
+			product.setPrice(calculateDiscount(product,product.getAmount()));
+			 price = price + product.getPrice()*product.getAmount();
 		}
 		return price;
 	}
 	
-	private float calculateDiscount(ProductPrice pp, int amount,ArrayList<Discount> discounts) {
-		float discount_price = pp.get_price();
-		float original_price = pp.get_price();
-		for (Discount discount : discounts) {
-			if(discount.getProduct().equals(pp.get_product()) 
-					&& (discount.getAmount() < amount) 
-					&& discount_price < original_price*discount.getPrecent())
-				discount_price=original_price*discount.getPrecent();
+	private float calculateDiscount(OrderProduct product, int amount) {
+		float discount_price = product.getPrice();
+		float original_price = product.getPrice();
+		for (Discount discount : product.getAgreementProduct().get_discounts()) {
+			if((discount.get_quantity() < amount) 
+					&& discount_price < original_price*discount.get_precent())
+				discount_price=original_price*discount.get_precent();
 				
 		}
 		return discount_price;
 	}
 	
-	public SupplyAgreement getSupplyAgreement(String samID) {
-		return _db.getSupplyAgreement(samID);
+	public SupplyAgreement getSupplyAgreement(String samID) throws SQLException {
+		SupplyAgreement sa = searchSupplyAgreement(new int[]{1}, new String[]{samID}).get(0);
+		return sa;
 	}
-	public ArrayList<ProductPrice> getProducts(String supplyAgreementID, Set<String> set) {
+	
+	public ArrayList<AgreementProduct> getSubsetProducts(String supplyAgreementID, Set<String> set) throws SQLException {
 		SupplyAgreement sa = getSupplyAgreement(supplyAgreementID);
-		ArrayList<ProductPrice> list = sa.get_prices();
-		list.removeIf(p -> !set.contains(p.get_product().get_name()));
+		ArrayList<AgreementProduct> list = sa.get_prices();
+		list.removeIf(p -> !set.contains(p.get_product().get_serial_number()));
 		return list;
 	}
-
+	
+	public ArrayList<AgreementProduct> getAllProducts() throws SQLException
+	{
+		return searchAgreementProduct(new int[]{0},new String[]{"All"});
+	}
+	
+	public ArrayList<AgreementProduct> searchAgreementProduct(int[] search_field,String[] query) throws SQLException
+	{
+			ArrayList<AgreementProduct> sa = new ArrayList<>();
+			return _db.search(sa,search_field,query,AgreementProduct.class);
+	}
+	
+	public ArrayList<SupplyAgreement> searchSupplyAgreement(int[] search_field,String[] query) throws SQLException
+	{
+			ArrayList<SupplyAgreement> sa = new ArrayList<>();
+			return _db.search(sa,search_field,query,SupplyAgreement.class);
+	}
+	
+	public Discount createDiscount(String productSN, int amount, Float precent) {
+		return new Discount(amount,precent);
+		
+	}
+	
+	
 }

@@ -1,8 +1,12 @@
 package PL;
 
-import java.time.LocalDate;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Scanner;
@@ -31,7 +35,7 @@ public class orderView {
 		}
 		System.out.println("Please enter number of products at the order:");
 		int n=scn.nextInt();
-		Hashtable<String, Integer> product_table  = new Hashtable<String, Integer>();
+		HashMap<String, Integer> product_table  = new HashMap<String, Integer>();
 		for(int i=0;i<n;i++){
 			System.out.println("Please enter product number :");
 			String m=products[_vu.listChoose(products)];
@@ -42,29 +46,30 @@ public class orderView {
 		
 		System.out.println("Please enter the date of order:");
 		String dateS=scn.nextLine();		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
-		LocalDate date = LocalDate.parse(dateS, formatter);
+		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+		Date date = null;
+		try {
+			date = format.parse(dateS);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		_om.createOrder(supllyagreement,product_table,date);
 	}
 	
-	public void printOreder(){
+	public void printOrder(){
 		_vu.clear();
 		
 		System.out.println("Please enter order's number:");
-		String orderNumber=scn.nextLine();
+		String str=scn.nextLine();
 		
-		ArrayList<Product> order = new ArrayList<>();
-		order=printOredersProduct(orderNumber);
-		for (int j = 0; j < order.size(); j++) {
-			System.out.println(order.get(j));
-		}
+		System.out.println(_om.search(1, str).get(0));
 	}
 	
 	public void searchMenu(){
 		_vu.clear();
-		ArrayList<String> menu = _vu.getNamesOfEnum(Order.Search.values());
-		menu.add("Return");
+		String[] menu = _om.getFileds();
 		_vu.clear();
 		int choise = -1;
 		String query;
@@ -72,7 +77,7 @@ public class orderView {
 		{
 			System.out.println("Order Search Menu");
 			choise = _vu.listChoose(menu);
-			if(choise == menu.size()-1)
+			if(choise == menu.length)
 				return;
 			else{
 				query = scn.nextLine();

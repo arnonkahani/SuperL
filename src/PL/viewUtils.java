@@ -133,7 +133,7 @@ public class viewUtils {
 		return choise;
 	}
 	
-	public void showResult(ArrayList<Object> result){
+	public void showResult(ArrayList<?> result){
 		clear();
 		System.out.println("Search Results");
 		if(result == null)
@@ -155,6 +155,16 @@ public class viewUtils {
 			ret_list.add(list[i].name());
 		}
 		return ret_list;
+	}
+	
+	private String[] addReturn(String[] list)
+	{
+		String [] menu = new String[list.length + 1];
+		for (int i = 0; i < list.length; i++) {
+			menu[i] = list[i];
+		}
+		menu[list.length] = "Return";
+		return menu;
 	}
 
 }

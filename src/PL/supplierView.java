@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import BE.Contact;
+import BE.Producer;
 import BE.Product;
+import BE.Supplier;
 import BL.SupplierManager;
 
 public class supplierView {
@@ -76,7 +78,7 @@ public class supplierView {
 		String supllierID = scn.nextLine();
 		System.out.println("The products of this supplier are:");
 		
-		ArrayList<Product> supllierPro = getAllSupllierProduct(supllierID);
+		ArrayList<Product> supllierPro = _sp.getAllSupllierProduct(supllierID);
 		for (int j = 0; j < supllierPro.size(); j++) {
 			System.out.println(supllierPro.get(j));
 		}
@@ -98,7 +100,7 @@ public class supplierView {
 				return;
 			else{
 				query = scn.nextLine();
-				_vu.showResult(_sp.search(choise,query));
+				_vu.showResult(_sp.searchProduct(choise,query));
 				}
 			}
 		}
@@ -119,7 +121,7 @@ public class supplierView {
 				return;
 			else{
 				query = scn.nextLine();
-				_vu.showResult(_sp.search(choise,query));
+				_vu.showResult(_sp.searchProducer(choise,query));
 				}
 			}
 	}	
@@ -140,7 +142,7 @@ public class supplierView {
 				return;
 			else{
 				query = scn.nextLine();
-				_vu.showResult(_sp.search(choise,query));
+				_vu.showResult(_sp.searchSupplier(choise,query));
 				}
 			}
 	}

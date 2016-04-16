@@ -1,11 +1,6 @@
 package PL;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Locale;
+
 import java.util.Scanner;
 
 import javax.xml.bind.ParseConversionEvent;
@@ -66,7 +61,7 @@ public class viewController {
 			switch(choise)
 			{
 			case 1:
-				_ov.printOreder();
+				_ov.printOrder();
 				break;
 			case 2:
 				_sv.supplierProduct();

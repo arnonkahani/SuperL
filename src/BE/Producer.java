@@ -1,14 +1,13 @@
 package BE;
 
-public class Producer {
- 
-	public enum Search{
-		ProducerName("Name");
-		
-		public final String columnName;       
-
-	    private Search(String s) {
-	    	columnName = s;
-	    }
+public class Producer{
+	private String name;
+	
+	
+	public Producer(String Name)
+	{
+		name = Name;
 	}
+	
+	
 }

@@ -1,39 +1,46 @@
 package BL;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+
 
 import BE.*;
-import DB.Database;
+import DB.DB;
 
 public class OrderManager {
 	
-	private Database _db;
+	private DB _db;
 	private SupplyAgreementManager _sam;
 	
-	public OrderManager(Database db,SupplyAgreementManager sam) {
+	public OrderManager(DB db,SupplyAgreementManager sam) {
 		_db = db;
 		_sam = sam;
 	}
 
-	public void createOrder(String supplyAgreementID,HashMap<String, Integer> amounts,Date date){
-		ArrayList<ProductPrice> product_prices = new ArrayList<>();
-		product_prices = _sam.getProducts(supplyAgreementID,amounts.keySet());
-		for (ProductPrice product : product_prices )
+	public void createOrder(String supplyAgreementID,HashMap<String, Integer> amounts,Date date) throws SQLException{
+		ArrayList<AgreementProduct> agreementProducts = new ArrayList<>();
+		ArrayList<OrderProduct> orderProducts = new ArrayList<>();
+		agreementProducts = _sam.getSubsetProducts(supplyAgreementID, amounts.keySet());
+		for (AgreementProduct product : agreementProducts )
 		{
-			product.set_amount(amounts.get(product.get_product().get_name()));
+			orderProducts.add(new OrderProduct(product, product.get_price(), amounts.get(product.get_product().get_product().get_name())));
 		}
-		float price = _sam.calculateDiscount(supplyAgreementID, product_prices);
-		Order or = new Order(_sam.getSupplyAgreement(supplyAgreementID), date, product_prices,price);
-		_db.add(or);
+		float price = _sam.calculateDiscount(supplyAgreementID, orderProducts);
+		Order or = new Order(_sam.getSupplyAgreement(supplyAgreementID), date, orderProducts,price);
+		_db.insert(or);
 	}
 	
 	
-	public ArrayList<Order> search(int search_field,String query)
+	public ArrayList<Order> search(int[] search_field,String[] query) throws SQLException
 	{
-			return _db.searchOrder(Order.Search.values()[search_field].columnName,query);
+		ArrayList<Order> orderSearch = new ArrayList<>();
+			return _db.search(orderSearch,search_field,query,Order.class);
+	}
+
+	public String[] getFileds() {
+		return _db.getSearchFieldView(Order.class);
 	}
 	
 }

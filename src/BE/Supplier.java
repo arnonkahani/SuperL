@@ -2,24 +2,14 @@ package BE;
 
 import java.util.ArrayList;
 
-public class Supplier {
-
-	public enum Search{
-		ComppanyNumber("CN"),SupplierName("Name");
-		
-		public final String columnName;       
-
-	    private Search(String s) {
-	    	columnName = s;
-	    }
-	}
+public class Supplier{
 	
 	private String _CN;
 	private String _name;
 	private int paymentMethod;
 	private String bankNumber;
 	private ArrayList<Contact> _contacts = new ArrayList<>();
-	private ArrayList<Product> _products = new ArrayList<>();
+	private ArrayList<SupplierProduct> _products = new ArrayList<>();
 	
 	public Supplier(String _name,int paymentMethod,String companyNumber){
 		this._name=_name;
@@ -72,12 +62,13 @@ public class Supplier {
 		this._contacts = _contacts;
 	}
 
-	public ArrayList<Product> get_products() {
+	public ArrayList<SupplierProduct> get_products() {
 		return _products;
 	}
 
-	public void set_products(ArrayList<Product> _products) {
+	public void set_products(ArrayList<SupplierProduct> _products) {
 		this._products = _products;
 	}
+	
 }
 	

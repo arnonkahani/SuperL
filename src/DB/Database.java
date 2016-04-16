@@ -7,16 +7,17 @@ import java.util.HashMap;
 
 import BE.Order;
 import BE.Product;
-import BE.ProductPrice;
+import BE.AgreementProduct;
 import BE.Supplier;
 import BE.SupplyAgreement;
 
 public class Database {
 
 	private Connection c = null;
+    private DBquery _dbQuery;
     
-
 	public Database() {
+		createTable();
 		try {
 		      Class.forName("org.sqlite.JDBC");
 		      c = DriverManager.getConnection("jdbc:sqlite:supllier.db");
@@ -30,6 +31,16 @@ public class Database {
 		insert(null);
 	}
 
+
+	public String[] getSearchFieldView(Class object_class){
+		return _dbQuery.getSearchFieldsView(object_class);
+		
+	}
+	
+	public <T> ArrayList<T> search(ArrayList<T> query_result,int[] fileds,String[] query,Class object_class) throws SQLException{
+		return _dbQuery.search(query_result,fileds,query,object_class);
+	}
+	
 	public void insertProduct(String[] values) {
 		Statement stmt = null;
 	    try{
@@ -155,7 +166,7 @@ public class Database {
 	     sql = "CREATE TABLE ORDER_PRODUCT " +
                   "(ORDERID INTEGER NOT NULL," + 
                   "SUPPLYID    INTEGER  NOT NULL, "
-                  +"PIDSUPPLIER DATETIME NOT NULL," +
+                  +"PIDSUPPLIER INTEGER NOT NULL," +
                   "PRICE FLOAT NOT NULL, "
                   + "AMOUNT INTEGER NOT NULL, "
                   + "FOREIGN KEY (ORDERID) REFERENCES ORDERS(ORDERID),"
@@ -187,7 +198,7 @@ public class Database {
 
 
 
-	public void insertOrder(String samID, Date date, ArrayList<ProductPrice> product_prices) {
+	public void insertOrder(String samID, Date date, ArrayList<AgreementProduct> product_prices) {
 		
 		
 		
@@ -200,7 +211,7 @@ public class Database {
 		return null;
 	}
 
-	public ProductPrice getProductFromAgreement(String samID, String ProductID) {
+	public AgreementProduct getProductFromAgreement(String samID, String ProductID) {
 		// TODO Auto-generated method stub
 		return null;
 	}

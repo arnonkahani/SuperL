@@ -2,37 +2,27 @@ package BE;
 
 public class Product {
 	
-
-	public enum Search{
-		ProductName("Name"),ProducerName("ProducerName"),ProducerId("pId");
-		
-		public final String columnName;       
-
-	    private Search(String s) {
-	    	columnName = s;
-	    }
-	}
 	
 	private String _name;
 	private int _weight;
-	private int _daysOfvaid;
+	private int _shelf_life;
 	private Producer _producer;
 	
 	public Product(int _weight, int _daysOfvaid, String name,Producer _producer) {
 		this._weight = _weight;
-		this._daysOfvaid = _daysOfvaid;
+		this._shelf_life = _daysOfvaid;
 		this._producer = _producer;
 		this._name = name;
 	}
 	public Product(int _weight, int _daysOfvaid, String name) {
 		this._weight = _weight;
-		this._daysOfvaid = _daysOfvaid;
+		this._shelf_life = _daysOfvaid;
 		this._name = name;
 	}
 
 	public Product(Product _product) {
 		this._weight = _product._weight;
-		this._daysOfvaid = _product._daysOfvaid;
+		this._shelf_life = _product._shelf_life;
 		this._producer = _product._producer;
 	}
 
@@ -52,12 +42,12 @@ public class Product {
 		this._weight = _weight;
 	}
 
-	public int get_daysOfvaid() {
-		return _daysOfvaid;
+	public int get_shelf_life() {
+		return _shelf_life;
 	}
 
-	public void set_daysOfvaid(int _daysOfvaid) {
-		this._daysOfvaid = _daysOfvaid;
+	public void set_shelf_life(int _daysOfvaid) {
+		this._shelf_life = _daysOfvaid;
 	}
 
 	public Producer get_producer() {
