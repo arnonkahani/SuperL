@@ -13,16 +13,14 @@ public class DBquery {
 
 private Connection c = null;
 private ObjectMaker _objectMaker;
-private HashMap<Class,String[]> search_fields;
-private HashMap<Class,String[]> search_fields_view;
-private HashMap<Class, String> classToTable;
+private DBUtils _utils;
 
-
-	public DBquery(Connection _c)
+	public DBquery(Connection _c,DBUtils utils)
 	{
 		_objectMaker = new ObjectMaker(this);
+		_utils = utils;
 		c = _c;
-		createMap();
+	
 		
 	}
 	public <T> ArrayList<T> search(ArrayList<T> query_result, int[] fileds, String[] query, Class object_class) throws SQLException {
@@ -48,9 +46,9 @@ private HashMap<Class, String> classToTable;
 		ResultSet rs = null;
 		try{
 			s=c.createStatement();
-			String sql="SELECT * FROM "+ classToTable.get(object_class);
+			String sql="SELECT * FROM "+ _utils.getClassToTable().get(object_class);
 			if(search_feild[0]!=0)
-				sql = sql + " WHERE " + search_fields.get(object_class)[search_feild[0]] + " = " + query;
+				sql = sql + " WHERE " + _utils.getSearch_fields().get(object_class)[search_feild[0]] + " = " + query;
 			rs = s.executeQuery(sql);
 			
 		}
@@ -88,28 +86,10 @@ private HashMap<Class, String> classToTable;
 	
 	public String[] getSearchFieldsView(Class object_class)
 	{
-		String [] m = search_fields_view.get(object_class);
+		String [] m = _utils.getSearch_fields_view().get(object_class);
 		return m;
 	}
-	private void createMap()
-	{
-		search_fields = new HashMap<>();
-		search_fields_view = new HashMap<>();
-		search_fields.put(Product.class,new String[]{"All","PID","PRODUCERNAME","WEIGHT","SHELFLIFE"});
-		search_fields_view.put(Product.class,new String[]{"All","Product ID","Producer Name","Weight","Shelf Life"});
-		search_fields.put(SupplierProduct.class,new String[]{"All","PRODUCTSUPLLIERSN","PID","PRODUCERNAME","SUPLLIERCN"});
-		search_fields_view.put(SupplierProduct.class,new String[]{"All","Product Supllier SN","Product ID","Producer","Company Number"});
-		search_fields.put(Supplier.class,new String[]{"All","CN","Name","BANKNUMBER","PAYMENTMETHOD"});
-		search_fields_view.put(Supplier.class,new String[]{"All","Company Number","Name","Bank Number","Payment Method"});
-		search_fields.put(SupplyAgreement.class,new String[]{"All","SupplyID","SUPLLIERCN","DELEVRYTYPE","SUPPLYTYPE","DAY"});
-		search_fields_view.put(SupplyAgreement.class,new String[]{"All","Supply Agreement ID","Company Number","Delevry Type","Supply Type","Days"});
-		search_fields.put(Order.class,new String[]{"All","ORDERID","SUPPLYID","SUPPLYTYPE","DAY"});
-		search_fields_view.put(Order.class,new String[]{"All","Order ID","Supply Agreement ID","Company Number","Delevry Type","Supply Type","Days"});
-		classToTable = new HashMap<>();
-		classToTable.put(Order.class, "ORDER");
-		classToTable.put(Supplier.class, "SUPLLIER");
-		classToTable.put(Product.class, "PRODUCT");
-	}
+
 	public ResultSet search(int i, String string, Class<Producer> class1) {
 		int[] intArr = {i};
 		String[] strArr = {string};

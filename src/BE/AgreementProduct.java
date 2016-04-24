@@ -2,8 +2,8 @@ package BE;
 
 import java.util.ArrayList;
 
-public class AgreementProduct{
-
+public class AgreementProduct implements DBEntity{
+	private SupplyAgreement _sp;
 	private SupplierProduct _product;
 	private ArrayList<Discount> _discounts;
 	private float _price;
@@ -41,6 +41,21 @@ public class AgreementProduct{
 
 	public void set_price(float _price) {
 		this._price = _price;
+	}
+
+
+	public SupplyAgreement get_sp() {
+		return _sp;
+	}
+
+
+	public void set_sp(SupplyAgreement _sp) {
+		this._sp = _sp;
+	}
+
+
+	public String[] getValues() {
+		return new String[]{""+_sp.get_supplyID(),""+_product.get_serial_number(),""+_price};
 	}
 
 

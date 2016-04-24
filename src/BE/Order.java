@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 
-public class Order {
+public class Order implements DBEntity{
 
 	private String orderID;
 	private SupplyAgreement _samID;
@@ -75,6 +75,9 @@ public class Order {
 	}
 	public void setOrderID(String orderID) {
 		this.orderID = orderID;
+	}
+	public String[] getValues() {
+		return new String[]{};
 	}
 	
 

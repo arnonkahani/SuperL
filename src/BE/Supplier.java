@@ -2,7 +2,7 @@ package BE;
 
 import java.util.ArrayList;
 
-public class Supplier{
+public class Supplier implements DBEntity{
 	
 	private String _CN;
 	private String _name;
@@ -68,6 +68,10 @@ public class Supplier{
 
 	public void set_products(ArrayList<SupplierProduct> _products) {
 		this._products = _products;
+	}
+
+	public String[] getValues() {
+		return new String[]{"'"+_CN+"'","'"+_name+"'",""+paymentMethod,""+bankNumber};
 	}
 
 	

@@ -1,7 +1,7 @@
 package BE;
 
-public class Contact {
-
+public class Contact implements DBEntity{
+	private Supplier _supplier;
 	private String _tel;
 	private String _email;
 	private String _name;
@@ -38,6 +38,21 @@ public class Contact {
 	}
 	public void setName(String _name) {
 		this._name = _name;
+	}
+
+
+	public Supplier get_supplier() {
+		return _supplier;
+	}
+
+
+	public void set_supplier(Supplier _supplier) {
+		this._supplier = _supplier;
+	}
+
+
+	public String[] getValues() {
+		return new String[]{};
 	}
 	
 	

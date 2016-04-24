@@ -1,6 +1,6 @@
 package BE;
 
-public class Producer{
+public class Producer implements DBEntity{
 	private String name;
 	
 	
@@ -12,5 +12,14 @@ public class Producer{
 	public String toString()
 	{
 		return "Producer: " + name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String[] getValues() {
+		return new String[]{"'"+name+"'"};
 	}
 }

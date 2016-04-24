@@ -1,6 +1,7 @@
 package BE;
 
-public class SupplierProduct{
+public class SupplierProduct implements DBEntity{
+	private Supplier _supplier;
 	private Product _product;
 	private String _serial_number;
 	
@@ -25,6 +26,18 @@ public class SupplierProduct{
 	public String toString()
 	{
 		return "SN: " + _serial_number +" " + _product.toString();	
+	}
+
+	public String[] getValues() {
+		return new String[]{"'"+_supplier.get_CN()+"'",""+_product.get_pid()};
+	}
+
+	public Supplier get_supplier() {
+		return _supplier;
+	}
+
+	public void set_supplier(Supplier _supplier) {
+		this._supplier = _supplier;
 	}
 	
 	

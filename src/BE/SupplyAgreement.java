@@ -2,8 +2,10 @@ package BE;
 
 import java.util.ArrayList;
 
+import org.omg.DynamicAny._DynEnumStub;
 
-public class SupplyAgreement {
+
+public class SupplyAgreement implements DBEntity {
 	public enum SupplyType {
 		SetDay,OnDemand;
 	}
@@ -100,7 +102,20 @@ public class SupplyAgreement {
 		this._supplyID = _supplyID;
 	}
 
+	public String[] getValues() {
+		return new String[]{"'" + _sup.get_CN() + "'","'"+_sType.name()+"'","'"+getDays()+"'","'"+_dType.name()+"'"};
+	}
+
+	private String getDays(){
+		if(_day.size() == 0)
+			return "0";
+		String day_string ="";
+		
+		for (Day day : _day) {
 	
+		}
+		return day_string;
+	}
 
 	
 	

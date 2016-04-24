@@ -11,6 +11,7 @@ import BE.SupplyAgreement;
 public class DB {
 	private DBquery _query;
 	private DBinsert _insert;
+	private DBUtils _utilty;
 	private Connection _c;
 	public DB(){
 		try {
@@ -21,8 +22,9 @@ public class DB {
 		      System.exit(0);
 		    }
 		    System.out.println("Opened supplier database successfully");
-		_query = new DBquery(_c);
-		_insert = new DBinsert(_c);
+		_utilty = new DBUtils();
+		_query = new DBquery(_c,_utilty);
+		_insert = new DBinsert(_c,_utilty);
 	}
 	
 	public String[] getSearchFieldView(Class object_class){

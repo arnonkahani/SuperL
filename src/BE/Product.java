@@ -1,8 +1,8 @@
 package BE;
 
-public class Product {
+public class Product implements DBEntity{
 	
-	
+	private int _pid;
 	private String _name;
 	private int _weight;
 	private int _shelf_life;
@@ -62,6 +62,22 @@ public class Product {
 	{
 		return "Name :" + _name + " Weight: " + _weight + " Shelf Life: " + _shelf_life + " " + _producer.toString();
 		
+	}
+	@Override
+	public String[] getValues() {
+		String[] values = new String[4];
+		values[0] = "'"+_name+"'";
+		values[1] = ""+_weight;
+		values[2] = ""+_shelf_life;
+		values[3] = "'"+_producer.getName()+"'";
+		
+		return values;
+	}
+	public int get_pid() {
+		return _pid;
+	}
+	public void set_pid(int _pid) {
+		this._pid = _pid;
 	}
 
 	
