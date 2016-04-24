@@ -76,7 +76,7 @@ public class viewUtils {
 	public int listChoose(String[] menu) {
 		int choise = -1;
 		boolean error = false;
-		while(choise<0 || choise > menu.length-1){
+		while(choise<1 || choise > menu.length){
 			if(error){
 				System.out.println("Out of range try again");
 				error = false;
@@ -102,7 +102,7 @@ public class viewUtils {
 				error = false;
 			}
 			printList(menu);
-			choise = scn.nextInt();
+			choise = scn.nextInt() -1;
 			if(choise<0 || choise > menu.size()-1)
 			{
 				error = true;
@@ -157,7 +157,7 @@ public class viewUtils {
 		return ret_list;
 	}
 	
-	private String[] addReturn(String[] list)
+	public String[] createMenu(String[] list)
 	{
 		String [] menu = new String[list.length + 1];
 		for (int i = 0; i < list.length; i++) {
@@ -166,5 +166,6 @@ public class viewUtils {
 		menu[list.length] = "Return";
 		return menu;
 	}
+	
 
 }

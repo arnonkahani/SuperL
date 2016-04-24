@@ -17,7 +17,7 @@ public class Database {
     private DBquery _dbQuery;
     
 	public Database() {
-		createTable();
+		//createTable();
 		try {
 		      Class.forName("org.sqlite.JDBC");
 		      c = DriverManager.getConnection("jdbc:sqlite:supllier.db");
@@ -26,9 +26,9 @@ public class Database {
 		      System.exit(0);
 		    }
 		    System.out.println("Opened supplier database successfully");
-		drop();
-		create();
-		insert(null);
+		//drop();
+		//create();
+		//insert(null);
 	}
 
 

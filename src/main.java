@@ -1,9 +1,10 @@
 import DB.Database;
+import PL.viewController;
 
 public class main {
 
 	public static void main(String[] args) {
-		Database db =  new Database();
+		viewController v = new viewController();
 
 	}
 

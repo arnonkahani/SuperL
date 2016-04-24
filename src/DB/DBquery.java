@@ -88,7 +88,8 @@ private HashMap<Class, String> classToTable;
 	
 	public String[] getSearchFieldsView(Class object_class)
 	{
-		return search_fields_view.get(object_class);
+		String [] m = search_fields_view.get(object_class);
+		return m;
 	}
 	private void createMap()
 	{

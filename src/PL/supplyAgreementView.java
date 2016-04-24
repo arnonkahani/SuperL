@@ -1,11 +1,14 @@
 package PL;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Scanner;
 
+import BE.AgreementProduct;
 import BE.Discount;
+import BE.SupplyAgreement;
 import BE.SupplyAgreement.*;
 import BL.SupplyAgreementManager;
 
@@ -83,16 +86,21 @@ public class supplyAgreementView {
 		
 		
 		
-		_sam.createSupplyAgreement(supplierID,supplyType,supplyDays,delevryType,dicount,product_table);	
+		try {
+			_sam.createSupplyAgreement(supplierID,supplyType,supplyDays,delevryType,dicount,product_table);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 	
 
 	
 	
-	public void searchMenu(){
+	public void searchSupplyAgreement(){
 		_vu.clear();
-		ArrayList<String> menu = _vu.getNamesOfEnum(Search.values());
-		menu.add("Return");
+		String[] menu = _sam.getSearchFields(SupplyAgreement.class);
+		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;
 		String query;
@@ -100,17 +108,51 @@ public class supplyAgreementView {
 		{
 			System.out.println("Supply Agreement Search Menu");
 			choise = _vu.listChoose(menu);
-			if(choise == menu.size()-1)
+			if(menu[choise].equals("Return"))
 				return;
 			else{
 				query = scn.nextLine();
-				_vu.showResult(_sam.search(choise,query));
+				try {
+					_vu.showResult(_sam.searchSupplyAgreement(new int[]{choise},new String[]{query}));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				}
 			}
 		}
-	public String[] showAllProducts(String supllyagreement) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public void searchSupplyAgreementProduct(){
+		_vu.clear();
+		String[] menu = _sam.getSearchFields(AgreementProduct.class);
+		menu = _vu.createMenu(menu);
+		_vu.clear();
+		int choise = -1;
+		String query;
+		while(true)
+		{
+			System.out.println("Supply Agreement Product Search Menu");
+			choise = _vu.listChoose(menu);
+			if(menu[choise-1].equals("Return"))
+				return;
+			else{
+				query = scn.nextLine();
+				try {
+					_vu.showResult(_sam.searchAgreementProduct(new int[]{choise-1},new String[]{query}));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+			}
+		}
+	
+	
+	public String[] getAllProductsNames(String supllyagreement) throws SQLException {
+		return _sam.getAllProductsNames(supllyagreement);
+	}
+	public String[] getAllProductsSN(String supllyagreement) throws SQLException {
+		return _sam.getAllProductsSN(supllyagreement);
 	}
 	}
 

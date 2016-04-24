@@ -9,5 +9,8 @@ public class Producer{
 		name = Name;
 	}
 	
-	
+	public String toString()
+	{
+		return "Producer: " + name;
+	}
 }

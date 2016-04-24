@@ -66,8 +66,12 @@ public class SupplierManager {
 	public Supplier getSupplier(String supplierID) throws SQLException {
 		return searchSupplier(new int[]{1}, new String[]{supplierID}).get(0);
 		}
-	
 
+
+	public String [] getSearchFields(Class be_class) {
+		return _db.getSearchFieldView(be_class);
+	}
+	
 	
 	
 }

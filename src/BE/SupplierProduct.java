@@ -22,5 +22,10 @@ public class SupplierProduct{
 		return _product;
 	}
 	
+	public String toString()
+	{
+		return "SN: " + _serial_number +" " + _product.toString();	
+	}
+	
 	
 }

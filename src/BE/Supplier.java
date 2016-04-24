@@ -69,6 +69,7 @@ public class Supplier{
 	public void set_products(ArrayList<SupplierProduct> _products) {
 		this._products = _products;
 	}
+
 	
 }
 	

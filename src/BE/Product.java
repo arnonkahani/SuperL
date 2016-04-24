@@ -58,7 +58,11 @@ public class Product {
 		this._producer = _producer;
 	}
 
-
+	public String toString()
+	{
+		return "Name :" + _name + " Weight: " + _weight + " Shelf Life: " + _shelf_life + " " + _producer.toString();
+		
+	}
 
 	
 	

@@ -90,6 +90,35 @@ public class SupplyAgreementManager {
 		return new Discount(amount,precent);
 		
 	}
+
+	public String[] getAllProductsNames(String supllyagreement) throws SQLException {
+		SupplyAgreement sa = getSupplyAgreement(supllyagreement);
+		ArrayList<AgreementProduct> list = sa.get_prices();
+		if(list.size()==0)
+			return null;
+		String [] return_list = new String[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			return_list[i] = list.get(i).get_product().get_product().get_name();
+			
+		}
+		return return_list;
+	}
+	public String[] getAllProductsSN(String supllyagreement) throws SQLException {
+		SupplyAgreement sa = getSupplyAgreement(supllyagreement);
+		ArrayList<AgreementProduct> list = sa.get_prices();
+		if(list.size()==0)
+			return null;
+		String [] return_list = new String[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			return_list[i] = list.get(i).get_product().get_serial_number();
+			
+		}
+		return return_list;
+	}
+
+	public String[] getSearchFields(Class be_class) {
+		return _db.getSearchFieldView(be_class);
+	}
 	
 	
 }

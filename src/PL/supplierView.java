@@ -1,6 +1,7 @@
 package PL;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,6 +9,7 @@ import BE.Contact;
 import BE.Producer;
 import BE.Product;
 import BE.Supplier;
+import BE.SupplierProduct;
 import BL.SupplierManager;
 
 public class supplierView {
@@ -16,6 +18,12 @@ public class supplierView {
 	private Scanner scn;
 	private viewUtils _vu;
 	
+	public supplierView(viewUtils vu, SupplierManager sm) {
+		_sp=sm;
+		_vu=vu;
+		scn = new Scanner(System.in);
+	}
+
 	public void createSupplier(){
 		
 		_vu.clear();
@@ -54,7 +62,7 @@ public class supplierView {
 		System.out.println("Please enter product name:");
 		String productname = scn.nextLine();
 		
-		System.out.println("Please enter daysOfValid:");
+		System.out.println("Please enter Shelf Life:");
 		int dayofvalid = scn.nextInt();
 		
 		System.out.println("Please enter weight:");
@@ -72,13 +80,19 @@ public class supplierView {
 		}		 
 	}
 	
-	public void supplierProduct(){
+	public void supplierProducts(){
 		_vu.clear();
-		System.out.println("Please enter producer name:");
+		System.out.println("Please enter supplier company number:");
 		String supllierID = scn.nextLine();
 		System.out.println("The products of this supplier are:");
 		
-		ArrayList<Product> supllierPro = _sp.getAllSupllierProduct(supllierID);
+		ArrayList<SupplierProduct> supllierPro = new ArrayList<>();
+		try {
+			supllierPro = _sp.getAllSupllierProduct(supllierID);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (int j = 0; j < supllierPro.size(); j++) {
 			System.out.println(supllierPro.get(j));
 		}
@@ -87,20 +101,24 @@ public class supplierView {
 
 	public void productSearch(){
 		_vu.clear();
-		ArrayList<String> menu = _vu.getNamesOfEnum(Product.Search.values());
-		menu.add("Return");
-		_vu.clear();
+		String [] menu = _sp.getSearchFields(Product.class);
+		menu = _vu.createMenu(menu);
 		int choise = -1;
 		String query;
 		while(true)
 		{
 			System.out.println("Product Search Menu");
 			choise = _vu.listChoose(menu);
-			if(choise == menu.size()-1)
+			if(menu[choise].equals("Return"))
 				return;
 			else{
 				query = scn.nextLine();
-				_vu.showResult(_sp.searchProduct(choise,query));
+				try {
+					_vu.showResult(_sp.searchProduct(new int[]{choise},new String[]{query}));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				}
 			}
 		}
@@ -108,8 +126,8 @@ public class supplierView {
 	
 	public void producerSearch(){
 		_vu.clear();
-		ArrayList<String> menu = _vu.getNamesOfEnum(Producer.Search.values());
-		menu.add("Return");
+		String [] menu = _sp.getSearchFields(Producer.class);
+		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;
 		String query;
@@ -117,11 +135,16 @@ public class supplierView {
 		{
 			System.out.println("Producer Search Menu");
 			choise = _vu.listChoose(menu);
-			if(choise == menu.size()-1)
+			if(menu[choise].equals("Return"))
 				return;
 			else{
 				query = scn.nextLine();
-				_vu.showResult(_sp.searchProducer(choise,query));
+				try {
+					_vu.showResult(_sp.searchProducer(new int []{choise},new String []{query}));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				}
 			}
 	}	
@@ -129,8 +152,9 @@ public class supplierView {
 	
 	public void supplierSearch(){
 		_vu.clear();
-		ArrayList<String> menu = _vu.getNamesOfEnum(Supplier.Search.values());
-		menu.add("Return");
+		String [] menu = _sp.getSearchFields(Supplier.class);
+		
+		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;
 		String query;
@@ -138,12 +162,18 @@ public class supplierView {
 		{
 			System.out.println("Supllier Search Menu");
 			choise = _vu.listChoose(menu);
-			if(choise == menu.size()-1)
+			if(menu[choise-1].equals("Return"))
 				return;
 			else{
 				query = scn.nextLine();
-				_vu.showResult(_sp.searchSupplier(choise,query));
+				try {
+					_vu.showResult(_sp.searchSupplier(new int[]{choise-1},new String[]{query}));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				}
 			}
 	}
+	
 }

@@ -3,25 +3,27 @@ package PL;
 
 import java.util.Scanner;
 
-import javax.xml.bind.ParseConversionEvent;
+
 
 import BE.*;
 import BL.*;
 
 public class viewController {
 	private Scanner scn;
-	private SupplierManager _sp;
-	private SupplyAgreementManager _sam ;
+	
 	private supplyAgreementView _sav;
-	private OrderManager _om;
 	private viewUtils _vu;
 	private supplierView _sv;
 	private orderView _ov;
+	private BusinessController _bc; 
 	
 	public viewController(){
+		_bc = new BusinessController(); 
 		_vu = new viewUtils();
-		_sav = new supplyAgreementView(_vu, _sam);
-		_sv = new supplierView();
+		_sav = new supplyAgreementView(_vu,_bc.get_sam());
+		_sv = new supplierView(_vu,_bc.get_sm());
+		_ov = new orderView(_vu,_bc.get_om(),_sav);
+		
 		
 		run();
 	}
@@ -44,6 +46,7 @@ public class viewController {
 				break;
 			case 3:
 				otherMenu();
+				break;
 			case 4:
 				return;
 			}
@@ -64,7 +67,7 @@ public class viewController {
 				_ov.printOrder();
 				break;
 			case 2:
-				_sv.supplierProduct();
+				_sv.supplierProducts();
 				break;
 			case 3:
 				return;
@@ -94,7 +97,7 @@ public class viewController {
 				_sv.productSearch();
 				break;
 			case 5:
-				_sav.searchMenu();
+				_sav.searchSupplyAgreement();
 				break;
 			case 6:
 				return;
@@ -106,11 +109,9 @@ public class viewController {
 		_vu.clear();
 		System.out.println("Creation Menu");
 		String menu[] = {"Supplier","Product","Supply Agreement","Order","Return"};
-		_vu.clear();
 		int choise = -1;
 		while(true)
 		{
-			System.out.println("Creation Menu");
 			choise = _vu.listChoose(menu);
 			switch(choise)
 			{
