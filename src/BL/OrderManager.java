@@ -9,31 +9,24 @@ import java.util.HashMap;
 import BE.*;
 import DB.DB;
 
-public class OrderManager {
+public class OrderManager extends LogicManager{
 	
-	private DB _db;
+	
 	private SupplyAgreementManager _sam;
 	
 	public OrderManager(DB db,SupplyAgreementManager sam) {
-		_db = db;
+		super(db);
 		_sam = sam;
 	}
-
-	public void createOrder(SupplyAgreement supllyagreement,ArrayList<OrderProduct> product_table,Date date) throws SQLException{
-		float price = _sam.calculateDiscount(product_table);
-		Order or = new Order(supllyagreement, date, product_table,price);
+	@Override
+	public void create(Object[] values) throws SQLException{
+		float price = _sam.calculateDiscount((ArrayList<OrderProduct>)values[1]);
+		Order or = new Order((SupplyAgreement)values[0],(Date)values[2], (ArrayList<OrderProduct>)values[1],price);
 		_db.insert(or);
 	}
 	
 	
-	public ArrayList<Order> search(int[] search_field,String[] query) throws SQLException
-	{
-	
-			return _db.search(search_field,query,Order.class);
-	}
 
-	public String[] getFileds() {
-		return _db.getSearchFieldView(Order.class);
-	}
+	
 	
 }

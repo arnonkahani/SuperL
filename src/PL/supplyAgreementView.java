@@ -92,7 +92,7 @@ public class supplyAgreementView {
 		
 		
 		try {
-			_sam.createSupplyAgreement(supplierID,supplyType,supplyDays,delevryType,product_table);
+			_sam.create(new Object[]{supplierID,supplyType,supplyDays,delevryType,product_table});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,7 +104,7 @@ public class supplyAgreementView {
 	
 	public void searchSupplyAgreement(){
 		_vu.clear();
-		String[] menu = _sam.getSearchFields(SupplyAgreement.class);
+		String[] menu = _sam.getFileds(SupplyAgreement.class);
 		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;
@@ -134,7 +134,7 @@ public class supplyAgreementView {
 	
 	public void searchSupplyAgreementProduct(){
 		_vu.clear();
-		String[] menu = _sam.getSearchFields(AgreementProduct.class);
+		String[] menu = _sam.getFileds(AgreementProduct.class);
 		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;

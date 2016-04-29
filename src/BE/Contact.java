@@ -2,6 +2,8 @@ package BE;
 
 public class Contact{
 	private Supplier _supplier;
+	
+	
 	private String _tel;
 	private String _email;
 	private String _name;

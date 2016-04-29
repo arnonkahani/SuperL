@@ -46,41 +46,17 @@ public class supplierView {
 			String _email = _vu.tryGetEmail();
 			System.out.println("Please name of contact:");
 			String _name = _vu.tryGetOnlyLetters();
-			contacts.add(_sp.createContact(_name, _email, _tel));
+			contacts.add(new Contact(_name, _email, _tel));
 		}
 		try{
-			_sp.createSupplier(cn,name,paymentmethod,banknumber,contacts);
+			_sp.create(new Object[]{cn,name,paymentmethod,banknumber,contacts});
 		}
 		catch(SQLException e){
 			System.out.println(_vu.exceptionHandler(e));
 		}
 	}
 	
-	public void createProduct(){
-		_vu.clear();
-		System.out.println("Please enter producer name:");
-		String producername = _vu.tryGetOnlyLetters();
 
-		System.out.println("Please enter product name:");
-		String productname = scn.nextLine();
-		
-		System.out.println("Please enter Shelf Life:");
-		int dayofvalid = Integer.parseInt(_vu.tryGetNumber());
-		
-		System.out.println("Please enter weight:");
-		float weight =Float.parseFloat(_vu.tryGetFloat());
-		
-		System.out.println("Please enter supplierCN:");
-		String supplierid = _vu.tryGetNumber();
-		
-		
-		try{
-			_sp.createProduct(producername,productname,dayofvalid,weight,supplierid);
-		}
-		catch(SQLException e){
-			System.out.println(_vu.exceptionHandler(e));
-		}		 
-	}
 	
 	public void supplierProducts(){
 		_vu.clear();
@@ -94,7 +70,7 @@ public class supplierView {
 		
 		ArrayList<SupplierProduct> supllierPro = new ArrayList<>();
 		try {
-			supllierPro = _sp.getAllSupllierProduct(supllierID);
+			supllierPro = _sp.search(new int[]{4}, new String[]{supllierID}, SupplierProduct.class);
 		} catch (SQLException e) {
 			_vu.exceptionHandler(e);
 			return;
@@ -105,69 +81,12 @@ public class supplierView {
 	}
 	
 
-	public void productSearch(){
-		_vu.clear();
-		String [] menu = _sp.getSearchFields(Product.class);
-		menu = _vu.createMenu(menu);
-		int choise = -1;
-		String query;
-		while(true)
-		{
-			System.out.println("Product Search Menu");
-			choise = _vu.listChoose(menu);
-			if(menu[choise-1].equals("Return"))
-				return;
-
-			else{
-				if(!menu[choise-1].equals("All")){
-					System.out.println("Enter query: ");
-					query = scn.nextLine();
-				}
-				else
-					query = "";
-				try {
-					_vu.showResult(_sp.searchProduct(new int[]{choise-1},new String[]{query}));
-				} catch (SQLException e) {
-					_vu.exceptionHandler(e);
-				}
-				}
-			}
-		}
 	
-	
-	public void producerSearch(){
-		_vu.clear();
-		String [] menu = _sp.getSearchFields(Producer.class);
-		menu = _vu.createMenu(menu);
-		_vu.clear();
-		int choise = -1;
-		String query;
-		while(true)
-		{
-			System.out.println("Producer Search Menu");
-			choise = _vu.listChoose(menu);
-			if(menu[choise-1].equals("Return"))
-				return;
-			else{
-				if(!menu[choise-1].equals("All")){
-					System.out.println("Enter query: ");
-					query = scn.nextLine();
-				}
-				else
-					query = "";
-				try {
-					_vu.showResult(_sp.searchProducer(new int []{choise},new String []{query}));
-				} catch (SQLException e) {
-					System.out.println(_vu.exceptionHandler(e));
-				}
-				}
-			}
-	}	
 	
 	
 	public void supplierSearch(){
 		_vu.clear();
-		String [] menu = _sp.getSearchFields(Supplier.class);
+		String [] menu = _sp.getFileds(Supplier.class);
 		
 		menu = _vu.createMenu(menu);
 		_vu.clear();
@@ -187,7 +106,7 @@ public class supplierView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_sp.searchSupplier(new int[]{choise-1},new String[]{query}));
+					_vu.showResult(_sp.search(new int[]{choise-1},new String[]{query},Supplier.class));
 				} catch (SQLException e) {
 					System.out.println(_vu.exceptionHandler(e));
 				}
@@ -198,7 +117,7 @@ public class supplierView {
 	public String chooseCN()
 	{
 		try {
-			ArrayList<Supplier> sup = _sp.searchSupplier(new int[]{0}, new String[]{""});
+			ArrayList<Supplier> sup = _sp.search(new int[]{0}, new String[]{""},Supplier.class);
 			for (int i = 0; i < sup.size(); i++) {
 				System.out.println(i + ". " + sup.get(0));
 			}
@@ -213,7 +132,7 @@ public class supplierView {
 	public SupplierProduct chooseSupplierProduct(String CN)
 	{
 		try {
-			ArrayList<SupplierProduct> sup = _sp.getAllSupllierProduct(CN);
+			ArrayList<SupplierProduct> sup = _sp.search(new int[]{4}, new String[]{CN}, SupplierProduct.class);;
 			for (int i = 0; i < sup.size(); i++) {
 				System.out.println(i + ". " + sup.get(0));
 			}

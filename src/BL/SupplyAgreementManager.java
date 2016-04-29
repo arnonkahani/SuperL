@@ -10,25 +10,20 @@ import BE.*;
 import BE.SupplyAgreement.*;
 import DB.DB;
 
-public class SupplyAgreementManager {
-	private DB _db;
+public class SupplyAgreementManager extends LogicManager{
+	
 	private SupplierManager _sm;
 	public SupplyAgreementManager(DB db,SupplierManager sm){
-		_db=db;
+		super(db);
 		_sm = sm;
 	}
-
-	public void createSupplyAgreement(String supplierID, int supplyType, ArrayList<Day> supplyDays,
-			int delevryType, ArrayList<AgreementProduct> products) throws Exception{
 	
+	@Override
+	public void create(Object[] values) throws SQLException{
 	
-	
-	Supplier sp = _sm.getSupplier(supplierID);
-	
-	
-	System.out.println("size:" + products.size());
-	
-	SupplyAgreement sa = new SupplyAgreement(sp, SupplyType.values()[supplyType], supplyDays, DelevryType.values()[delevryType],products);
+	Supplier sp = _sm.getSupplier((String)values[0]);
+	SupplyAgreement sa = new SupplyAgreement(sp, SupplyType.values()[(int)values[1]], 
+			(ArrayList<Day>)values[2], DelevryType.values()[(int)values[3]],(ArrayList<AgreementProduct>)values[4]);
 	_db.insert(sa);
 	
 	}
@@ -111,9 +106,6 @@ public class SupplyAgreementManager {
 		return return_list;
 	}
 
-	public String[] getSearchFields(Class be_class) {
-		return _db.getSearchFieldView(be_class);
-	}
 
 	public ArrayList<SupplyAgreement> getAllSupllyAgreemnt() throws SQLException{
 		return _db.search(new int[]{0}, new String[]{""}, SupplyAgreement.class);

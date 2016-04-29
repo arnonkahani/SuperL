@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
 
+import BE.Order;
 import BE.OrderProduct;
 import BE.SupplyAgreement;
 import BL.OrderManager;
@@ -64,7 +65,7 @@ public class orderView {
 		}
 		
 		
-		_om.createOrder(supllyagreement,product_table,date);
+		_om.create(new Object[]{supllyagreement,product_table,date});
 		} catch (SQLException e1) {
 			System.out.println(_vu.exceptionHandler(e1));
 		}
@@ -77,7 +78,7 @@ public class orderView {
 		String str=scn.nextLine();
 		
 		try {
-			System.out.println(_om.search(new int[]{1}, new String[]{str}).get(0));
+			System.out.println(_om.search(new int[]{1}, new String[]{str},Order.class).get(0));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +87,7 @@ public class orderView {
 	
 	public void searchMenu(){
 		_vu.clear();
-		String[] menu = _om.getFileds();
+		String[] menu = _om.getFileds(Order.class);
 		menu = _vu.createMenu(menu);
 		int choise = -1;
 		String query;
@@ -104,7 +105,7 @@ public class orderView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_om.search(new int[]{choise-1},new String[]{query}));
+					_vu.showResult(_om.search(new int[]{choise-1},new String[]{query},Order.class));
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

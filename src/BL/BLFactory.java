@@ -2,19 +2,21 @@ package BL;
 
 import DB.DB;
 
-public class BusinessController {
+public class BLFactory {
 
 	DB _db;
 	OrderManager _om;
 	SupplierManager _sm;
 	SupplyAgreementManager _sam;
+	ProductManager _pm;
 	
-	public BusinessController()
+	public BLFactory(boolean first_time)
 	{
-		_db = new DB();
+		_db = new DB(first_time);
 		_sm = new SupplierManager(_db);
 		_sam = new SupplyAgreementManager(_db,_sm);
 		_om = new OrderManager(_db, _sam);
+		_pm = new ProductManager(_db);
 	}
 
 	public OrderManager get_om() {
@@ -39,6 +41,10 @@ public class BusinessController {
 
 	public void set_sam(SupplyAgreementManager _sam) {
 		this._sam = _sam;
+	}
+
+	public ProductManager get_pm() {
+		return _pm;
 	}
 	
 	

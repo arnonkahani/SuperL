@@ -12,7 +12,7 @@ public class DB {
 	
 	private DAOFactory _factory;
 	private Connection _c;
-	public DB(){
+	public DB(boolean first_time){
 		try {
 		      Class.forName("org.sqlite.JDBC");
 		      _c = DriverManager.getConnection("jdbc:sqlite:supllier.db");
@@ -27,9 +27,10 @@ public class DB {
 		    System.out.println("Opened supplier database successfully");
 		
 		_factory = new DAOFactory(_c);
-		
-		//drop();
-		//create();
+		if(first_time){
+		drop();
+		create();
+		}
 	}
 	
 	private void drop() {

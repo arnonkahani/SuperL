@@ -15,14 +15,19 @@ public class viewController {
 	private viewUtils _vu;
 	private supplierView _sv;
 	private orderView _ov;
-	private BusinessController _bc; 
+	private BLFactory _bc; 
+	private ProductView _pv;
 	
 	public viewController(){
-		_bc = new BusinessController(); 
+		_vu = new viewUtils();
+		System.out.println("Is this the first time the program is running? Yes = 1 , No = 0");
+		boolean first_time = 1 == Integer.parseInt(_vu.tryGetNumber(0, 1));
+		_bc = new BLFactory(first_time); 
 		_vu = new viewUtils();
 		_sv = new supplierView(_vu,_bc.get_sm());
 		_sav = new supplyAgreementView(_vu,_bc.get_sam(),_sv);
 		_ov = new orderView(_vu,_bc.get_om(),_sav);
+		_pv = new ProductView(_bc.get_pm(), _vu);
 		
 		
 		run();
@@ -91,7 +96,7 @@ public class viewController {
 				_ov.searchMenu();
 				break;
 			case 3:
-				_sv.productSearch();
+				_pv.productSearch();
 				break;
 			case 4:
 				_sav.searchSupplyAgreement();
@@ -116,7 +121,7 @@ public class viewController {
 				_sv.createSupplier();
 				break;
 			case 2:
-				_sv.createProduct();
+				_pv.createProduct();
 				break;
 			case 3:
 				_sav.createSupplyAgreement();
