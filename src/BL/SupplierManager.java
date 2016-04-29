@@ -8,27 +8,26 @@ import DB.DB;
 
 public class SupplierManager {
 	
-	private DB _db = new DB();
+	private DB _db;
 	
 	public SupplierManager(DB db) {
 		_db = db;
 	}
 	
 	
-	public void createSupplier(String name, int paymentMethod, String bankNumber, ArrayList<Contact> contacts){
-		Supplier sp = new Supplier(name, paymentMethod, bankNumber);
-		for (Contact contact : contacts) {
-			sp.addContact(contact);
-		}
+	public void createSupplier(String name, String cn, int paymentMethod, String bankNumber, ArrayList<Contact> contacts) throws SQLException{
+		Supplier sp = new Supplier(cn,name, paymentMethod, bankNumber);
+		sp.set_contacts(contacts);
 		_db.insert(sp);
 	}
 	
 	
-	public void createProduct(String producerName,String productName,int dayOfvalid,int weight,String supId){
+	public void createProduct(String producerName,String productName,int dayOfvalid,float weight,String supId) throws SQLException{
 		Producer producer= new Producer(producerName);
 		Product pr = new Product(weight,dayOfvalid,productName);
 		pr.set_producer(producer);
 		SupplierProduct supplierProduct = new SupplierProduct(pr);
+		supplierProduct.set_supplier(supId);
 		_db.insert(supplierProduct);
 		
 	}
@@ -38,28 +37,26 @@ public class SupplierManager {
 	}
 	
 	public ArrayList<SupplierProduct> getAllSupllierProduct(String id) throws SQLException{
-		return searchProductSupplier(new int[]{2},new String[]{"id"});
+		return searchProductSupplier(new int[]{4},new String[]{id});
 	}
 	public ArrayList<SupplierProduct> searchProductSupplier(int search_field[],String query[]) throws SQLException
 	{
-			ArrayList<SupplierProduct> searchResult = new ArrayList<>();
-			return _db.search(searchResult,search_field,query,SupplierProduct.class);
+		
+			return _db.search(search_field,query,SupplierProduct.class);
 	}
 	public ArrayList<Supplier> searchSupplier(int search_field[],String query[]) throws SQLException
 	{
-			ArrayList<Supplier> searchResult = new ArrayList<>();
-			return _db.search(searchResult,search_field,query,Supplier.class);
+			return _db.search(search_field,query,Supplier.class);
 	}
 	public ArrayList<Producer> searchProducer(int[] search_field,String[] query) throws SQLException
 	{
-			ArrayList<Producer> searchResult = new ArrayList<>();
-			return _db.search(searchResult,search_field,query,Producer.class);
+			return _db.search(search_field,query,Producer.class);
 	}
 	
 	public ArrayList<Product> searchProduct(int[] search_field,String[] query) throws SQLException
 	{
-			ArrayList<Product> searchResult = new ArrayList<>();
-			return _db.search(searchResult,search_field,query,Product.class);
+			
+			return _db.search(search_field,query,Product.class);
 	}
 
 

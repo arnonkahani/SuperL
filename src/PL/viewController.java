@@ -20,8 +20,8 @@ public class viewController {
 	public viewController(){
 		_bc = new BusinessController(); 
 		_vu = new viewUtils();
-		_sav = new supplyAgreementView(_vu,_bc.get_sam());
 		_sv = new supplierView(_vu,_bc.get_sm());
+		_sav = new supplyAgreementView(_vu,_bc.get_sam(),_sv);
 		_ov = new orderView(_vu,_bc.get_om(),_sav);
 		
 		
@@ -76,7 +76,7 @@ public class viewController {
 		
 	}
 	private void searchMenu() {
-		String menu[] = {"Supplier","Producer","Order","Product","Supply Agreement","Return"};
+		String menu[] = {"Supplier","Order","Product","Supply Agreement","Return"};
 		int choise = -1;
 		while(true)
 		{
@@ -88,18 +88,15 @@ public class viewController {
 				_sv.supplierSearch();
 				break;
 			case 2:
-				_sv.producerSearch();
-				break;
-			case 3:
 				_ov.searchMenu();
 				break;
-			case 4:
+			case 3:
 				_sv.productSearch();
 				break;
-			case 5:
+			case 4:
 				_sav.searchSupplyAgreement();
 				break;
-			case 6:
+			case 5:
 				return;
 			}
 		}
@@ -107,11 +104,11 @@ public class viewController {
 	}
 	private void createMenu() {
 		_vu.clear();
-		System.out.println("Creation Menu");
 		String menu[] = {"Supplier","Product","Supply Agreement","Order","Return"};
 		int choise = -1;
 		while(true)
 		{
+			System.out.println("Creation Menu");
 			choise = _vu.listChoose(menu);
 			switch(choise)
 			{

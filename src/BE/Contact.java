@@ -1,6 +1,6 @@
 package BE;
 
-public class Contact implements DBEntity{
+public class Contact{
 	private Supplier _supplier;
 	private String _tel;
 	private String _email;
@@ -18,6 +18,11 @@ public class Contact implements DBEntity{
 		this._tel = contact._tel;
 		this._name = contact._name;
 		this._email = contact._email;
+	}
+
+
+	public Contact() {
+		// TODO Auto-generated constructor stub
 	}
 
 
@@ -50,10 +55,10 @@ public class Contact implements DBEntity{
 		this._supplier = _supplier;
 	}
 
-
-	public String[] getValues() {
-		return new String[]{};
+	public String toString(){
+		return "Tel: " + _tel + " Name: " + _name + " Email: " + _email; 
 	}
+
 	
 	
 }

@@ -2,18 +2,20 @@ package BE;
 
 import java.util.ArrayList;
 
-import org.omg.DynamicAny._DynEnumStub;
 
 
-public class SupplyAgreement implements DBEntity {
+public class SupplyAgreement{
 	public enum SupplyType {
-		SetDay,OnDemand;
+		setday,ondemand;
 	}
 	public enum DelevryType {
-		comeTake,deliver;
+		cometake,deliver;
 	}
 	public enum Day {
-		sunday,monday,tuesday,wednesday,thursday,friday,saturday;
+		sunday(1),monday(2),tuesday(3),wednesday(4),thursday(5),friday(6),saturday(7);
+		private final int id;
+		Day(int id) { this.id = id; }
+	    public int getValue() { return id; }
 	}
 
 	private String _supplyID;
@@ -85,12 +87,12 @@ public class SupplyAgreement implements DBEntity {
 	}
 
 	public void set_dType(String string) {
-		_dType = DelevryType.valueOf(string);
+		_dType = DelevryType.valueOf(string.toLowerCase());
 		
 	}
 
 	public void set_sType(String string) {
-		_sType = SupplyType.valueOf(string);
+		_sType = SupplyType.valueOf(string.toLowerCase());
 		
 	}
 
@@ -102,19 +104,8 @@ public class SupplyAgreement implements DBEntity {
 		this._supplyID = _supplyID;
 	}
 
-	public String[] getValues() {
-		return new String[]{"'" + _sup.get_CN() + "'","'"+_sType.name()+"'","'"+getDays()+"'","'"+_dType.name()+"'"};
-	}
-
-	private String getDays(){
-		if(_day.size() == 0)
-			return "0";
-		String day_string ="";
-		
-		for (Day day : _day) {
-	
-		}
-		return day_string;
+	public String toString(){
+		return "Supply ID: " + _supplyID + " Supplier CN: " + _sup.get_CN() + " Delevry Type: " + _dType + " Supply Type: " + _sType;
 	}
 
 	

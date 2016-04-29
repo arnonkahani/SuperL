@@ -28,70 +28,76 @@ public class supplierView {
 		
 		_vu.clear();
 		System.out.println("Supplier Creation");
+		System.out.println("Please enter company number:");
+		String cn = _vu.tryGetNumber();
 		System.out.println("Please enter supplier name:");
-		String name = scn.nextLine();
+		String name = _vu.tryGetOnlyLetters();
 		System.out.println("Please enter supplier payment method (0-10):");
-		int paymentmethod = scn.nextInt();
+		int paymentmethod = Integer.parseInt(_vu.tryGetNumber(0,10));
 		System.out.println("Please enter supplier bank number:");
-		String banknumber = scn.nextLine();
+		String banknumber = _vu.tryGetNumber();
 		System.out.println("Please enter number of contacts:");
-		int i = scn.nextInt();
+		int i = Integer.parseInt(_vu.tryGetNumber());
 		ArrayList<Contact> contacts = new ArrayList<>();
 		for (int j = 0; j < i; j++) {
 			System.out.println("Please enter tel number of contact:");
-			String _tel = scn.nextLine();
+			String _tel = _vu.tryGetNumber();
 			System.out.println("Please email of contact:");
-			String _email = scn.nextLine();
+			String _email = _vu.tryGetEmail();
 			System.out.println("Please name of contact:");
-			String _name = scn.nextLine();
+			String _name = _vu.tryGetOnlyLetters();
 			contacts.add(_sp.createContact(_name, _email, _tel));
 		}
 		try{
-			_sp.createSupplier(name,paymentmethod,banknumber,contacts);
+			_sp.createSupplier(cn,name,paymentmethod,banknumber,contacts);
 		}
-		catch(Exception e){
-			
+		catch(SQLException e){
+			System.out.println(_vu.exceptionHandler(e));
 		}
 	}
 	
 	public void createProduct(){
 		_vu.clear();
 		System.out.println("Please enter producer name:");
-		String producername = scn.nextLine();
+		String producername = _vu.tryGetOnlyLetters();
 
 		System.out.println("Please enter product name:");
 		String productname = scn.nextLine();
 		
 		System.out.println("Please enter Shelf Life:");
-		int dayofvalid = scn.nextInt();
+		int dayofvalid = Integer.parseInt(_vu.tryGetNumber());
 		
 		System.out.println("Please enter weight:");
-		int weight = scn.nextInt();
+		float weight =Float.parseFloat(_vu.tryGetFloat());
 		
-		System.out.println("Please enter supplierID:");
-		String supplierid = scn.nextLine();
+		System.out.println("Please enter supplierCN:");
+		String supplierid = _vu.tryGetNumber();
 		
 		
 		try{
 			_sp.createProduct(producername,productname,dayofvalid,weight,supplierid);
 		}
-		catch(Exception e){
-			
+		catch(SQLException e){
+			System.out.println(_vu.exceptionHandler(e));
 		}		 
 	}
 	
 	public void supplierProducts(){
 		_vu.clear();
 		System.out.println("Please enter supplier company number:");
-		String supllierID = scn.nextLine();
+		String supllierID = _vu.tryGetNumber();
+		supplierProducts(supllierID);
+	}
+	
+	public void supplierProducts(String supllierID){
 		System.out.println("The products of this supplier are:");
 		
 		ArrayList<SupplierProduct> supllierPro = new ArrayList<>();
 		try {
 			supllierPro = _sp.getAllSupllierProduct(supllierID);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_vu.exceptionHandler(e);
+			return;
 		}
 		for (int j = 0; j < supllierPro.size(); j++) {
 			System.out.println(supllierPro.get(j));
@@ -109,15 +115,20 @@ public class supplierView {
 		{
 			System.out.println("Product Search Menu");
 			choise = _vu.listChoose(menu);
-			if(menu[choise].equals("Return"))
+			if(menu[choise-1].equals("Return"))
 				return;
+
 			else{
-				query = scn.nextLine();
+				if(!menu[choise-1].equals("All")){
+					System.out.println("Enter query: ");
+					query = scn.nextLine();
+				}
+				else
+					query = "";
 				try {
-					_vu.showResult(_sp.searchProduct(new int[]{choise},new String[]{query}));
+					_vu.showResult(_sp.searchProduct(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					_vu.exceptionHandler(e);
 				}
 				}
 			}
@@ -135,15 +146,19 @@ public class supplierView {
 		{
 			System.out.println("Producer Search Menu");
 			choise = _vu.listChoose(menu);
-			if(menu[choise].equals("Return"))
+			if(menu[choise-1].equals("Return"))
 				return;
 			else{
-				query = scn.nextLine();
+				if(!menu[choise-1].equals("All")){
+					System.out.println("Enter query: ");
+					query = scn.nextLine();
+				}
+				else
+					query = "";
 				try {
 					_vu.showResult(_sp.searchProducer(new int []{choise},new String []{query}));
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(_vu.exceptionHandler(e));
 				}
 				}
 			}
@@ -165,15 +180,50 @@ public class supplierView {
 			if(menu[choise-1].equals("Return"))
 				return;
 			else{
-				query = scn.nextLine();
+				if(!menu[choise-1].equals("All")){
+					System.out.println("Enter query: ");
+					query = scn.nextLine();
+				}
+				else
+					query = "";
 				try {
 					_vu.showResult(_sp.searchSupplier(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(_vu.exceptionHandler(e));
 				}
 				}
 			}
+	}
+	
+	public String chooseCN()
+	{
+		try {
+			ArrayList<Supplier> sup = _sp.searchSupplier(new int[]{0}, new String[]{""});
+			for (int i = 0; i < sup.size(); i++) {
+				System.out.println(i + ". " + sup.get(0));
+			}
+			System.out.println("Choose supplier: ");
+			int choise = Integer.parseInt(_vu.tryGetNumber(0, sup.size() - 1));
+			return sup.get(choise).get_CN();
+		} catch (SQLException e) {
+			_vu.exceptionHandler(e);
+			return "";
+		}
+	}
+	public SupplierProduct chooseSupplierProduct(String CN)
+	{
+		try {
+			ArrayList<SupplierProduct> sup = _sp.getAllSupllierProduct(CN);
+			for (int i = 0; i < sup.size(); i++) {
+				System.out.println(i + ". " + sup.get(0));
+			}
+			System.out.println("Choose product: ");
+			int choise = Integer.parseInt(_vu.tryGetNumber(0, sup.size() - 1));
+			return sup.get(choise);
+		} catch (SQLException e) {
+			_vu.exceptionHandler(e);
+			return null;
+		}
 	}
 	
 }

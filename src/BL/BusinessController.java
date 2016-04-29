@@ -12,9 +12,9 @@ public class BusinessController {
 	public BusinessController()
 	{
 		_db = new DB();
-		_sam = new SupplyAgreementManager(_db);
-		_om = new OrderManager(_db, _sam);
 		_sm = new SupplierManager(_db);
+		_sam = new SupplyAgreementManager(_db,_sm);
+		_om = new OrderManager(_db, _sam);
 	}
 
 	public OrderManager get_om() {

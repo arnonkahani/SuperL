@@ -1,6 +1,7 @@
 package PL;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -82,7 +83,7 @@ public class viewUtils {
 				error = false;
 			}
 			printList(menu);
-			choise = scn.nextInt();
+			choise = Integer.parseInt(tryGetNumber());
 			if(choise<0 || choise > menu.length-1)
 			{
 				error = true;
@@ -122,7 +123,7 @@ public class viewUtils {
 				error = false;
 			}
 			printList(menu);
-			choise = scn.nextInt();
+			choise = Integer.parseInt(tryGetNumber());
 			if(choise<0 || choise > menu.length-1)
 			{
 				error = true;
@@ -136,7 +137,7 @@ public class viewUtils {
 	public void showResult(ArrayList<?> result){
 		clear();
 		System.out.println("Search Results");
-		if(result == null)
+		if(result.size() == 0)
 			System.out.println("There are no onjects matching this search");
 		else{
 			for (int i = 0; i < result.size(); i++) {
@@ -144,7 +145,7 @@ public class viewUtils {
 				System.out.println(result.get(i));
 			}
 		System.out.println("Press enter to return");
-		scn.hasNext();
+		scn.nextLine();
 		}
 		
 	}
@@ -165,6 +166,96 @@ public class viewUtils {
 		}
 		menu[list.length] = "Return";
 		return menu;
+	}
+	
+	public String exceptionHandler(SQLException e)
+	{
+		String exp_msg = "";
+		if(e.getMessage().startsWith("UNIQUE"))
+        {
+           String msg = e.getMessage();
+           String object = msg.substring(msg.indexOf(':')+1, msg.indexOf('.'));
+           exp_msg = "There is a" + object.toLowerCase() + " with the same " + msg.substring(msg.indexOf('.')+1).toLowerCase();
+        }
+        else if(e.getMessage().startsWith("FOREIGN"))
+        {
+                  exp_msg = "There is a problem with forgein relations";
+        }
+        else{
+        	exp_msg = e.getClass().getName() + ": " + e.getMessage() ;
+         
+        }
+		return exp_msg;
+	}
+
+	public String tryGetNumber() {
+		
+		String num = scn.nextLine();
+		while(!isOnlyInt(num))
+		{
+			System.out.println("Please enter number:");
+			num = scn.nextLine();
+		}
+		return num;
+	}
+
+	public String tryGetOnlyLetters() {
+		String str = scn.nextLine();
+		while(!isOnlyLetters(str))
+		{
+			System.out.println("Please enter only letters:");
+			str = scn.nextLine();
+		}
+		return str;
+	}
+
+	private boolean isOnlyLetters(String str) {
+		return str.matches("[a-zA-Z]+");
+	}
+
+	public String tryGetNumber(int i, int j) {
+		
+		String num = tryGetNumber();
+		while(Integer.parseInt(num)<i || Integer.parseInt(num)>j){
+			System.out.println("Out of range");
+			num = scn.nextLine();
+			while(!isOnlyInt(num))
+			{
+				System.out.println("Please enter number:");
+				num = scn.nextLine();
+			}
+			
+		}
+		return num;
+		
+			
+	}
+
+	public String tryGetEmail() {
+		String email = scn.nextLine();
+		while(!isEmail(email))
+		{
+			System.out.println("Please enter only email format:");
+			email = scn.nextLine();
+		}
+		return email;
+	}
+
+	public String tryGetFloat() {
+		String flo = scn.nextLine();
+		boolean flag = false;
+		while(!flag){
+		try{
+			Float.parseFloat(flo);
+			flag=true;
+			
+		}
+		catch(Exception e){
+			System.out.println("not float");
+			flo = scn.nextLine();
+		}
+		}
+		return flo;
 	}
 	
 

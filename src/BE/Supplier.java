@@ -2,7 +2,7 @@ package BE;
 
 import java.util.ArrayList;
 
-public class Supplier implements DBEntity{
+public class Supplier{
 	
 	private String _CN;
 	private String _name;
@@ -11,10 +11,16 @@ public class Supplier implements DBEntity{
 	private ArrayList<Contact> _contacts = new ArrayList<>();
 	private ArrayList<SupplierProduct> _products = new ArrayList<>();
 	
-	public Supplier(String _name,int paymentMethod,String companyNumber){
+	public Supplier(String _name,String _cn, int paymentMethod,String companyNumber){
 		this._name=_name;
 		this.paymentMethod=paymentMethod;
 		this.bankNumber=companyNumber;
+		_CN = _cn;
+	}
+	
+	public Supplier()
+	{
+		
 	}
 	
 	public void addContact(Contact c)
@@ -59,6 +65,9 @@ public class Supplier implements DBEntity{
 	}
 
 	public void set_contacts(ArrayList<Contact> _contacts) {
+		for (Contact contact : _contacts) {
+			contact.set_supplier(this);
+		}
 		this._contacts = _contacts;
 	}
 
@@ -70,10 +79,10 @@ public class Supplier implements DBEntity{
 		this._products = _products;
 	}
 
-	public String[] getValues() {
-		return new String[]{"'"+_CN+"'","'"+_name+"'",""+paymentMethod,""+bankNumber};
-	}
 
+	public String toString(){
+		return "CN: " + _CN + " Name: " + _name + " PaymentMethod: " + paymentMethod + " Banknumber: " + bankNumber;
+	}
 	
 }
 	

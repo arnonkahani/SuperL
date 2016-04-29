@@ -1,12 +1,16 @@
 package BE;
 
-public class Discount implements DBEntity{
-	private AgreementProduct agreementProduct;
+public class Discount{
+	private String supplyid;
+	private String supplier_product_SN;
 	private int _quantity;
 	private float _precent;
 	public Discount(int amount, Float precent) {
 		_quantity=amount;
 		
+	}
+	public Discount() {
+		// TODO Auto-generated constructor stub
 	}
 	public int get_quantity() {
 		return _quantity;
@@ -20,14 +24,18 @@ public class Discount implements DBEntity{
 	public void set_precent(float _precent) {
 		this._precent = _precent;
 	}
-	public String[] getValues() {
-		return new String[]{""+_quantity,""+_precent,""+agreementProduct.get_product().get_serial_number(),""+agreementProduct.get_sp().get_supplyID()};
+	
+	public String getAgreementProductSN() {
+		return supplier_product_SN;
 	}
-	public AgreementProduct getAgreementProduct() {
-		return agreementProduct;
+	public void setAgreementProductSN(String supplier_product_SN) {
+		this.supplier_product_SN = supplier_product_SN;
 	}
-	public void setAgreementProduct(AgreementProduct agreementProduct) {
-		this.agreementProduct = agreementProduct;
+	public String getSupplyid() {
+		return supplyid;
+	}
+	public void setSupplyid(String supplyid) {
+		this.supplyid = supplyid;
 	}
 
 

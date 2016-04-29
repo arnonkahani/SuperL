@@ -19,24 +19,17 @@ public class OrderManager {
 		_sam = sam;
 	}
 
-	public void createOrder(String supplyAgreementID,HashMap<String, Integer> amounts,Date date) throws SQLException{
-		ArrayList<AgreementProduct> agreementProducts = new ArrayList<>();
-		ArrayList<OrderProduct> orderProducts = new ArrayList<>();
-		agreementProducts = _sam.getSubsetProducts(supplyAgreementID, amounts.keySet());
-		for (AgreementProduct product : agreementProducts )
-		{
-			orderProducts.add(new OrderProduct(product, product.get_price(), amounts.get(product.get_product().get_product().get_name())));
-		}
-		float price = _sam.calculateDiscount(supplyAgreementID, orderProducts);
-		Order or = new Order(_sam.getSupplyAgreement(supplyAgreementID), date, orderProducts,price);
+	public void createOrder(SupplyAgreement supllyagreement,ArrayList<OrderProduct> product_table,Date date) throws SQLException{
+		float price = _sam.calculateDiscount(product_table);
+		Order or = new Order(supllyagreement, date, product_table,price);
 		_db.insert(or);
 	}
 	
 	
 	public ArrayList<Order> search(int[] search_field,String[] query) throws SQLException
 	{
-		ArrayList<Order> orderSearch = new ArrayList<>();
-			return _db.search(orderSearch,search_field,query,Order.class);
+	
+			return _db.search(search_field,query,Order.class);
 	}
 
 	public String[] getFileds() {

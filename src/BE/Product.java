@@ -1,21 +1,24 @@
 package BE;
 
-public class Product implements DBEntity{
+public class Product{
 	
-	private int _pid;
+	
 	private String _name;
-	private int _weight;
+	private float _weight;
 	private int _shelf_life;
 	private Producer _producer;
-	
+	public Product()
+	{
+		
+	}
 	public Product(int _weight, int _daysOfvaid, String name,Producer _producer) {
 		this._weight = _weight;
 		this._shelf_life = _daysOfvaid;
 		this._producer = _producer;
 		this._name = name;
 	}
-	public Product(int _weight, int _daysOfvaid, String name) {
-		this._weight = _weight;
+	public Product(float weight, int _daysOfvaid, String name) {
+		this._weight = weight;
 		this._shelf_life = _daysOfvaid;
 		this._name = name;
 	}
@@ -34,11 +37,11 @@ public class Product implements DBEntity{
 		this._name = _name;
 	}
 
-	public int get_weight() {
+	public float get_weight() {
 		return _weight;
 	}
 
-	public void set_weight(int _weight) {
+	public void set_weight(float _weight) {
 		this._weight = _weight;
 	}
 
@@ -63,22 +66,8 @@ public class Product implements DBEntity{
 		return "Name :" + _name + " Weight: " + _weight + " Shelf Life: " + _shelf_life + " " + _producer.toString();
 		
 	}
-	@Override
-	public String[] getValues() {
-		String[] values = new String[4];
-		values[0] = "'"+_name+"'";
-		values[1] = ""+_weight;
-		values[2] = ""+_shelf_life;
-		values[3] = "'"+_producer.getName()+"'";
-		
-		return values;
-	}
-	public int get_pid() {
-		return _pid;
-	}
-	public void set_pid(int _pid) {
-		this._pid = _pid;
-	}
+
+
 
 	
 	

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 
 
-public class Order implements DBEntity{
+public class Order {
 
 	private String orderID;
 	private SupplyAgreement _samID;
-	private int _weight;
+	private float _weight;
 	private Date _date;
 	private ArrayList<OrderProduct> _amountProduct = new ArrayList<>();
 	private float _price = 0;
@@ -21,6 +21,7 @@ public class Order implements DBEntity{
 			_amountProduct.add(product);
 			_weight = _weight + (product.getAgreementProduct().get_product().get_product().get_weight()*product.getAmount());
 		}
+		_price = price;
 	}
 	public Order() {
 		// TODO Auto-generated constructor stub
@@ -31,10 +32,10 @@ public class Order implements DBEntity{
 	public void set_samID(SupplyAgreement _samID) {
 		this._samID = _samID;
 	}
-	public int get_weight() {
+	public float get_weight() {
 		return _weight;
 	}
-	public void set_weight(int _weight) {
+	public void set_weight(float _weight) {
 		this._weight = _weight;
 	}
 	public Date get_date() {
@@ -76,9 +77,7 @@ public class Order implements DBEntity{
 	public void setOrderID(String orderID) {
 		this.orderID = orderID;
 	}
-	public String[] getValues() {
-		return new String[]{};
-	}
+
 	
 
 	
