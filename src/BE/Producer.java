@@ -2,7 +2,7 @@ package BE;
 
 public class Producer{
 	private String name;
-	"hi ziv";
+	
 	
 	public Producer(String Name)
 	{
