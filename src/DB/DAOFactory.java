@@ -216,7 +216,27 @@ public class DAOFactory {
 	    		  "FOREIGN KEY(NAME_SCAT) REFERENCES SUB_CATAGORY(NAME_SCAT))"; 
 	      
 	      
-	      stmt.executeUpdate(sql);   
+	      stmt.executeUpdate(sql);
+	      
+	      sql = "CREATE TABLE WEEKLY_ORDER " +
+	              "(DAY CHAR(50)      NOT NULL,"
+	              + "PRIMARY KEY (DAY))"; 
+	      
+	      
+	      stmt.executeUpdate(sql);  
+	      
+	      sql = "CREATE TABLE WEEKLY_ORDER_PRODUCT " +
+	              "(DAY CHAR(50)      NOT NULL,"+
+	              "NAME CHAR(50)      NOT NULL,"+
+	              "PRODUCERNAME CHAR(50)      NOT NULL,"+
+	              "CATAGORY CHAR(50)      NOT NULL,"+
+	              "SUB_CATAGORY CHAR(50)      NOT NULL,"+
+	              "SUB_SUB_CATAGORY CHAR(50)      NOT NULL,"+
+	              "AMOUNT INT     NOT NULL,"+
+	              "PRIMARY KEY (DAY ,NAME, PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY))"; 
+	      
+	      stmt.executeUpdate(sql); 
+	      
 	      stmt.close();
 	    } catch ( Exception e ) {
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );

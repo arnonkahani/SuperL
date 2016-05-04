@@ -2,17 +2,17 @@ package BE;
 import java.util.Date;
 
 public class issue_certificate {
-	int s_id;
-	Date s_date;
-	int s_p_id;
-	int s_serial_num;
-	String s_cat;
-	String s_sub_cat;
-	String s_sub_sub_cat;
-	String s_name;
-	String s_producer;
-	double s_price;
-	String s_valid_date;
+	private int s_id;
+	private Date s_date;
+	private int s_p_id;
+	private int s_serial_num;
+	private String s_cat;
+	private String s_sub_cat;
+	private String s_sub_sub_cat;
+	private String s_name;
+	private String s_producer;
+	private double s_price;
+	private String s_valid_date;
 	
 	
 	public issue_certificate() {

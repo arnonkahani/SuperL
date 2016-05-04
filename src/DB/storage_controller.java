@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+import BE.INS_product;
 import BE.Product;
 import BE.SupplyAgreement.Day;
 import BE.WeeklyOrder;
+import BE.issue_certificate;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -79,22 +81,22 @@ public class storage_controller {
 				sql = "SELECT * FROM PRODUCT JOIN INS_PRODUCT WHERE CATAGORY="+prod.catagory+" AND SUB_CATAGORY="+prod.s_catagory+" AND SUB_SUB_CATAGORY="+prod.ss_catagory+" AND NAME="+prod.name+" AND INS_PRODUCT.ID = PRODUCT.ID ORDER BY VALID_DATE ASC LIMIT 1;" ;
 				stmt = c.createStatement();
 				ResultSet rs=stmt.executeQuery(sql);
-				issue.s_id=index_issue_certificate;
+				issue.setS_id(index_issue_certificate);
 				index_issue_certificate++;
-				issue.s_serial_num = rs.getInt("SERIAL_NUM");
-				issue.s_date=new Date();
-				issue.s_p_id=rs.getInt("ID");
-				issue.s_cat=rs.getString("CATAGORY");
-				issue.s_sub_cat=rs.getString("SUB_CATAGORY");
-				issue.s_sub_sub_cat=rs.getString("SUB_SUB_CATAGORY");
-				issue.s_name=rs.getString("NAME");
-				issue.s_producer=rs.getString("PRODUCER");
-				issue.s_price=rs.getDouble("PRICE");
-				issue.s_valid_date=rs.getString("VALID_DATE");
+				issue.setS_serial_num(rs.getInt("SERIAL_NUM"));
+				issue.setS_date(new Date());
+				issue.setS_p_id(rs.getInt("ID"));
+				issue.setS_cat(rs.getString("CATAGORY"));
+				issue.setS_sub_cat(rs.getString("SUB_CATAGORY"));
+				issue.setS_sub_sub_cat(rs.getString("SUB_SUB_CATAGORY"));
+				issue.setS_name(rs.getString("NAME"));
+				issue.setS_producer(rs.getString("PRODUCER"));
+				issue.setS_price(rs.getDouble("PRICE"));
+				issue.setS_valid_date(rs.getString("VALID_DATE"));
 				id =rs.getInt("ID");
 				curr_amount = rs.getInt("AMOUNT");
 				try{
-					sql = "DELETE from INS_PRODUCT where SERIAL_NUM="+issue.s_serial_num+";";
+					sql = "DELETE from INS_PRODUCT where SERIAL_NUM="+issue.getS_serial_num()+";";
 					stmt.executeUpdate(sql);
 					create_issue(issue, c);
 				} catch (SQLException e) {
@@ -120,7 +122,7 @@ public class storage_controller {
 			String sql;
 	    	Statement stmt;
 			sql = "INSERT INTO ISSUE_CERTIFICATE (S_ID,S_DATE,S_P_ID,S_SERIAL_NUM,S_CATAGORY,S_SUB_CATAGORY,S_SUB_SUB_CATAGORY,S_NAME,S_PRODUCER,S_PRICE,S_VALID_DATE) " +
-	                "VALUES ('"+issue.s_id+"','"+issue.s_date+"','"+issue.s_p_id+"','"+issue.s_serial_num+"','"+issue.s_cat+"','"+issue.s_sub_cat+"','"+issue.s_sub_sub_cat+"','"+issue.s_name+"','"+issue.s_producer+"','"+issue.s_price+"','"+issue.s_valid_date+"');"; 
+	                "VALUES ('"+issue.getS_id()+"','"+issue.getS_date()+"','"+issue.getS_p_id()+"','"+issue.getS_serial_num()+"','"+issue.getS_cat()+"','"+issue.getS_sub_cat()+"','"+issue.getS_sub_cat()+"','"+issue.getS_name()+"','"+issue.getS_producer()+"','"+issue.getS_price()+"','"+issue.getS_valid_date()+"');"; 
 			stmt = c.createStatement();
 			stmt.executeUpdate(sql);
 			c.commit();
