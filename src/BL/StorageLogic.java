@@ -91,8 +91,10 @@ public class StorageLogic {
 	
 	public WeeklyOrder create_weekly_order(Day day, HashMap<Product,Integer> products){
 		WeeklyOrder order = new WeeklyOrder(day,products);
-		sc.create_weekly_order(order);
+		sc.create_weekly_order(order,c);
 	}
 	
-	
+	public void remove_weekly_order(Day day){
+		sc.remove_weekly_order(day,c);
+	}
 }

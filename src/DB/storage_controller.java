@@ -3,7 +3,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
+import BE.Product;
+import BE.SupplyAgreement.Day;
 import BE.WeeklyOrder;
 
 import java.sql.*;
@@ -272,11 +275,13 @@ public class storage_controller {
 		try {
 			String sql;
 	    	Statement stmt;
-			sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY) " +
-	                "VALUES ('"+order.getDay()+"');"; 
-			stmt = c.createStatement();
-			stmt.executeUpdate(sql);
-			c.commit();
+	    	for ( Product key : order.getProducts().keySet() ) {
+				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,AMOUNT) " +
+		                "VALUES ("+order.getDay()+","+ key.get_id()+","+key.get_name()+","+key.get_producer()+","+key.get_categoryname_cat()+","+key.get_sub_categoryname_scat()+","+key.get_sub_sub_categoryname_sscat()+","+order.getProducts().get(key)+");"; 
+		    	stmt = c.createStatement();
+		    	stmt.executeUpdate(sql);
+		    	c.commit();        
+	    	}
 			
 			
 		} catch (SQLException e) {
@@ -286,7 +291,32 @@ public class storage_controller {
 		
 	}
 	
-	
+	public void remove_weekly_order(Day day, Connection c){
+		
+		try{
+			String sql;
+	    	Statement stmt;
+			sql = "DELETE from WEEKLY_ORDER_PRODUCT where DAY="+day+";";
+			stmt = c.createStatement();
+			stmt.executeUpdate(sql);
+
+		} catch (SQLException e) {
+			 System.err.println("" );
+		}
+		
+		try{
+			String sql;
+	    	Statement stmt;
+			sql = "DELETE from WEEKLY_ORDER where DAY="+day+";";
+			stmt = c.createStatement();
+			stmt.executeUpdate(sql);
+
+		} catch (SQLException e) {
+			 System.err.println("" );
+		}
+		
+		
+	}
 
 }
 
