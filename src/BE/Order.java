@@ -19,12 +19,12 @@ public class Order {
 		this._date = date;
 		for (OrderProduct product : amountProduct) {
 			_amountProduct.add(product);
-			_weight = _weight + (product.getAgreementProduct().get_product().get_product().get_weight()*product.getAmount());
+			_weight = _weight + (product.get_weight()*product.getAmount());
 		}
 		_price = price;
 	}
 	public Order() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	public SupplyAgreement get_samID() {
 		return _samID;
@@ -67,7 +67,7 @@ public class Order {
 				+ "---------------------------- \n";
 		String productlist = "";
 		for (OrderProduct product : get_amountProduct()) {
-			productlist = productlist + product.getAgreementProduct().get_product().get_product().get_name() + " | " + product.getAmount() + " | " + product.getPrice() +"\n";
+			productlist = productlist + product.get_name() + " | " + product.getAmount() + " | " + product.getPrice() +"\n";
 		}
 		return str + productlist;
 	}
@@ -78,7 +78,10 @@ public class Order {
 		this.orderID = orderID;
 	}
 
-	
+	public boolean equals(Object o)
+	{
+		return o.toString().toUpperCase().equals(toString().toUpperCase());
+	}
 
 	
 }

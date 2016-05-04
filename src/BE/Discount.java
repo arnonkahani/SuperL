@@ -38,6 +38,12 @@ public class Discount{
 		this.supplyid = supplyid;
 	}
 
+	public String toString(){
+		return "Supply ID: "  + supplyid + " Product SN: " + supplier_product_SN + " Precent: " + _precent + " Amount: " + _quantity;
+	}
+	public boolean equals(Object o){
+		return o.toString().toUpperCase().equals(toString().toUpperCase());
+	}
 
 	
 }

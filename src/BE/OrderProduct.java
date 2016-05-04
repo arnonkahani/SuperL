@@ -1,35 +1,28 @@
 package BE;
 
-public class OrderProduct{
+public class OrderProduct extends SupplyAgreementProduct{
 	private String OrderID;
-	private AgreementProduct agreementProduct;
-	private float price;
+	private float actual_price;
 	private int amount;
 	
-	public OrderProduct(AgreementProduct agreementProduct, float price, int amount) {
-
-		this.agreementProduct = agreementProduct;
-		this.price = price;
+	public OrderProduct(SupplyAgreementProduct agreementProduct, float price, int amount) {
+		super(agreementProduct);
+		this.actual_price = price;
 		this.amount = amount;
 	}
-	public OrderProduct()
-	{
-		
-	}
-	public AgreementProduct getAgreementProduct() {
-		return agreementProduct;
-	}
 
-	public void setAgreementProduct(AgreementProduct agreementProduct) {
-		this.agreementProduct = agreementProduct;
-	}
 
+
+
+	public OrderProduct(SupplyAgreementProduct ap) {
+		super(ap);
+	}
 	public float getPrice() {
-		return price;
+		return actual_price;
 	}
 
 	public void setPrice(float price) {
-		this.price = price;
+		this.actual_price = price;
 	}
 
 	public int getAmount() {
@@ -40,9 +33,7 @@ public class OrderProduct{
 		this.amount = amount;
 	}
 
-	public String[] getValues() {
-		return new String[]{agreementProduct.get_product().get_serial_number(),agreementProduct.get_sp(),""+price,""+amount};
-	}
+
 	public String getOrderID() {
 		return OrderID;
 	}
@@ -50,5 +41,9 @@ public class OrderProduct{
 		OrderID = orderID;
 	}
 	
+	public boolean equals(Object o)
+	{
+		return o.toString().toUpperCase().equals(toString().toUpperCase());
+	}
 	
 }

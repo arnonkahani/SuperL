@@ -3,25 +3,35 @@ package BL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import DB.DB;
 
-public abstract class LogicManager {
+import DB.DAO;
 
-	protected DB _db;
+
+public abstract class LogicManager<T extends DAO> {
+
+	protected T _db;
 	
-	public LogicManager(DB db)
+	public LogicManager(T db)
 	{
 		_db =db;
 	}
 	
 	public abstract void create(Object[] values) throws SQLException;
 	
-	public <T> ArrayList<T> search(int[] search_field,String[] query,Class object_class) throws SQLException
+	public <K> ArrayList<K> search(int[] search_field,String[] query) throws SQLException
 	{
-			return _db.search(search_field,query,object_class);
+			return _db.search(search_field,query);
 	}
 	
-	public String[] getFileds(Class object_class) {
-		return _db.getSearchFieldView(object_class);
+	protected String[] getFileds() {
+		return _db.getSearchFieldsView();
+	}
+	
+	protected <K> K getFromPK(String[] values) throws SQLException{
+		return (K)_db.getFromPK(values);
+	}
+	
+	protected <K> ArrayList<K> getAll() throws SQLException{
+		return (ArrayList<K>)_db.getAll();
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Supplier{
 	
 	private String _CN;
+	private String _address;
 	private String _name;
 	private int paymentMethod;
 	private String bankNumber;
@@ -66,7 +67,7 @@ public class Supplier{
 
 	public void set_contacts(ArrayList<Contact> _contacts) {
 		for (Contact contact : _contacts) {
-			contact.set_supplier(this);
+			contact.set_supplier_cn(_CN);
 		}
 		this._contacts = _contacts;
 	}
@@ -81,7 +82,31 @@ public class Supplier{
 
 
 	public String toString(){
-		return "CN: " + _CN + " Name: " + _name + " PaymentMethod: " + paymentMethod + " Banknumber: " + bankNumber;
+		return "CN: " + _CN + " Name: " + _name + " PaymentMethod: " + paymentMethod + " Banknumber: " + bankNumber + " Address: " + _address;
+	}
+	
+	public boolean equals(Object o){
+		if(o.getClass().equals(Supplier.class))
+		{
+			boolean ans = true;
+			for (Contact contact : _contacts) {
+				ans = ans && ((Supplier)o)._contacts.contains(contact);
+			}
+			for (SupplierProduct product : _products) {
+				ans = ans && ((Supplier)o)._products.contains(product);
+			}
+			return ans && _CN.toUpperCase().equals(((Supplier)o)._CN) && _name.toUpperCase().equals(((Supplier)o)._name) && bankNumber.toUpperCase().equals(((Supplier)o).bankNumber);
+		}
+		else
+			return false;
+	}
+
+	public String get_address() {
+		return _address;
+	}
+
+	public void set_address(String _address) {
+		this._address = _address;
 	}
 	
 }

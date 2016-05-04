@@ -1,15 +1,17 @@
 package BE;
 
-public class SupplierProduct {
+public class SupplierProduct extends Product{
 	private String _supplier ="";
-	private Product _product;
+	
 	private String _serial_number ="";
 	
 	public SupplierProduct(Product product) {
-		_product = product;
+		super(product);
 	}
-	public SupplierProduct(){
-		
+	public SupplierProduct(SupplierProduct product){
+		super(product);
+		_supplier = product._supplier;
+		_serial_number = product._serial_number;
 	}
 
 	public String get_serial_number() {
@@ -19,12 +21,7 @@ public class SupplierProduct {
 		this._serial_number = _serial_number;
 	}
 
-	public Product get_product() {
-		return _product;
-	}
-	public void set_product(Product product) {
-		_product = product;
-	}
+
 	
 
 
@@ -39,7 +36,12 @@ public class SupplierProduct {
 	}
 	
 	public String toString(){
-		return "Supplier: " + _supplier + " " + _product + " SN: " + _serial_number;
+		return "Supplier: " + _supplier + " " + super.toString() + " SN: " + _serial_number;
+	}
+	
+	public boolean equals(Object o)
+	{
+		return super.equals(o) && _supplier.toUpperCase().equals(((SupplierProduct)o)._supplier) && _serial_number.toUpperCase().equals(((SupplierProduct)o)._serial_number);
 	}
 	
 	

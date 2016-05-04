@@ -2,28 +2,26 @@ package PL;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
-import BE.AgreementProduct;
+import BE.SupplyAgreementProduct;
 import BE.Discount;
-import BE.OrderProduct;
 import BE.SupplierProduct;
 import BE.SupplyAgreement;
 import BE.SupplyAgreement.*;
-import BL.SupplyAgreementManager;
+import BL.LogicManager;
 
 public class supplyAgreementView {
 
-	private SupplyAgreementManager _sam;
+	private LogicManager _sam;
 	private supplierView _sv;
 	private viewUtils _vu;
 	private Scanner scn;
 	
-	public supplyAgreementView(viewUtils vu,SupplyAgreementManager sam,supplierView sv)
+	public supplyAgreementView(viewUtils vu,LogicManager logicManager,supplierView sv)
 	{
 		_sv = sv;
-		_sam = sam;
+		_sam = logicManager;
 		_vu = vu;
 		scn = new Scanner(System.in);
 	}
@@ -66,13 +64,13 @@ public class supplyAgreementView {
 		
 		System.out.println("Please enter number of products at the agreement:");
 		int n=Integer.parseInt(_vu.tryGetNumber());
-		ArrayList<AgreementProduct> product_table  = new ArrayList<>();
+		ArrayList<SupplyAgreementProduct> product_table  = new ArrayList<>();
 		for(int i=0;i<n;i++){
 			ArrayList<Discount> dicount = new ArrayList<>();
 			SupplierProduct pr = _sv.chooseSupplierProduct(supplierID);
 			System.out.println("Please enter price to the product :");
 			float l=scn.nextFloat();
-			AgreementProduct agp = new AgreementProduct(pr, l);
+			SupplyAgreementProduct agp = new SupplyAgreementProduct(pr, l);
 			System.out.println("Please enter number of discounts:");
 			int k=scn.nextInt();
 			for(int p=0;p<k;p++){
@@ -93,9 +91,8 @@ public class supplyAgreementView {
 		
 		try {
 			_sam.create(new Object[]{supplierID,supplyType,supplyDays,delevryType,product_table});
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SQLException e) {
+			_vu.exceptionHandler(e);
 		}	
 	}
 	
@@ -123,10 +120,9 @@ public class supplyAgreementView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_sam.searchSupplyAgreement(new int[]{choise-1},new String[]{query}));
+					_vu.showResult(_sam.search(new int[]{choise-1},new String[]{query},SupplyAgreement.class));
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					_vu.exceptionHandler(e);
 				}
 				}
 			}
@@ -134,7 +130,7 @@ public class supplyAgreementView {
 	
 	public void searchSupplyAgreementProduct(){
 		_vu.clear();
-		String[] menu = _sam.getFileds(AgreementProduct.class);
+		String[] menu = _sam.getFileds(SupplyAgreementProduct.class);
 		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;
@@ -153,25 +149,19 @@ public class supplyAgreementView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_sam.searchAgreementProduct(new int[]{choise-1},new String[]{query}));
+					_vu.showResult(_sam.search(new int[]{choise-1},new String[]{query},SupplyAgreementProduct.class));
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					_vu.exceptionHandler(e);
 				}
 				}
 			}
 		}
 	
 	
-	public String[] getAllProductsNames(String supllyagreement) throws SQLException {
-		return _sam.getAllProductsNames(supllyagreement);
-	}
-	public String[] getAllProductsSN(String supllyagreement) throws SQLException {
-		return _sam.getAllProductsSN(supllyagreement);
-	}
+	
 	public SupplyAgreement chooseSupplyAgreement() {
 		try {
-			ArrayList<SupplyAgreement> sup = _sam.getAllSupllyAgreemnt();
+			ArrayList<SupplyAgreement> sup = _sam.search(new int[]{0}, new String[]{""}, SupplyAgreement.class);
 			for (int i = 0; i < sup.size(); i++) {
 				System.out.println(i + ". " + sup.get(0));
 			}
@@ -183,7 +173,7 @@ public class supplyAgreementView {
 			return null;
 		}
 	}
-	public AgreementProduct chooseAgreementProduct(ArrayList<AgreementProduct> get_prices) {
+	public SupplyAgreementProduct chooseAgreementProduct(ArrayList<SupplyAgreementProduct> get_prices) {
 		try {
 			
 			for (int i = 0; i < get_prices.size(); i++) {

@@ -34,8 +34,8 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 
 	@Override
 	protected String[] getValues(SupplierProduct object) {
-		return new String[]{""+object.get_serial_number(),"'"+object.get_product().get_name()+"'",
-				"'"+object.get_product().get_producer().getName()+"'","'"+object.get_supplier()+"'"};
+		return new String[]{""+object.get_serial_number(),"'"+object.get_name()+"'",
+				"'"+object.get_producer().getName()+"'","'"+object.get_supplier()+"'"};
 	}
 
 	@Override
@@ -47,15 +47,15 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 	public void insert(SupplierProduct object) throws SQLException
 	{
 		try{
-			System.out.println("stage 1");
-			_product.insert(object.get_product());
-			System.out.println("stage 1 over");
+			
+			_product.insert(object);
+			
 		}catch(SQLException e)
 		{}
-		//TODO:fix
 		
-		if(search(new int[]{2,3,4}, new String[]{"'"+object.get_product().get_name()+"'",
-				"'"+object.get_product().get_producer().getName()+"'",object.get_supplier()}).size()!=0)
+		
+		if(search(new int[]{2,3,4}, new String[]{"'"+object.get_name()+"'",
+				"'"+object.get_producer().getName()+"'",object.get_supplier()}).size()!=0)
 			throw new SQLException("Already exsists");
 		int sn = 0;
 		
@@ -68,11 +68,10 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 	
 	@Override
 	public SupplierProduct create(ResultSet rs) throws SQLException {
-		SupplierProduct supplierProduct = new SupplierProduct();
+		SupplierProduct supplierProduct = new SupplierProduct(_product.getFromPK(new String[]{
+				"'"+rs.getString("ProductName")+"'","'"+rs.getString("ProductProducerName")+"'"}));
 		supplierProduct.set_serial_number(rs.getString("SN"));
 		supplierProduct.set_supplier(rs.getString("SupplierCN"));
-		supplierProduct.set_product(_product.getFromPK(new String[]{
-				"'"+rs.getString("ProductName")+"'","'"+rs.getString("ProductProducerName")+"'"}));
 		return supplierProduct;
 	}
 

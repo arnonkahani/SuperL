@@ -24,9 +24,9 @@ public class SupplyAgreement{
 	private ArrayList<Day> _day;
 	private DelevryType _dType;
 	
-	private ArrayList<AgreementProduct> _prices;
+	private ArrayList<SupplyAgreementProduct> _prices;
 	
-	public SupplyAgreement(Supplier _sup, SupplyType _sType, ArrayList<Day> day, DelevryType _dType, ArrayList<AgreementProduct> products) {
+	public SupplyAgreement(Supplier _sup, SupplyType _sType, ArrayList<Day> day, DelevryType _dType, ArrayList<SupplyAgreementProduct> products) {
 		this._sup = _sup;
 		this._sType = _sType;
 		this._day = day;
@@ -71,11 +71,11 @@ public class SupplyAgreement{
 	}
 
 
-	public ArrayList<AgreementProduct> get_prices() {
+	public ArrayList<SupplyAgreementProduct> get_prices() {
 		return _prices;
 	}
 
-	public void set_prices(ArrayList<AgreementProduct> _prices) {
+	public void set_prices(ArrayList<SupplyAgreementProduct> _prices) {
 		this._prices = _prices;
 	}
 
@@ -108,6 +108,8 @@ public class SupplyAgreement{
 		return "Supply ID: " + _supplyID + " Supplier CN: " + _sup.get_CN() + " Delevry Type: " + _dType + " Supply Type: " + _sType;
 	}
 
-	
+	public boolean equals(Object o){
+		return o.toString().toUpperCase().equals(toString().toUpperCase());
+	}
 	
 }

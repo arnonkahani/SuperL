@@ -5,16 +5,16 @@ import java.util.Scanner;
 
 import BE.Producer;
 import BE.Product;
-import BL.ProductManager;
+import BL.LogicManager;
 
 public class ProductView {
 
-	private ProductManager _pm;
+	private LogicManager _pm;
 	private Scanner scn;
 	private viewUtils _vu;
 	
-	public ProductView(ProductManager pm,viewUtils vu){
-		_pm = pm;
+	public ProductView(LogicManager logicManager,viewUtils vu){
+		_pm = logicManager;
 		scn = new Scanner(System.in);
 		_vu = vu;
 	}

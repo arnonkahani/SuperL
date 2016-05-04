@@ -1,9 +1,13 @@
 package BE;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Contact{
-	private Supplier _supplier;
 	
-	
+
+	private String _supplier_cn;
+
 	private String _tel;
 	private String _email;
 	private String _name;
@@ -27,7 +31,7 @@ public class Contact{
 		// TODO Auto-generated constructor stub
 	}
 
-
+	
 	public String getTel() {
 		return _tel;
 	}
@@ -48,19 +52,31 @@ public class Contact{
 	}
 
 
-	public Supplier get_supplier() {
-		return _supplier;
-	}
 
-
-	public void set_supplier(Supplier _supplier) {
-		this._supplier = _supplier;
-	}
 
 	public String toString(){
-		return "Tel: " + _tel + " Name: " + _name + " Email: " + _email; 
+		return "Tel: " + _tel + " Name: " + _name + " Email: " + _email + " Supplier: " + _supplier_cn; 
+		
+	}
+	
+	public boolean equals(Object o){
+		if(o.getClass().equals(Contact.class))
+		{
+			return o.toString().toUpperCase().equals(toString().toUpperCase());
+		}
+		else
+			return false;
 	}
 
+
+	public String get_supplier_cn() {
+		return _supplier_cn;
+	}
+
+
+	public void set_supplier_cn(String _supplier_cn) {
+		this._supplier_cn = _supplier_cn;
+	}
 	
 	
 }

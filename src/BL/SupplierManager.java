@@ -4,13 +4,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import BE.*;
-import DB.DB;
+import DB.DAOSupplier;
 
-public class SupplierManager extends LogicManager{
+public class SupplierManager extends LogicManager<DAOSupplier>{
 	
 	
 	
-	public SupplierManager(DB db) {
+	public SupplierManager(DAOSupplier db) {
 		super(db);
 	}
 	
@@ -18,25 +18,16 @@ public class SupplierManager extends LogicManager{
 	public void create(Object[] values) throws SQLException{
 		Supplier sp = new Supplier((String)values[1],(String)values[0], (int)values[2], (String)values[3]);
 		sp.set_contacts((ArrayList<Contact>)values[4]);
+		sp.set_address((String)values[5]);
 		_db.insert(sp);
 	}
 
-	public Supplier getSupplier(String string) throws SQLException {
-		return (Supplier) search(new int[]{1}, new String[]{string}, Supplier.class).get(0);
+	public Supplier getSupplierByCN(String cn) throws SQLException{
+		return getFromPK(new String[]{cn});
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-
-	
-	
+		
+	public ArrayList<Supplier> getAllSuplliers() throws SQLException{
+		return getAll();
+	}
 	
 }

@@ -24,10 +24,10 @@ public class viewController {
 		boolean first_time = 1 == Integer.parseInt(_vu.tryGetNumber(0, 1));
 		_bc = new BLFactory(first_time); 
 		_vu = new viewUtils();
-		_sv = new supplierView(_vu,_bc.get_sm());
-		_sav = new supplyAgreementView(_vu,_bc.get_sam(),_sv);
-		_ov = new orderView(_vu,_bc.get_om(),_sav);
-		_pv = new ProductView(_bc.get_pm(), _vu);
+		_sv = new supplierView(_vu,_bc.getManager(Supplier.class));
+		_sav = new supplyAgreementView(_vu,_bc.getManager(SupplyAgreement.class),_sv);
+		_ov = new orderView(_vu,_bc.getManager(Order.class),_sav);
+		_pv = new ProductView(_bc.getManager(Product.class), _vu);
 		
 		
 		run();
@@ -81,7 +81,7 @@ public class viewController {
 		
 	}
 	private void searchMenu() {
-		String menu[] = {"Supplier","Order","Product","Supply Agreement","Return"};
+		String menu[] = {"Supplier","Order","Product","Supply Agreement","Supply Agreement Product","Return"};
 		int choise = -1;
 		while(true)
 		{
@@ -102,6 +102,9 @@ public class viewController {
 				_sav.searchSupplyAgreement();
 				break;
 			case 5:
+				_sav.searchSupplyAgreementProduct();
+				break;
+			case 6:
 				return;
 			}
 		}

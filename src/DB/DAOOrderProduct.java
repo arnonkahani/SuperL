@@ -32,8 +32,8 @@ public class DAOOrderProduct extends DAO<OrderProduct>{
 
 	@Override
 	protected String[] getValues(OrderProduct object) {
-		return new String[]{object.getOrderID(),object.getAgreementProduct().get_sp(),
-				object.getAgreementProduct().get_product().get_serial_number(),""+object.getAmount(),""+object.getPrice()};
+		return new String[]{object.getOrderID(),object.get_sp(),
+				object.get_serial_number(),""+object.getAmount(),""+object.getPrice()};
 	}
 
 	@Override
@@ -43,12 +43,12 @@ public class DAOOrderProduct extends DAO<OrderProduct>{
 
 	@Override
 	public OrderProduct create(ResultSet rs) throws SQLException {
-		OrderProduct orderProduct = new OrderProduct();
+		OrderProduct orderProduct = new OrderProduct(_prodcut.getFromPK(new String[]{rs.getString("SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID"),
+				rs.getString("SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN")}));
 		orderProduct.setOrderID(""+rs.getInt("orderid"));
 		orderProduct.setPrice(rs.getFloat("price"));
 		orderProduct.setAmount(rs.getInt("amount"));
-		orderProduct.setAgreementProduct(_prodcut.getFromPK(new String[]{rs.getString("SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID"),
-				rs.getString("SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN")}));
+		
 		return orderProduct;
 	}
 

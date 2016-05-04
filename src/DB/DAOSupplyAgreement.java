@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import BE.AgreementProduct;
+import BE.SupplyAgreementProduct;
 import BE.SupplyAgreement;
 import BE.SupplyAgreement.Day;
 
@@ -57,10 +57,11 @@ public class DAOSupplyAgreement extends DAO<SupplyAgreement> {
 		insert(getValues(object), true);
 		int pk = getLastAutoID();
 		object.set_supplyID(""+pk);
-		for (AgreementProduct agreementProduct : object.get_prices()) {
+		for (SupplyAgreementProduct agreementProduct : object.get_prices()) {
 			agreementProduct.set_sp(object.get_supplyID());
 			_product.insert(agreementProduct);
 		}
+		object.set_sup(_supplier.getFromPK(new String[]{object.get_sup().get_CN()}));
 		
 	
 	}
@@ -78,7 +79,7 @@ public class DAOSupplyAgreement extends DAO<SupplyAgreement> {
 		supplyAgreement.set_dType(rs.getString("DELEVERYTYPE"));
 		supplyAgreement.set_sType(rs.getString("SupplyType"));
 		supplyAgreement.set_sup(_supplier.getFromPK(new String[]{"'"+rs.getString("SUPPLIERCN")+"'"}));
-		ArrayList<AgreementProduct> products = _product.search(new int[]{1}, new String[]{supplyAgreement.get_supplyID()});
+		ArrayList<SupplyAgreementProduct> products = _product.search(new int[]{1}, new String[]{supplyAgreement.get_supplyID()});
 		supplyAgreement.set_prices(products);
 		
 		

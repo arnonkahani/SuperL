@@ -1,25 +1,24 @@
 package PL;
 
-import java.io.IOException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import BE.Contact;
-import BE.Producer;
-import BE.Product;
+
 import BE.Supplier;
 import BE.SupplierProduct;
-import BL.SupplierManager;
+import BL.LogicManager;
 
 public class supplierView {
 	
-	private SupplierManager _sp;
+	private LogicManager _sp;
 	private Scanner scn;
 	private viewUtils _vu;
 	
-	public supplierView(viewUtils vu, SupplierManager sm) {
-		_sp=sm;
+	public supplierView(viewUtils vu, LogicManager logicManager) {
+		_sp=logicManager;
 		_vu=vu;
 		scn = new Scanner(System.in);
 	}
@@ -30,6 +29,8 @@ public class supplierView {
 		System.out.println("Supplier Creation");
 		System.out.println("Please enter company number:");
 		String cn = _vu.tryGetNumber();
+		System.out.println("Please enter supplier Address:");
+		String address = scn.nextLine();
 		System.out.println("Please enter supplier name:");
 		String name = _vu.tryGetOnlyLetters();
 		System.out.println("Please enter supplier payment method (0-10):");
@@ -49,7 +50,7 @@ public class supplierView {
 			contacts.add(new Contact(_name, _email, _tel));
 		}
 		try{
-			_sp.create(new Object[]{cn,name,paymentmethod,banknumber,contacts});
+			_sp.create(new Object[]{cn,name,paymentmethod,banknumber,contacts,address});
 		}
 		catch(SQLException e){
 			System.out.println(_vu.exceptionHandler(e));

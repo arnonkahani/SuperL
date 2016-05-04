@@ -17,6 +17,11 @@ public class Producer{
 	public String getName() {
 		return name;
 	}
+	
+	public boolean equals(Object o)
+	{
+		return o.toString().toUpperCase().equals(toString().toUpperCase());
+	}
 
 
 }

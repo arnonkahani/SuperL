@@ -5,26 +5,25 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
+
 import java.util.Scanner;
 
 import BE.Order;
 import BE.OrderProduct;
 import BE.SupplyAgreement;
-import BL.OrderManager;
+import BL.LogicManager;
+
 
 public class orderView {
-	private OrderManager _om;
+	private LogicManager _om;
 	private Scanner scn;
 	private viewUtils _vu;
 	private supplyAgreementView _sav;
 	
-	public orderView(viewUtils vu, OrderManager om, supplyAgreementView sav) {
+	public orderView(viewUtils vu, LogicManager logicManager, supplyAgreementView sav) {
 		_sav=sav;
-		_om=om;
+		_om=logicManager;
 		_vu=vu;
 		scn = new Scanner(System.in);
 	}
@@ -39,8 +38,7 @@ public class orderView {
 		int n= Integer.parseInt(_vu.tryGetNumber());
 		ArrayList<OrderProduct> product_table  = new ArrayList<>();
 		for(int i=0;i<n;i++){
-			OrderProduct pr = new OrderProduct();
-			pr.setAgreementProduct(_sav.chooseAgreementProduct(supllyagreement.get_prices()));
+			OrderProduct pr = new OrderProduct(_sav.chooseAgreementProduct(supllyagreement.get_prices()));
 			System.out.println("Please enter amount of the product :");
 			int l= Integer.parseInt(_vu.tryGetNumber());
 			pr.setAmount(l);

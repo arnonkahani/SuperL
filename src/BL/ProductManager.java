@@ -1,17 +1,19 @@
 package BL;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+
 
 import BE.Producer;
 import BE.Product;
 import BE.SupplierProduct;
-import DB.DB;
 
-public class ProductManager extends LogicManager{
+import DB.DAOSupplierProduct;
+
+
+public class ProductManager extends LogicManager<DAOSupplierProduct>{
 
 	
-	public ProductManager(DB db)
+	public ProductManager(DAOSupplierProduct db)
 	{
 		super(db);
 	}
@@ -26,6 +28,14 @@ public class ProductManager extends LogicManager{
 		_db.insert(supplierProduct);
 		
 	}
+
+	@Override
+	public <K> K getFromPK(String[] values) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 	
 	
