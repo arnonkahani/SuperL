@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+
+import BE.WeeklyOrder;
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -246,6 +249,40 @@ public class storage_controller {
 		
 
 			
+		
+	}
+	
+	public void create_weekly_order(WeeklyOrder order,Connection c){
+		
+		try {
+			String sql;
+	    	Statement stmt;
+			sql = "INSERT INTO WEEKLY_ORDER (DAY) " +
+	                "VALUES ('"+order.getDay()+"');"; 
+			stmt = c.createStatement();
+			stmt.executeUpdate(sql);
+			c.commit();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			String sql;
+	    	Statement stmt;
+			sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY) " +
+	                "VALUES ('"+order.getDay()+"');"; 
+			stmt = c.createStatement();
+			stmt.executeUpdate(sql);
+			c.commit();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

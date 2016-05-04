@@ -9,7 +9,7 @@ public class report_controller {
 	
 	
 	
-	ArrayList<String> cat_search (Connection c){
+	public ArrayList<String> cat_search (Connection c){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -31,7 +31,7 @@ public class report_controller {
 	
 	
 	
-	ArrayList<String> sub_cat_search (String cat_name,Connection c){
+	public ArrayList<String> sub_cat_search (String cat_name,Connection c){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -51,7 +51,7 @@ public class report_controller {
 		 	
 	}
 	
-	ArrayList<String> sub_sub_cat_search (String cat_name,String sub_cat_name,Connection c){
+	public ArrayList<String> sub_sub_cat_search (String cat_name,String sub_cat_name,Connection c){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -71,7 +71,7 @@ public class report_controller {
 		 	
 	}
 	
-	ArrayList<String> product_search (String cat_name,String sub_cat_name,String sub_sub_cat_name,Connection c){
+	public ArrayList<String> product_search (String cat_name,String sub_cat_name,String sub_sub_cat_name,Connection c){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -91,7 +91,7 @@ public class report_controller {
 		 	
 	}
 	
-	int product_search_ID (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,Connection c){
+	public int product_search_ID (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,Connection c){
 		int id=0;
 		try {
 			String sql;
@@ -110,7 +110,7 @@ public class report_controller {
 	}
 	
 	
-	ArrayList<ArrayList<String>> get_report (ArrayList<String> parm,int count,String criter ,Connection c){
+	public ArrayList<ArrayList<String>> get_report (ArrayList<String> parm,int count,String criter ,Connection c){
 		ArrayList<ArrayList<String>> arr = new ArrayList<ArrayList<String>>();
 		try {
 			String sql;
