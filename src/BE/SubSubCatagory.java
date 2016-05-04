@@ -3,12 +3,12 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 
-public class sub_sub_catagory {
+public class SubSubCatagory {
 	String name_sscat;
 	String name_scat;
 	
 	
-	public sub_sub_catagory(String name_sscat, String name_scat) {
+	public SubSubCatagory(String name_sscat, String name_scat) {
 		this.name_sscat = name_sscat;
 		this.name_scat = name_scat;
 		

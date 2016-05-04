@@ -1,11 +1,11 @@
 package BE;
 import java.util.List;
 
-public class catagory {
+public class Catagory {
 	String name_cat;
 	
 	
-	public catagory(String name_cat) {
+	public Catagory(String name_cat) {
 		this.name_cat = name_cat;
 	}
 	public String getName_cat() {

@@ -11,7 +11,7 @@ public class Product{
 	private String _categoryname_cat;
 	private String _sub_categoryname_scat;
 	private String _sub_sub_categoryname_sscat;
-	private int _price;
+	private float _price;
 	private String _id;
 	
 	public Product()
@@ -85,10 +85,10 @@ public class Product{
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	public int get_price() {
+	public float get_price() {
 		return _price;
 	}
-	public void set_price(int _price) {
+	public void set_price(float _price) {
 		this._price = _price;
 	}
 	public String get_sub_sub_categoryname_sscat() {
