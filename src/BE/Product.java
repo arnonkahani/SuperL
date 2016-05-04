@@ -10,7 +10,7 @@ public class Product{
 	private int _min_amount;
 	private String _categoryname_cat;
 	private String _sub_categoryname_scat;
-	private int _sub_sub_categoryname_sscat;
+	private String _sub_sub_categoryname_sscat;
 	private int _price;
 	private String _id;
 	
@@ -91,10 +91,10 @@ public class Product{
 	public void set_price(int _price) {
 		this._price = _price;
 	}
-	public int get_sub_sub_categoryname_sscat() {
+	public String get_sub_sub_categoryname_sscat() {
 		return _sub_sub_categoryname_sscat;
 	}
-	public void set_sub_sub_categoryname_sscat(int _sub_sub_categoryname_sscat) {
+	public void set_sub_sub_categoryname_sscat(String _sub_sub_categoryname_sscat) {
 		this._sub_sub_categoryname_sscat = _sub_sub_categoryname_sscat;
 	}
 	public String get_sub_categoryname_scat() {

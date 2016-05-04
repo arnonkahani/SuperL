@@ -30,7 +30,8 @@ public class DAOProduct extends DAO<Product> {
 
 	@Override
 	public String[] getSearchFields() {
-		return new String[]{"All","NAME","PRODUCERNAME","WEIGHT","SHELFLIFE"};
+		return new String[]{"All","ID","NAME","PRODUCERNAME","WEIGHT","SHELFLIFE","CATAGORY","SUB_CATAGORY"
+		,"SUB_SUB_CATAGORY","MIN_AMOUNT","PRICE"};
 	}
 
 	@Override
@@ -41,13 +42,14 @@ public class DAOProduct extends DAO<Product> {
 
 	@Override
 	public Product getFromPK(String[] values) throws SQLException {
-		return search(new int[]{1,2},values).get(0);
+		return search(new int[]{1,2,3,6,7,8},values).get(0);
 	}
 
 
 	@Override
 	public String[] getSearchFieldsView() {
-		return new String[]{"All","Name","Producer's Name","Weight","Shelf Life"};
+		return new String[]{"All","ID","Name","Producer's Name","Weight","Shelf Life",
+				"Catagory","Sub Catagory","Sub Sub Catagory","Minimum Amount","Price"};
 	}
 
 
@@ -58,6 +60,11 @@ public class DAOProduct extends DAO<Product> {
 		product.set_producer(_producer.getFromPK(new String[]{"'"+rs.getString("PRODUCERNAME")+"'"}));
 		product.set_shelf_life(rs.getInt("SHELFLIFE"));
 		product.set_weight(rs.getInt("Weight"));
+		product.set_categoryname_cat(rs.getString("CATAGORY"));
+		product.set_sub_categoryname_scat(rs.getString("SUB_CATAGORY"));
+		product.set_sub_sub_categoryname_sscat(rs.getString("SUB_SUB_CATAGORY"));
+		product.set_id(""+rs.getInt("ID"));
+		product.set_min_amount(rs.getString(columnLabel));
 
 		return product;
 	}

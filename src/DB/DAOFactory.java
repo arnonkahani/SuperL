@@ -86,9 +86,16 @@ public class DAOFactory {
 	    stmt.executeUpdate(sql);
 	    sql = "DROP TABLE IF EXISTS DISCOUNT";
 	    stmt.executeUpdate(sql);
-	    stmt.executeUpdate(sql);
+	    
 	    sql = "DROP TABLE IF EXISTS ORDER_PRODUCT";
 	    stmt.executeUpdate(sql);
+	    sql = "DROP TABLE IF EXISTS CATAGORY";
+	    stmt.executeUpdate(sql);
+	    sql = "DROP TABLE IF EXISTS SUB_CATAGORY";
+	    stmt.executeUpdate(sql);
+	    sql = "DROP TABLE IF EXISTS SUB_SUB_CATAGORY";
+	    stmt.executeUpdate(sql);
+	    
 	    }catch(Exception e)
 	    {
 	    	System.out.println(e.getMessage());
@@ -108,12 +115,21 @@ public class DAOFactory {
 	                   "(NAME VARCHAR(15) PRIMARY KEY  NOT NULL)"; 
 	    stmt.executeUpdate(sql);
 	      sql = "CREATE TABLE PRODUCT " +
-                  "(NAME VARCHAR(15)  NOT NULL, " + 
+                  "(ID INTEGER AUTOINCREMENT ,"+
+	    		  "NAME VARCHAR(15)  NOT NULL, " + 
                   " SHELFLIFE      INT NOT NULL, " + 
                   " WEIGHT         REAL NOT NULL, " + 
-                  " PRODUCERNAME VARCHAR(15),"
-                  +"FOREIGN KEY (PRODUCERNAME) REFERENCES PRODUCER(NAME),"
-                  + "PRIMARY KEY (NAME,PRODUCERNAME))"; 
+                  " PRODUCERNAME VARCHAR(15),"+
+                  " CATAGORY           CHARACTER(50)    NOT NULL, " + 
+                  " SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+                  " SUB_SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+                  " PRICE         REAL    NOT NULL, "+
+                  " MIN_AMOUNT      INT  NOT NULL,"+
+                  "FOREIGN KEY (CATAGORY) REFERENCES CATAGORY(NAME_CAT),"+
+                  "FOREIGN KEY (SUB_CATAGORY,CATAGORY) REFERENCES SUB_CATAGORY(NAME_SCAT,NAME_CAT),"+
+                  "FOREIGN KEY (SUB_SUB_CATAGORY,SUB_CATAGORY) REFERENCES SUB_SUB_CATAGORY(NAME_SSCAT,NAME_SCAT),"+
+                  "FOREIGN KEY (PRODUCERNAME) REFERENCES PRODUCER(NAME),"
+                  + "PRIMARY KEY (ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY))"; 
 	      stmt.executeUpdate(sql);
 	      sql = "CREATE TABLE SUPPLIER_PRODUCT " +
                   "(SN INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -179,6 +195,28 @@ public class DAOFactory {
                   "FOREIGN KEY (SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID,SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN) REFERENCES SUPPLY_AGREEMENT_PRODUCT(SUPPLY_AGREEMENT_ID,SUPPLIER_PRODUCT_SN)"
                   + "PRIMARY KEY(SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID,SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN,AMOUNT))";
 	      stmt.executeUpdate(sql);
+	      sql = "CREATE TABLE CATAGORY " +
+	              "(NAME_CAT CHAR(50) PRIMARY KEY     NOT NULL)"; 
+	      
+	      
+	      stmt.executeUpdate(sql);
+	      
+	      sql = "CREATE TABLE SUB_CATAGORY " +
+	              "(NAME_SCAT CHAR(50)      NOT NULL, " +
+	    		  "NAME_CAT CHAR(50)      NOT NULL,"+
+	              "PRIMARY KEY (NAME_SCAT, NAME_CAT)"+
+	    		  "FOREIGN KEY(NAME_CAT) REFERENCES CATAGORY(NAME_CAT))"; 
+	    		  
+	    stmt.executeUpdate(sql);
+	      
+	      sql = "CREATE TABLE SUB_SUB_CATAGORY " +
+	              "(NAME_SSCAT CHAR(50)      NOT NULL, " +
+	    		  "NAME_SCAT CHAR(50)      NOT NULL,"+
+	    		  "PRIMARY KEY (NAME_SSCAT, NAME_SCAT)"+
+	    		  "FOREIGN KEY(NAME_SCAT) REFERENCES SUB_CATAGORY(NAME_SCAT))"; 
+	      
+	      
+	      stmt.executeUpdate(sql);   
 	      stmt.close();
 	    } catch ( Exception e ) {
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
