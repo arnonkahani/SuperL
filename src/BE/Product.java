@@ -18,6 +18,28 @@ public class Product{
 	{
 		
 	}
+	
+	public Product(int _id,String _catagory, String _sub_catagory, String _sub_sub_category , String _name, Producer _producer){
+		this._id=_id;
+		this._catagory=_catagory;
+		this._sub_catagory=_sub_catagory;
+		this._sub_sub_category=_sub_sub_category;
+		this._name=_name;
+		this._producer=_producer;
+		
+	}
+	
+	public Product(String _catagory, String _sub_catagory, String _sub_sub_category , String _name, Producer _producer){
+		this._catagory=_catagory;
+		this._sub_catagory=_sub_catagory;
+		this._sub_sub_category=_sub_sub_category;
+		this._name=_name;
+		this._producer=_producer;
+		
+	}
+	
+	
+	
 	public Product(int _weight, int _daysOfvaid, String name,Producer _producer) {
 		this._weight = _weight;
 		this._shelf_life = _daysOfvaid;

@@ -15,13 +15,11 @@ import Modle.storage_controller;
 public class StorageLogic {
 
 	
-	public void acceptSupply(ArrayList<OrderProduct> products);
-	
 	DB.storage_controller sc ;
 	DB.report_controller rc;
 	Connection c ;
 	
-	public Logic(storage_controller storage_controller, Connection c,report_controller rc){
+	public StorageLogic(DB.storage_controller storage_controller, Connection c,DB.report_controller rc){
 		this.c=c;
 		this.sc=storage_controller;
 		this.rc=rc;
@@ -30,10 +28,11 @@ public class StorageLogic {
 	
 	
 	
-	public int remove_from_storage (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,int amount){
+	
+	public int remove_from_storage (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,Producer producer ,int amount){
 		int check=0;
 		int id = rc.product_search_ID(catagory,sub_catagory,sub_sub_catagory,product_name,c);
-		Product prod = new Product(id,catagory,sub_catagory,sub_sub_catagory,product_name);
+		Product prod = new Product(id,catagory,sub_catagory,sub_sub_catagory,product_name,producer);
 		for (int i=0; i<amount;i++)
 		{
 			check = sc.Check_amount(prod, c, amount);
@@ -41,18 +40,20 @@ public class StorageLogic {
 				int serial = sc.get_INS_serial(prod,c);
 				Date Valid=sc.get_INS_valid(prod,c);
 				int defected =sc.get_INS_defected(prod,c);
-				INS_product ins_prod = new INS_product(serial,prod.getId(),Valid,defected);
+				INS_product ins_prod = new INS_product(serial,prod.get_id(),Valid,defected);
 				issue_certificate issue = new issue_certificate();
 				sc.remove_from_storage(prod,ins_prod,issue,c);}
 			
 		}
 		return check;
 	}
+	
+	public void acceptSupply(ArrayList<OrderProduct> products){
+		
+	}
 
-	public void getSupply (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,int amount,Date date,int is_defected){
-		Product prod = new Product(catagory,sub_catagory,sub_sub_catagory,product_name);
-		INS_product ins_prod = new INS_product (prod.getId(),date,is_defected);
-		sc.getSupply(prod,ins_prod,amount,c);
+	public void getSupply (ArrayList<OrderProduct> products,Connection c){
+		sc.getSupply(products,c);
 	}
 	
 	
@@ -96,5 +97,9 @@ public class StorageLogic {
 	
 	public void remove_weekly_order(Day day){
 		sc.remove_weekly_order(day,c);
+	}
+	
+	public WeeklyOrder get_daily_order(){
+		//return WeeklyOrder for specipic day
 	}
 }

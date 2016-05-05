@@ -1,15 +1,13 @@
 package BE;
+import java.util.Calendar;
 import java.util.Date;
 
-public class INS_product {
+public class INS_product extends Product {
 	
-	int serial_num;
-	int id;
-	Date valid_date;
-	int defected;
-	
-	
-	
+	private int serial_num;
+	private int id;
+	private Date valid_date;
+	private int defected;
 	
 	
 	public INS_product() {
@@ -17,17 +15,27 @@ public class INS_product {
 	}
 
 
-	public INS_product(int id, Date valid_date, int defected) {
+	public INS_product(int defected) {
 		this.serial_num=0;
-		this.id = id;
-		this.valid_date = valid_date;
-		this.defected = defected;
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, get_shelf_life());
+        this.valid_date = c.getTime();
+        this.defected = defected;
 	}
 	
-	public INS_product(int serial_num,int id, Date valid_date, int defected) {
+	public INS_product(int serial_num,int _id,String _catagory, String _sub_catagory, String _sub_sub_category ,String _name,Producer _producer,float _weight,float _price, int defected) {
 		this.serial_num=serial_num;
-		this.id = id;
-		this.valid_date = valid_date;
+		this.id = _id;
+		this._catagory = _catagory;
+		this._sub_catagory = _sub_catagory;
+		this._sub_sub_category = _sub_sub_category;
+		this._name = _name;
+		this._producer = _producer;
+		this._weight = _weight;
+		this._price = _price;
+		Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, get_shelf_life());
+        this.valid_date = c.getTime();
 		this.defected = defected;
 	}
 	public int getSerial_num() {

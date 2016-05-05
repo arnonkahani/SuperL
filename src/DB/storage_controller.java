@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import BE.INS_product;
+import BE.OrderProduct;
 import BE.Product;
 import BE.SupplyAgreement.Day;
 import BE.WeeklyOrder;
@@ -28,21 +29,17 @@ public class storage_controller {
 	}
 
 
-	public void getSupply(Product prod,INS_product ins,int amount,Connection c){
-	    try {
+	public void getSupply(ArrayList<INS_product> products,Connection c){
+	    
+		try {
 	    	
 	    	String sql;
 	    	Statement stmt;
 	    	
-	    	sql = "SELECT ID FROM PRODUCT WHERE CATAGORY="+prod.catagory+" AND SUB_CATAGORY="+prod.s_catagory+" AND SUB_SUB_CATAGORY="+prod.ss_catagory+" AND NAME="+prod.name+";";
-	    	stmt = c.createStatement();
-			ResultSet rs=stmt.executeQuery(sql);
-			int id = rs.getInt("ID");
-	    	
-	    	for(int i=0; i<amount; i++){
+	    	for(int j=0; j<products.size(); j++){
 				c.setAutoCommit(false);
 				 sql = "INSERT INTO INS_PRODUCT (SERIAL_NUM,ID,VALID_DATE,DEFECTED) " +
-	                   "VALUES ('"+index_ins_product+"','"+id+ "','" +ins.valid_date+"','"+ins.defected+"');"; 
+	                   "VALUES ('"+index_ins_product+"','"+id+ "','" +ins.getValid_date()+"','"+ins.isDefected()+"');"; 
 				 stmt = c.createStatement();
 			
 				stmt.executeUpdate(sql);
@@ -67,8 +64,6 @@ public class storage_controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	     
-		
 	}
 	
 	public  void remove_from_storage(Product prod, INS_product ins,issue_certificate issue,Connection c){
@@ -166,7 +161,7 @@ public class storage_controller {
 		try {
 			String sql;
 			Statement stmt;
-			sql = "SELECT VALID_DATE FROM INS_PRODUCT WHERE ID="+prod.getId()+" ORDER BY VALID_DATE ASC LIMIT 1;" ;
+			sql = "SELECT VALID_DATE FROM INS_PRODUCT WHERE ID="+prod.get_id()+" ORDER BY VALID_DATE ASC LIMIT 1;" ;
 			stmt = c.createStatement();
 			ResultSet rs=stmt.executeQuery(sql);
 			date=rs.getString("VALID_DATE");
@@ -187,7 +182,7 @@ public class storage_controller {
 		try {
 			String sql;
 			Statement stmt;
-			sql = "SELECT DEFECTED FROM INS_PRODUCT WHERE ID="+prod.getId()+" ORDER BY VALID_DATE ASC LIMIT 1;" ;
+			sql = "SELECT DEFECTED FROM INS_PRODUCT WHERE ID="+prod.get_id()+" ORDER BY VALID_DATE ASC LIMIT 1;" ;
 			stmt = c.createStatement();
 			ResultSet rs=stmt.executeQuery(sql);
 			defected=rs.getInt("DEFECTED");
@@ -234,7 +229,7 @@ public class storage_controller {
 		try {
 			String sql;
 			Statement stmt;
-			sql = "SELECT AMOUNT,MIN_AMOUNT FROM PRODUCT WHERE ID="+prod.getId()+";" ;
+			sql = "SELECT AMOUNT,MIN_AMOUNT FROM PRODUCT WHERE ID="+prod.get_id()+";" ;
 			stmt = c.createStatement();
 			ResultSet rs=stmt.executeQuery(sql);
 			curr_amount=rs.getInt("AMOUNT");
