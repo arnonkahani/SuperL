@@ -59,7 +59,7 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 		return _apm.getCheapestProductOnDemand(products);
 	}
 	
-	public ArrayList<Product> getAllOnDemandProducts(){
+	public ArrayList<Product> getAllOnDemandProducts() throws SQLException{
 		return _apm.getAllOnDemandProducts();
 	}
 	
@@ -74,7 +74,13 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 
 		public ArrayList<Product> getAllOnDemandProducts() throws SQLException {
 			
-			_db.getAllOnDemand();
+			ArrayList<SupplyAgreementProduct> supl_products = _db.getAllOnDemand();
+			ArrayList<Product> products = new ArrayList<>();
+			for (Product product : supl_products) {
+				if(!products.contains(product))
+					products.add(product);
+			}
+			return products;
 			
 		}
 

@@ -99,7 +99,7 @@ public class Product{
 	
 	public boolean equals(Object o)
 	{
-		return o.toString().toUpperCase().equals(toString().toUpperCase());
+		return ((Product)o).get_id() == get_id();
 	}
 	public int get_id() {
 		return _id;
