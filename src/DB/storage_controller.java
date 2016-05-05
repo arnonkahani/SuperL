@@ -348,6 +348,64 @@ public class storage_controller {
 			e.printStackTrace();
 		}
 	}
+	
+	public ArrayList<INS_product> ins_product_search(Product prod){
+		ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
+		int serial;
+		int defected;
+		Date valid;
+		INS_product ins;
+		try {
+			String sql;
+	    	Statement stmt;
+			sql = "SELECT SERIAL_NUM, ID, DEFECTED, VALID_DATE FROM INS_PRODUCT WHERE ID="+prod.get_id()+";"; 
+			stmt = c.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			while(rs.next()) {
+				serial=rs.getInt("SERIAL_NUM");
+				defected=rs.getInt("DEFECTED");
+				valid=rs.getDate("VALID_DATE");
+				ins=new INS_product(prod,valid,serial,defected);
+				ins_products.add(ins);
+			}
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ins_products;
+		
+	}
+	
+	public Product product_search(String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,String producer){
+		
+		Product prod=new Product();
+		String producer_name;
+		try {
+			String sql;
+	    	Statement stmt;
+			sql = "SELECT * FROM PRODUCT JOIN SUB_SUB_CATAGORY JOIN SUB_CATAGORY WHERE SUB_CATAGORY.NAME_CAT="+cat_name+"AND SUB_SUB_CATAGORY.NAME_SCAT="+sub_cat_name+"AND SUB_SUB_CATAGORY.NAME_SSCAT="+sub_sub_cat_name+"AND SUB_SUB_CATAGORY.NAME_SSCAT=PRODUCT.SUB_SUB_CATAGORY AND SUB_SUB_CATAGORY.NAME_SCAT= SUB_CATAGORY.NAME_SCAT AND PRODUCT.NAME="+name+" AND PRODUCERNAME="+producer+" ;"; 
+			stmt = c.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			prod.set_id(rs.getInt ("ID"));
+			prod.set_category(rs.getString("CATAGORY"));
+			prod.set_sub_category(rs.getString("SUB_CATAGORY"));
+			prod.set_sub_sub_category(rs.getString("SUB_SUB_CATAGORY"));
+			prod.set_name(rs.getString("NAME"));
+			producer_name=rs.getString("PRODUCERNAME");
+			prod.set_producer(new Producer(producer_name));
+			prod.set_price(rs.getFloat("PRICE"));
+			prod.set_shelf_life(rs.getInt("SHELFLIFE"));
+			prod.set_weight(rs.getFloat("WEIGHT"));
+			prod.set_min_amount(rs.getInt("MIN_AMOUNT"));
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return prod;
+		 	
+	}
 
 }
 

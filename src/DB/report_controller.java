@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import BE.INS_product;
 import BE.Producer;
 
 public class report_controller {
@@ -120,6 +121,8 @@ public class report_controller {
 		 	
 	}
 	
+	
+	
 	public int product_search_ID (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,Producer p){
 		int id=0;
 		try {
@@ -179,7 +182,7 @@ public class report_controller {
 					line.add(rs.getString ("SUB_CATAGORY"));
 					line.add(rs.getString ("SUB_SUB_CATAGORY"));
 					line.add(rs.getString ("NAME"));
-					line.add(rs.getString ("PRODUCER"));
+					line.add(rs.getString ("PRODUCERNAME"));
 					line.add(rs.getString ("PRICE"));
 					line.add(rs.getString ("VALID_DATE"));
 					line.add(rs.getString ("DEFECTED"));
@@ -188,7 +191,7 @@ public class report_controller {
 	    		
 	    	}
 	    	else if(criter.equals("MIN_AMOUNT")){
-				sql = "SELECT * FROM PRODUCT WHERE AMOUNT<MIN_AMOUNT ;"; 
+				sql = "SELECT PRODUCT.ID,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,NAME,PRODUCERNAME,MIN_AMOUNT, COUNT(PRODUCT.ID) AS AMOUNT FROM(INS_PRODUCT JOIN PRODUCT ON PRODUCT.ID=INS_PRODUCT.ID) GROUP BY PRODUCT.ID HAVING COUNT(PRODUCT.ID) < PRODUCT.MIN_AMOUNT;"; 
 				stmt = c.createStatement();
 				rs=stmt.executeQuery(sql);
 				while(rs.next()) {
@@ -198,7 +201,7 @@ public class report_controller {
 					line.add(rs.getString ("SUB_CATAGORY"));
 					line.add(rs.getString ("SUB_SUB_CATAGORY"));
 					line.add(rs.getString ("NAME"));
-					line.add(rs.getString ("PRODUCER"));
+					line.add(rs.getString ("PRODUCERNAME"));
 					line.add(rs.getString ("AMOUNT"));
 					line.add(rs.getString ("MIN_AMOUNT"));
 					arr.add(line);
@@ -218,8 +221,8 @@ public class report_controller {
 						line.add(rs.getString ("SUB_CATAGORY"));
 						line.add(rs.getString ("SUB_SUB_CATAGORY"));
 						line.add(rs.getString ("NAME"));
-						line.add(rs.getString ("PRODUCER"));
-						line.add(rs.getString ("AMOUNT"));
+						line.add(rs.getString ("PRODUCERNAME"));
+						line.add(rs.getString ("WEIGHT"));
 						line.add(rs.getString ("MIN_AMOUNT"));
 						line.add(rs.getString ("PRICE"));
 						line.add(rs.getString ("VALID_DATE"));
@@ -240,8 +243,8 @@ public class report_controller {
 						line.add(rs.getString ("SUB_CATAGORY"));
 						line.add(rs.getString ("SUB_SUB_CATAGORY"));
 						line.add(rs.getString ("NAME"));
-						line.add(rs.getString ("PRODUCER"));
-						line.add(rs.getString ("AMOUNT"));
+						line.add(rs.getString ("PRODUCERNAME"));
+						line.add(rs.getString ("WEIGHT"));
 						line.add(rs.getString ("MIN_AMOUNT"));
 						line.add(rs.getString ("PRICE"));
 						line.add(rs.getString ("VALID_DATE"));
@@ -262,8 +265,8 @@ public class report_controller {
 						line.add(rs.getString ("SUB_CATAGORY"));
 						line.add(rs.getString ("SUB_SUB_CATAGORY"));
 						line.add(rs.getString ("NAME"));
-						line.add(rs.getString ("PRODUCER"));
-						line.add(rs.getString ("AMOUNT"));
+						line.add(rs.getString ("PRODUCERNAME"));
+						line.add(rs.getString ("WEIGHT"));
 						line.add(rs.getString ("MIN_AMOUNT"));
 						line.add(rs.getString ("PRICE"));
 						line.add(rs.getString ("VALID_DATE"));
@@ -285,9 +288,30 @@ public class report_controller {
 						line.add(rs.getString ("SUB_CATAGORY"));
 						line.add(rs.getString ("SUB_SUB_CATAGORY"));
 						line.add(rs.getString ("NAME"));
-						line.add(rs.getString ("PRODUCER"));
-						line.add(rs.getString ("AMOUNT"));
+						line.add(rs.getString ("PRODUCERNAME"));
+						line.add(rs.getString ("WEIGHT"));
 						line.add(rs.getString ("MIN_AMOUNT"));
+						line.add(rs.getString ("PRICE"));
+						line.add(rs.getString ("VALID_DATE"));
+						line.add(rs.getString ("DEFECTED"));
+						arr.add(line);
+					}
+	    			
+	    		}
+	    		else if (count==5){
+					sql = "SELECT * FROM PRODUCT JOIN INS_PRODUCT WHERE CATAGORY="+parm.get(0)+" AND SUB_CATAGORY="+parm.get(1)+" AND SUB_SUB_CATAGORY="+parm.get(2)+" AND NAME="+parm.get(3)+" AND PRODUCERNAME ="+parm.get(4)+"AND PRODUCT.ID=INS_PRODUCT.ID ;"; 
+					stmt = c.createStatement();
+					rs=stmt.executeQuery(sql);
+					while(rs.next()) {
+						ArrayList<String> line=new ArrayList<String>();
+						line.add(rs.getString ("ID"));
+						line.add(rs.getString ("SERIAL_NUM"));
+						line.add(rs.getString ("CATAGORY"));
+						line.add(rs.getString ("SUB_CATAGORY"));
+						line.add(rs.getString ("SUB_SUB_CATAGORY"));
+						line.add(rs.getString ("NAME"));
+						line.add(rs.getString ("PRODUCERNAME"));
+						line.add(rs.getString ("WEIGHT"));
 						line.add(rs.getString ("PRICE"));
 						line.add(rs.getString ("VALID_DATE"));
 						line.add(rs.getString ("DEFECTED"));

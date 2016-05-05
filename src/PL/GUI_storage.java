@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import BE.INS_product;
 import BL.StorageLogic;
 
 public class GUI_storage {
@@ -17,17 +18,19 @@ public class GUI_storage {
 	String sub_catagory ="";
 	String sub_sub_catagory ="";
 	String product_name ="";
+	String producer_name="";
 	ArrayList<String> cat = new ArrayList<String>();
 	ArrayList<String> sub_cat = new ArrayList<String>();
 	ArrayList<String> sub_sub_cat = new ArrayList<String>();
 	ArrayList<String> products = new ArrayList<String>();
+	ArrayList<String> producers = new ArrayList<String>();
 	StorageLogic logic;
 	
     public GUI_storage(StorageLogic logic) {
         this.logic=logic;
     }
 
-	public void get_cat(int n)
+public void get_cat(int n)
 	{
 		if(n==1)
 		{
@@ -53,7 +56,7 @@ public class GUI_storage {
 		
 	}
 	
-	public void get_sub_cat(int n){
+public void get_sub_cat(int n){
 		if(n==1)
 		{
 			System.out.println("Invalid option. Please try again");
@@ -78,7 +81,7 @@ public class GUI_storage {
 		
 	}
 	
-	public void get_sub_sub_cat(int n){
+public void get_sub_sub_cat(int n){
 		if(n==1)
 		{
 			System.out.println("Invalid option. Please try again");
@@ -103,7 +106,7 @@ public class GUI_storage {
 		
 	}
 	
-	public void get_prod(int n){
+public void get_prod(int n){
 		if(n==1)
 		{
 			System.out.println("Invalid option. Please try again");
@@ -128,13 +131,36 @@ public class GUI_storage {
 		
 	}
 	
+public void get_producer_prod(int n){
+		if(n==1)
+		{
+			System.out.println("Invalid option. Please try again");
+		}
+		producers = logic.producer_product_search(catagory,sub_catagory,sub_sub_catagory,product_name);
+		System.out.println("Please select product:");
+		for (int i = 1; i <= producers.size(); i++)
+		{
+			System.out.println(i+". "+producers.get(i-1));
+		}
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
+		String option = scanner.next();
+		if (Integer.parseInt(option)>cat.size())
+		{
+			get_prod(1);
+		}
+		else
+		{
+			producer_name = "'"+producers.get(Integer.parseInt(option)-1)+"'";
+		}
+		
+	}
 	
-	public void start(int n){
+public void start(int n){
 		if (n==0)
 		{
-		System.out.println("Welcom!!!");
 		System.out.println("Please select an option:");
-		System.out.println("1. Get supply"+'\n'+"2. Remove product from the storage"
+		System.out.println("1. Update product condition"+'\n'+"2. Remove product from the storage"
 				+'\n'+"3. Reports"+'\n'+"PRESS # TO EXIT"+'\n');
 		}
 		else
@@ -164,11 +190,12 @@ public class GUI_storage {
 	      }
 	      
 	}
-	public void add_remove(int n){
+	
+public void add_remove(int n){
 		
 		if (n==1)
 			{
-				System.out.println("-GET SUPPLY-");
+				System.out.println("-UPDATE PRODUCT CONDITION-");
 			}
 		else 
 			{
@@ -186,7 +213,8 @@ public class GUI_storage {
 		add_remove_a(n,0);
 		
 	}
-	public void add_remove_a(int n,int m){
+
+public void add_remove_a(int n,int m){
 		int amount;
 
 		if (m==1)
@@ -213,7 +241,7 @@ public class GUI_storage {
 			{
 				if(n==1)
 				{
-				add_remove_b(n,amount);
+				   update_defected();
 				}
 				else
 				{
@@ -227,28 +255,74 @@ public class GUI_storage {
 			add_remove_a(n,1);
 		}
 	}
-	public void add_remove_b(int n,int amount){
+
+public void update_defected(){
 		
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Please enter valid date in this format: MM/dd/yyyy");
-		String startDateString = scanner.next();
-	    DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
-	    Date startDate=new Date();
-	    try {
-	        startDate = df.parse(startDateString);
-	    } catch (ParseException e) {
-	        e.printStackTrace();
-	    }
-		add_remove_c(n,0,amount,startDate);
+		ArrayList<INS_product> ins_products = logic.ins_product_search(catagory,sub_catagory,sub_sub_catagory,product_name,producer_name);
+		boolean rep1 =false;
+		boolean rep2 =false;
+		INS_product ins=null;
+		if (!rep1){
+			System.out.println("Please select product:");
+			for (int i = 1; i <= ins_products.size(); i++)
+			{
+				System.out.println(i+". "+ins_products.get(i-1));
+			}
+		}
+		if (!rep2){
+			@SuppressWarnings("resource")
+			Scanner scanner = new Scanner(System.in);
+			String option = scanner.next();
+			if (Integer.parseInt(option)>cat.size())
+			{
+				System.out.println("invalid input please choose product");
+				rep1=true;
+				update_defected();
+			}
+			
+			else
+			{
+				ins = ins_products.get(Integer.parseInt(option)-1);	
+				System.out.println("Please press 1 for defected or 0 otherwise");
+				scanner = new Scanner(System.in);
+				option = scanner.next();
+				if (Integer.parseInt(option)!=0 && Integer.parseInt(option)!=1)
+					{
+					System.out.println("invalid input-Please press 1 for defected or 0 otherwise");
+					rep2=true;
+					update_defected();
+					}
+				else
+					{
+					logic.update_defected(ins, (Integer.parseInt(option)));
+					}
+			}
+		}
+		else{
+			System.out.println("Please press 1 for defected or 0 otherwise");
+			@SuppressWarnings("resource")
+			Scanner scanner = new Scanner(System.in);
+			String option = scanner.next();
+			if (Integer.parseInt(option)!=0 && Integer.parseInt(option)!=1)
+				{
+					System.out.println("invalid input-Please press 1 for defected or 0 otherwise");
+					rep2=true;
+					update_defected();
+					
+				}
+			else
+				{
+				logic.update_defected(ins, (Integer.parseInt(option)));
+				}
+		}
 		
 	}
 	
-		public void add_remove_c(int n,int m,int amount,Date date){
-		int is_defected;
-		if(n==0)
-		{
-			int check=logic.remove_from_storage(catagory, sub_catagory, sub_sub_catagory, product_name,producer, amount);
+public void add_remove_c(int n,int m,int amount,Date date){
+		//int is_defected;
+		//if(n==0)
+		//{
+			int check=logic.remove_from_storage(catagory, sub_catagory, sub_sub_catagory, product_name,producer_name, amount);
 			if (check==0){
 				System.err.println("The proccess failed -the amount is higher then the current amount");
 				start(0);
@@ -260,8 +334,8 @@ public class GUI_storage {
 			else{
 				cont_supply(n,0);
 			}
-		}
-		else if (m==1)
+		//}
+		/*else if (m==1)
 		{
 			System.out.println("Invalid input. Please enter a number");
 		}
@@ -296,7 +370,7 @@ public class GUI_storage {
 		catch(Exception e)
 		{
 			add_remove_c(n,1,amount,date);
-		}
+		}*/
 		
 	}
 	
@@ -393,18 +467,23 @@ public void rep_by_cat(int n,String search){
 	{
 		get_sub_sub_cat(0);
 	}
-	else
+	else if (n==3)
 	{
 		get_prod(0);
 	}
+	else 
+	{
+		get_producer_prod(0);
+	}
 	rep_by_cat_a(n,search,0);
 }
+
 public void rep_by_cat_a(int n,String search,int m){
 	if (m==1)
 	{
 		System.out.println("Invalid option. Please try again");
 	}
-	if (n<3)
+	if (n<4)
 		{
 			System.out.println("Please select an option:");
 			System.out.println("1. Another filter"+'\n'+"2. Send report"+'\n'+"PRESS # FOR MAIN MENU");
@@ -431,6 +510,7 @@ public void rep_by_cat_a(int n,String search,int m){
 	}
 	
 }
+
 public void display_report(int n,String search){
 	
 	System.out.println("PRESS # FOR MAIN MENU");
@@ -440,7 +520,7 @@ public void display_report(int n,String search){
 	param.add(sub_catagory);
 	param.add(sub_sub_catagory);
 	param.add(product_name);
-	String[] category_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Amount","Min Amount","Price","Valid Date","Is Defected?"};
+	String[] category_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Weight","Min Amount","Price","Valid Date","Is Defected?"};
 	String[] defected_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Price","Valid Date","Is Defected?"};
 	String[] min_arr ={"Product Id","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Amount","Min Amount"};
 	String[] issu_arr ={"Issue Certificate Id","Issue Date","Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Price","Valid Date"};

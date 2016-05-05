@@ -95,6 +95,20 @@ public class StorageLogic {
 		return ans;
 	}
 	
+	public ArrayList<String> producer_product_search (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name){
+		ArrayList<String> ans;
+		ans=rc.producer_product_search(cat_name,sub_cat_name,sub_sub_cat_name,name);
+		return ans;
+	}
+	
+	public ArrayList<INS_product> ins_product_search (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,String producer){
+		ArrayList<INS_product> ans;
+		Product prod;
+		prod=sc.product_search(cat_name,sub_cat_name,sub_sub_cat_name,name,producer);
+		ans=sc.ins_product_search(prod);
+		return ans;
+	}
+	
 	public ArrayList<ArrayList<String>> get_report (ArrayList<String> parm,int count,String criter){
 		ArrayList<ArrayList<String>> ans;
 		ans=rc.get_report(parm,count,criter);
