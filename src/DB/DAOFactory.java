@@ -251,6 +251,8 @@ public class DAOFactory {
 	      sql = "CREATE TABLE INS_PRODUCT " +
 	    		  "(SERIAL_NUM INTEGER  NOT NULL,"+
                   "ID INTEGER  NOT NULL,"+
+                  " DEFECTED   INTEGER     NOT NULL, " + 
+                  " VALID_DATE   TEXT     NOT NULL, " + 
                   "FOREIGN KEY (ID) REFERENCES PRODUCT(ID),"+
                   "PRIMARY KEY (SERIAL_NUM))"; 
 	      stmt.executeUpdate(sql);

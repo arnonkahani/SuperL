@@ -10,14 +10,15 @@ import BE.Contact;
 import BE.Supplier;
 import BE.SupplierProduct;
 import BL.LogicManager;
+import BL.SupplierManager;
 
 public class supplierView {
 	
-	private LogicManager _sp;
+	private SupplierManager _sp;
 	private Scanner scn;
 	private viewUtils _vu;
 	
-	public supplierView(viewUtils vu, LogicManager logicManager) {
+	public supplierView(viewUtils vu, SupplierManager logicManager) {
 		_sp=logicManager;
 		_vu=vu;
 		scn = new Scanner(System.in);
@@ -71,7 +72,7 @@ public class supplierView {
 		
 		ArrayList<SupplierProduct> supllierPro = new ArrayList<>();
 		try {
-			supllierPro = _sp.search(new int[]{4}, new String[]{supllierID}, SupplierProduct.class);
+			supllierPro = _sp.searchSupplierProduct(new int[]{4}, new String[]{supllierID});
 		} catch (SQLException e) {
 			_vu.exceptionHandler(e);
 			return;
@@ -87,7 +88,7 @@ public class supplierView {
 	
 	public void supplierSearch(){
 		_vu.clear();
-		String [] menu = _sp.getFileds(Supplier.class);
+		String [] menu = _sp.getSupplierFileds();
 		
 		menu = _vu.createMenu(menu);
 		_vu.clear();
@@ -107,7 +108,8 @@ public class supplierView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_sp.search(new int[]{choise-1},new String[]{query},Supplier.class));
+					
+					_vu.showResult(_sp.searchSupplier(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
 					System.out.println(_vu.exceptionHandler(e));
 				}
@@ -118,7 +120,7 @@ public class supplierView {
 	public String chooseCN()
 	{
 		try {
-			ArrayList<Supplier> sup = _sp.search(new int[]{0}, new String[]{""},Supplier.class);
+			ArrayList<Supplier> sup = _sp.searchSupplier(new int[]{0}, new String[]{""});
 			for (int i = 0; i < sup.size(); i++) {
 				System.out.println(i + ". " + sup.get(0));
 			}
@@ -133,7 +135,7 @@ public class supplierView {
 	public SupplierProduct chooseSupplierProduct(String CN)
 	{
 		try {
-			ArrayList<SupplierProduct> sup = _sp.search(new int[]{4}, new String[]{CN}, SupplierProduct.class);;
+			ArrayList<SupplierProduct> sup = _sp.searchSupplierProduct(new int[]{4}, new String[]{CN});
 			for (int i = 0; i < sup.size(); i++) {
 				System.out.println(i + ". " + sup.get(0));
 			}
