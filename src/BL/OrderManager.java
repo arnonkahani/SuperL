@@ -7,16 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import BE.*;
-import DB.DAO;
 import DB.DAOOrder;
-import PL.orderView;
 
 
 public class OrderManager extends LogicManager<DAOOrder>{
@@ -29,8 +23,7 @@ public class OrderManager extends LogicManager<DAOOrder>{
 	}
 	@Override
 	public void create(Object[] values) throws SQLException{
-		ArrayList<SupplyAgreementProduct> products = _sam.getCheapestProductOnDemand((HashMap<Product,Integer>)values[1]);
-		makeOrderProducts(products);
+		 makeOnDemand((HashMap<Product, Integer>) values[0]);
 	}
 	
 
@@ -106,6 +99,10 @@ public class OrderManager extends LogicManager<DAOOrder>{
 		}
 		return product_list;
 	
+	}
+	public ArrayList<OrderProduct> makeOnDemand(HashMap<Product, Integer> products_to_order) throws SQLException {
+		ArrayList<SupplyAgreementProduct> products = _sam.getCheapestProductOnDemand(products_to_order);
+		return makeOrderProducts(products);
 	}
 
 	

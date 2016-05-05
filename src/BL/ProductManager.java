@@ -1,7 +1,7 @@
 package BL;
 
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 
 import BE.Producer;
 import BE.Product;
@@ -39,6 +39,10 @@ public class ProductManager extends LogicManager<DAOSupplierProduct>{
 			String sub_catagory,String sub_sub_catagory) throws SQLException {
 		String [] values = new String[]{}; 
 		return getFromPK(values);
+	}
+	
+	public ArrayList<Product> getAllProducts() throws SQLException{
+		return getAll();
 	}
 
 
