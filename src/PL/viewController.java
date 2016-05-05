@@ -1,6 +1,7 @@
 package PL;
 
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -18,16 +19,17 @@ public class viewController {
 	private BLFactory _bc; 
 	private ProductView _pv;
 	
-	public viewController(){
+	public viewController() throws SQLException{
 		_vu = new viewUtils();
 		System.out.println("Is this the first time the program is running? Yes = 1 , No = 0");
 		boolean first_time = 1 == Integer.parseInt(_vu.tryGetNumber(0, 1));
+		
 		_bc = new BLFactory(first_time); 
 		_vu = new viewUtils();
-		_sv = new supplierView(_vu,_bc.getManager(Supplier.class));
-		_sav = new supplyAgreementView(_vu,_bc.getManager(SupplyAgreement.class),_sv);
-		_ov = new orderView(_vu,_bc.getManager(Order.class),_sav);
-		_pv = new ProductView(_bc.getManager(Product.class), _vu);
+		_pv = new ProductView((ProductManager) _bc.getSupplierLogic().getManager(Product.class), _vu);
+		_sv = new supplierView(_vu,_pv,(SupplierManager) _bc.getSupplierLogic().getManager(Supplier.class));
+		_sav = new supplyAgreementView(_vu,(SupplyAgreementManager) _bc.getSupplierLogic().getManager(SupplyAgreement.class),_sv);
+		_ov = new orderView(_vu,(OrderManager) _bc.getSupplierLogic().getManager(Order.class),_sav);
 		
 		
 		run();

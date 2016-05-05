@@ -1,27 +1,20 @@
 package PL;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
+import java.util.HashMap;
 import java.util.Scanner;
 
-import BE.Order;
-import BE.OrderProduct;
-import BE.SupplyAgreement;
-import BL.LogicManager;
+import BE.Product;
+import BL.OrderManager;
 
 
 public class orderView {
-	private LogicManager _om;
+	private OrderManager _om;
 	private Scanner scn;
 	private viewUtils _vu;
 	private supplyAgreementView _sav;
 	
-	public orderView(viewUtils vu, LogicManager logicManager, supplyAgreementView sav) {
+	public orderView(viewUtils vu, OrderManager logicManager, supplyAgreementView sav) {
 		_sav=sav;
 		_om=logicManager;
 		_vu=vu;
@@ -31,39 +24,27 @@ public class orderView {
 	public void createOrder(){
 		_vu.clear();
 		try {
-		System.out.println("Please enter choose supply agreement:");
-		SupplyAgreement supllyagreement= _sav.chooseSupplyAgreement();
 		
 		System.out.println("Please enter number of products at the order:");
 		int n= Integer.parseInt(_vu.tryGetNumber());
-		ArrayList<OrderProduct> product_table  = new ArrayList<>();
+		HashMap<Product,Integer> product_table  = new HashMap<>();
 		for(int i=0;i<n;i++){
-			OrderProduct pr = new OrderProduct(_sav.chooseAgreementProduct(supllyagreement.get_prices()));
+			Product product = _sav.chooseOnDemandAgreementProduct();
+			if(product == null)
+			{
+				System.out.println("No products");
+				return;
+				
+			}
 			System.out.println("Please enter amount of the product :");
 			int l= Integer.parseInt(_vu.tryGetNumber());
-			pr.setAmount(l);
-			product_table.add(pr);
-		}
-		
-		System.out.println("Please enter the date of order:");
-		System.out.println("Year:");
-		String year=scn.nextLine();	
-		System.out.println("Month:");
-		String month=scn.nextLine();
-		System.out.println("Day:");
-		String day=scn.nextLine();
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = null;
-		try {
 			
-			date = format.parse(year +"-" + month+"-"+day + " "+"20:20:20");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			product_table.put(product, new Integer(l));
 		}
 		
 		
-		_om.create(new Object[]{supllyagreement,product_table,date});
+		
+		_om.create(new Object[]{product_table});
 		} catch (SQLException e1) {
 			System.out.println(_vu.exceptionHandler(e1));
 		}
@@ -76,7 +57,7 @@ public class orderView {
 		String str=scn.nextLine();
 		
 		try {
-			System.out.println(_om.search(new int[]{1}, new String[]{str},Order.class).get(0));
+			System.out.println(_om.getOrderByID(str));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,7 +66,7 @@ public class orderView {
 	
 	public void searchMenu(){
 		_vu.clear();
-		String[] menu = _om.getFileds(Order.class);
+		String[] menu = _om.getFileds();
 		menu = _vu.createMenu(menu);
 		int choise = -1;
 		String query;
@@ -103,7 +84,7 @@ public class orderView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_om.search(new int[]{choise-1},new String[]{query},Order.class));
+					_vu.showResult(_om.search(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

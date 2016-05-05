@@ -15,12 +15,14 @@ import BL.SupplierManager;
 public class supplierView {
 	
 	private SupplierManager _sp;
+	private ProductView _pv;
 	private Scanner scn;
 	private viewUtils _vu;
 	
-	public supplierView(viewUtils vu, SupplierManager logicManager) {
+	public supplierView(viewUtils vu,ProductView pv ,SupplierManager logicManager) {
 		_sp=logicManager;
 		_vu=vu;
+		_pv=pv;
 		scn = new Scanner(System.in);
 	}
 
@@ -72,7 +74,7 @@ public class supplierView {
 		
 		ArrayList<SupplierProduct> supllierPro = new ArrayList<>();
 		try {
-			supllierPro = _sp.searchSupplierProduct(new int[]{4}, new String[]{supllierID});
+			supllierPro = _pv.getSupplierProduct(supllierID);
 		} catch (SQLException e) {
 			_vu.exceptionHandler(e);
 			return;
@@ -120,7 +122,9 @@ public class supplierView {
 	public String chooseCN()
 	{
 		try {
-			ArrayList<Supplier> sup = _sp.searchSupplier(new int[]{0}, new String[]{""});
+			ArrayList<Supplier> sup = _sp.getAllSuplliers();
+			if(sup.size() == 0)
+				return null;
 			for (int i = 0; i < sup.size(); i++) {
 				System.out.println(i + ". " + sup.get(0));
 			}
@@ -129,23 +133,14 @@ public class supplierView {
 			return sup.get(choise).get_CN();
 		} catch (SQLException e) {
 			_vu.exceptionHandler(e);
-			return "";
-		}
-	}
-	public SupplierProduct chooseSupplierProduct(String CN)
-	{
-		try {
-			ArrayList<SupplierProduct> sup = _sp.searchSupplierProduct(new int[]{4}, new String[]{CN});
-			for (int i = 0; i < sup.size(); i++) {
-				System.out.println(i + ". " + sup.get(0));
-			}
-			System.out.println("Choose product: ");
-			int choise = Integer.parseInt(_vu.tryGetNumber(0, sup.size() - 1));
-			return sup.get(choise);
-		} catch (SQLException e) {
-			_vu.exceptionHandler(e);
 			return null;
 		}
+	}
+	
+	public SupplierProduct chooseSupplierProduct(String CN)
+	{
+		return _pv.searchSupplierProduct(CN);
+		
 	}
 	
 }

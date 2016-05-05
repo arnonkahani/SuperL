@@ -63,7 +63,7 @@ public abstract class DAO <T>{
 				sql = sql + " WHERE " + genrateQuery(search_feild,query);}
 			sql = sql.toUpperCase();
 			rs = _stm.executeQuery(sql);
-			
+			System.out.println(sql);
 		}
 		catch(Exception e){
 		}
@@ -105,7 +105,7 @@ public abstract class DAO <T>{
 		}
 		sql = sql + insert_columns + ") VALUES (" +columns + ")";
 		sql = sql.toUpperCase();
-		
+		System.out.println(sql);
 		
 		_stm.executeUpdate(sql);
 		System.out.println("Added to: " + getTable());

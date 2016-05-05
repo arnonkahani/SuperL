@@ -6,19 +6,21 @@ import java.util.Scanner;
 
 import BE.SupplyAgreementProduct;
 import BE.Discount;
+import BE.Product;
 import BE.SupplierProduct;
 import BE.SupplyAgreement;
 import BE.SupplyAgreement.*;
 import BL.LogicManager;
+import BL.SupplyAgreementManager;
 
 public class supplyAgreementView {
 
-	private LogicManager _sam;
+	private SupplyAgreementManager _sam;
 	private supplierView _sv;
 	private viewUtils _vu;
 	private Scanner scn;
 	
-	public supplyAgreementView(viewUtils vu,LogicManager logicManager,supplierView sv)
+	public supplyAgreementView(viewUtils vu,SupplyAgreementManager logicManager,supplierView sv)
 	{
 		_sv = sv;
 		_sam = logicManager;
@@ -33,6 +35,11 @@ public class supplyAgreementView {
 		
 		System.out.println("Please enter supplier CN:");
 		String supplierID = _sv.chooseCN();
+		if(supplierID==null)
+		{
+			System.out.println("No suppliers");
+			return;
+		}
 		
 		System.out.println("Please enter number of SupplyType:");
 		int supplyType = _vu.listChoose(SupplyType.values());
@@ -101,7 +108,7 @@ public class supplyAgreementView {
 	
 	public void searchSupplyAgreement(){
 		_vu.clear();
-		String[] menu = _sam.getFileds(SupplyAgreement.class);
+		String[] menu = _sam.getFileds();
 		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;
@@ -120,7 +127,7 @@ public class supplyAgreementView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_sam.search(new int[]{choise-1},new String[]{query},SupplyAgreement.class));
+					_vu.showResult(_sam.search(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
 					_vu.exceptionHandler(e);
 				}
@@ -130,7 +137,7 @@ public class supplyAgreementView {
 	
 	public void searchSupplyAgreementProduct(){
 		_vu.clear();
-		String[] menu = _sam.getFileds(SupplyAgreementProduct.class);
+		String[] menu = _sam.getFileds();
 		menu = _vu.createMenu(menu);
 		_vu.clear();
 		int choise = -1;
@@ -149,7 +156,7 @@ public class supplyAgreementView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_sam.search(new int[]{choise-1},new String[]{query},SupplyAgreementProduct.class));
+					_vu.showResult(_sam.search(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
 					_vu.exceptionHandler(e);
 				}
@@ -161,7 +168,7 @@ public class supplyAgreementView {
 	
 	public SupplyAgreement chooseSupplyAgreement() {
 		try {
-			ArrayList<SupplyAgreement> sup = _sam.search(new int[]{0}, new String[]{""}, SupplyAgreement.class);
+			ArrayList<SupplyAgreement> sup = _sam.search(new int[]{0}, new String[]{""});
 			for (int i = 0; i < sup.size(); i++) {
 				System.out.println(i + ". " + sup.get(0));
 			}
@@ -173,11 +180,13 @@ public class supplyAgreementView {
 			return null;
 		}
 	}
+	
+	 
 	public SupplyAgreementProduct chooseAgreementProduct(ArrayList<SupplyAgreementProduct> get_prices) {
 		try {
 			
 			for (int i = 0; i < get_prices.size(); i++) {
-				System.out.println(i + ". " + get_prices.get(0));
+				System.out.println(i + ". " + get_prices.get(i));
 			}
 			System.out.println("Choose Agreement Product: ");
 			int choise = Integer.parseInt(_vu.tryGetNumber(0, get_prices.size() - 1));
@@ -186,6 +195,23 @@ public class supplyAgreementView {
 			return null;
 		}
 	}
+
+	public Product chooseOnDemandAgreementProduct() {
+		try {
+			ArrayList<Product> products =_sam.getAllOnDemandProducts();
+			for (int i = 0; i < products.size(); i++) {
+				System.out.println(i + ". " + products.get(i));
+				System.out.println("Choose Agreement Product: ");
+				int choise = Integer.parseInt(_vu.tryGetNumber(0, products.size() - 1));
+				return products.get(choise);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	}
 
 	

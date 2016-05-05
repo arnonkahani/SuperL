@@ -13,6 +13,7 @@ import BE.SupplyAgreement;
 import BE.WeeklyOrder;
 import DB.DAOFactory;
 import DB.DAOOrder;
+import DB.DAOProduct;
 import DB.DAOSupplier;
 import DB.DAOSupplierProduct;
 import DB.DAOSupplyAgreement;
@@ -33,7 +34,8 @@ public class SupplierLogic {
 		_sm = new SupplierManager((DAOSupplier) db.create(Supplier.class));
 		_sam = new SupplyAgreementManager((DAOSupplyAgreement) db.create(SupplyAgreement.class));
 		_om = new OrderManager((DAOOrder) db.create(Order.class));
-		_pm = new ProductManager((DAOSupplierProduct) db.create(SupplierProduct.class));
+		_pm = new ProductManager((DAOProduct) db.create(Product.class));
+		_pm.setSupplierProductManager((DAOSupplierProduct) db.create(SupplierProduct.class));
 		_storage_logic.getSupply(_om.makeWeekelyOrder(wo));
 	}
 	

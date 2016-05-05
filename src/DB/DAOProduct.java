@@ -3,6 +3,7 @@ package DB;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import BE.Producer;
 import BE.Product;
@@ -40,7 +41,7 @@ public class DAOProduct extends DAO<Product> {
 		}
 		catch(SQLException e){}
 		try{
-			_sub_sub_catagory.insert(new SubSubCatagory(object.get_sub_sub_category(), object.get_sub_category()));
+			_sub_sub_catagory.insert(new SubSubCatagory(object.get_sub_sub_category(), object.get_sub_category(),object.get_category()));
 		}
 		catch(SQLException e)
 		{
@@ -97,10 +98,25 @@ public class DAOProduct extends DAO<Product> {
 		
 		return new String[] {"'"+object.get_name()+"'","'"+object.get_producer().getName()+"'"
 				,""+object.get_weight(),""+object.get_shelf_life(),"'"+object.get_category()+"'",
-				"'"+object.get_sub_category()+"'","'"+object.get_sub_category()+"'","'"+object.get_sub_sub_category()+"'",
+				"'"+object.get_sub_category()+"'","'"+object.get_sub_sub_category()+"'",
 				object.get_min_amount()+"",""+object.get_price()};
 		
 	}
+	
+	
+	public ArrayList<Catagory> getAllCatagory() throws SQLException {
+		return _catagory.getAll();
+	}
+
+	public ArrayList<SubCatagory> getAllSubCatagory(String catagory) throws SQLException {
+		return _sub_catagory.search(new int[]{1}, new String[]{"'"+catagory+"'"});
+	}
+	
+	public ArrayList<SubSubCatagory> getAllSubSubCatagory(String catagory,String sub_catagory) throws SQLException {
+		return _sub_sub_catagory.search(new int[]{2,3}, new String[]{"'"+sub_catagory+"'","'"+catagory+"'"});
+	}
+	
+	
 	class DAOProducer extends DAO<Producer> {
 
 		public DAOProducer(Connection c) {
@@ -176,7 +192,11 @@ public class DAOProduct extends DAO<Product> {
 
 		@Override
 		public Catagory create(ResultSet rs) throws SQLException {
-			return new Catagory(rs.getString("NAME_CAT)"));
+			return new Catagory(rs.getString("NAME_CAT"));
+		}
+		@Override
+		public ArrayList<Catagory> getAll() throws SQLException {
+			return search(new int[]{0}, new String[]{});
 		}
 		
 	}
@@ -189,12 +209,12 @@ public class DAOProduct extends DAO<Product> {
 
 		@Override
 		public String[] getSearchFields() {
-			return new String[]{"All","NAME_SCAT","NAME_CAT"};
+			return new String[]{"All","NAME_CAT","NAME_SCAT"};
 		}
 
 		@Override
 		public String[] getSearchFieldsView() {
-			return new String[]{"All","Sub Catagory","Catagory"};
+			return new String[]{"All","Catagory","Sub Catagory"};
 		}
 
 		@Override
@@ -204,7 +224,7 @@ public class DAOProduct extends DAO<Product> {
 
 		@Override
 		protected String[] getValues(SubCatagory object) {
-			return new String[]{object.getName_scat(),object.getName_cat()};
+			return new String[]{"'"+object.getName_cat()+"'","'"+object.getName_scat()+"'"};
 		}
 
 		@Override
@@ -227,12 +247,12 @@ public class DAOProduct extends DAO<Product> {
 
 		@Override
 		public String[] getSearchFields() {
-			return new String[]{"All","NAME_SSCAT","NAME_SCAT"};
+			return new String[]{"All","NAME_SSCAT","NAME_SCAT","NAME_CAT"};
 		}
 
 		@Override
 		public String[] getSearchFieldsView() {
-			return new String[]{"All","Sub Sub Catagory","Sub Sub Catagory"};
+			return new String[]{"All","Sub Sub Catagory","Sub Catagory","Catagory"};
 		}
 
 		@Override
@@ -242,17 +262,17 @@ public class DAOProduct extends DAO<Product> {
 
 		@Override
 		protected String[] getValues(SubSubCatagory object) {
-			return new String[]{object.getName_sscat(),object.getName_scat()};
+			return new String[]{"'"+object.getName_sscat()+"'","'"+object.getName_scat()+"'","'"+object.getName_catagory()+"'"};
 		}
 
 		@Override
 		public SubSubCatagory getFromPK(String[] values) throws SQLException {
-			return search(new int[]{1, 2},values).get(0);
+			return search(new int[]{1, 2,3},values).get(0);
 		}
 
 		@Override
 		public SubSubCatagory create(ResultSet rs) throws SQLException {
-			return new SubSubCatagory(rs.getString("NAME_SSCAT"), rs.getString("NAME_SCAT"));
+			return new SubSubCatagory(rs.getString("NAME_SSCAT"), rs.getString("NAME_SCAT"),rs.getString("NAME_CAT"));
 		}
 		
 	}

@@ -23,7 +23,7 @@ public abstract class LogicManager<T extends DAO> {
 			return _db.search(search_field,query);
 	}
 	
-	protected String[] getFileds() {
+	public String[] getFileds() {
 		return _db.getSearchFieldsView();
 	}
 	

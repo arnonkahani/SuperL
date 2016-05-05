@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
-
+import BE.Catagory;
+import BE.SubCatagory;
+import BE.SubSubCatagory;
 import BE.SupplierProduct;
 
 public class DAOSupplierProduct extends DAO<SupplierProduct> {
@@ -19,14 +22,12 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 
 	@Override
 	public String[] getSearchFields() {
-		return new String[]{"All","SN","ProductName","ProductProducerName","SupplierCN","PRODUCT_ID","PRODUCT_CATAGORY","PRODUCT_SUB_CATAGORY"
-				,"PRODUCT_SUB_SUB_CATAGORY"};
+		return new String[]{"All","SN","SUPPLIERCN","PRODUCT_ID"};
 	}
 
 	@Override
 	public String[] getSearchFieldsView() {
-		return new String[]{"All","Serial Number","Product Name","Product's Producer's Name","Supplier CN","Product ID",
-				"Product Catagory","Product Sub Catagory","Product Sub Sub Catagory"};
+		return new String[]{"All","Serial Number","Supplier CN","Product ID"};
 	}
 
 	@Override
@@ -36,10 +37,7 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 
 	@Override
 	protected String[] getValues(SupplierProduct object) {
-		return new String[]{""+object.get_serial_number(),"'"+object.get_name()+"'",
-				"'"+object.get_producer().getName()+"'","'"+object.get_supplier()+"'",""+object.get_id(),"'"+object.get_category()+"'",
-				"'"+object.get_sub_category()+"'","'"+object.get_sub_category()+"'","'"+object.get_sub_sub_category()+"'",
-				};
+		return new String[]{""+object.get_serial_number(),"'"+object.get_supplier()+"'",""+object.get_id()};
 	}
 
 	@Override
@@ -58,8 +56,8 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 		{}
 		
 		
-		if(search(new int[]{2,3,4}, new String[]{"'"+object.get_name()+"'",
-				"'"+object.get_producer().getName()+"'",object.get_supplier()}).size()!=0)
+		if(search(new int[]{2,3}, new String[]{"'"+object.get_supplier()+"'",
+				""+object.get_id()}).size()!=0)
 			throw new SQLException("Already exsists");
 		int sn = 0;
 		
@@ -72,15 +70,14 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 	
 	@Override
 	public SupplierProduct create(ResultSet rs) throws SQLException {
-		SupplierProduct supplierProduct = new SupplierProduct(_product.getFromPK(new String[]{
-				"'"+rs.getString("ProductName")+"'","'"+rs.getString("ProductProducerName")+"'"}));
-		supplierProduct.set_serial_number(rs.getString("SN"));
-		supplierProduct.set_supplier(rs.getString("SupplierCN"));
-		supplierProduct.set_category(rs.getString("PRODUCT_CATAGORY"));
-		supplierProduct.set_sub_category(rs.getString("PRODUCT_SUB_CATAGORY"));
-		supplierProduct.set_sub_sub_category(rs.getString("PRODUCT_SUB_SUB_CATAGORY"));
-		supplierProduct.set_id(rs.getInt("PRODUCT_ID"));
+		SupplierProduct supplierProduct = new SupplierProduct(_product.getFromPK(new String[]{""+rs.getInt("PRODUCT_ID")}));
+		supplierProduct.set_supplier(rs.getString("SUPPLIERCN"));
+		supplierProduct.set_serial_number(""+rs.getInt("SN"));
+
 		return supplierProduct;
 	}
+
+
+
 
 }

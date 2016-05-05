@@ -26,6 +26,8 @@ public class DAOFactory {
 			    System.out.println("Opened supplier database successfully");
 			
 			if(first_time){
+				
+				
 			drop();
 			createTables();
 			}
@@ -119,11 +121,11 @@ public class DAOFactory {
 	    
 	    sql = "DROP TABLE IF EXISTS ORDER_PRODUCT";
 	    stmt.executeUpdate(sql);
-	    sql = "DROP TABLE IF EXISTS CATAGORY";
+	    sql = "DROP TABLE IF EXISTS SUB_SUB_CATAGORY";
 	    stmt.executeUpdate(sql);
 	    sql = "DROP TABLE IF EXISTS SUB_CATAGORY";
 	    stmt.executeUpdate(sql);
-	    sql = "DROP TABLE IF EXISTS SUB_SUB_CATAGORY";
+	    sql = "DROP TABLE IF EXISTS CATAGORY";
 	    stmt.executeUpdate(sql);
 	    sql = "DROP TABLE IF EXISTS WEEKLY_ORDER";
 	    stmt.executeUpdate(sql);
@@ -250,8 +252,10 @@ public class DAOFactory {
 	      sql = "CREATE TABLE SUB_SUB_CATAGORY " +
 	              "(NAME_SSCAT CHAR(50)      NOT NULL, " +
 	    		  "NAME_SCAT CHAR(50)      NOT NULL,"+
-	    		  "PRIMARY KEY (NAME_SSCAT, NAME_SCAT)"+
-	    		  "FOREIGN KEY(NAME_SCAT) REFERENCES SUB_CATAGORY(NAME_SCAT))"; 
+	    		  "NAME_CAT CHAR(50)      NOT NULL,"+
+	    		  "PRIMARY KEY (NAME_SSCAT, NAME_SCAT,NAME_CAT),"+
+	    		  "FOREIGN KEY(NAME_SCAT) REFERENCES SUB_CATAGORY(NAME_SCAT),"
+	    		  + "FOREIGN KEY(NAME_CAT) REFERENCES CATAGORY(NAME_CAT))"; 
 	      
 	      
 	      stmt.executeUpdate(sql);

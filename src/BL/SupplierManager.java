@@ -29,9 +29,7 @@ public class SupplierManager extends LogicManager<DAOSupplier>{
 	public ArrayList<Supplier> getAllSuplliers() throws SQLException{
 		return getAll();
 	}
-	public ArrayList<SupplierProduct> searchSupplierProduct(int[] fields,String[] values) throws SQLException{
-		return search(fields, values);
-	}
+	
 	public ArrayList<Supplier> searchSupplier(int[] fields,String[] values) throws SQLException{
 		return search(fields, values);
 	}

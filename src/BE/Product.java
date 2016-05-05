@@ -57,6 +57,11 @@ public class Product{
 		this._shelf_life = _product._shelf_life;
 		this._producer = _product._producer;
 		this._name = _product._name;
+		this._catagory = _product._catagory;
+		this._sub_catagory = _product._sub_catagory;
+		this._sub_sub_category = _product._sub_sub_category;
+		this._price = _product._price;
+		this._min_amount = _product._min_amount;
 	}
 
 	public String get_name() {

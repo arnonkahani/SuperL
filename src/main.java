@@ -11,7 +11,7 @@ public class main {
 	public static void main(String[] args) {
 		
 		try {
-			BLFactory f = new BLFactory(true);
+			viewController v = new viewController();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

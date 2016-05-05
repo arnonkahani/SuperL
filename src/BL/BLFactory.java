@@ -20,6 +20,17 @@ public class BLFactory {
 		
 	}
 
+	public SupplierLogic getSupplierLogic() {
+		return _supplierLogic;
+	}
+
+	public StorageLogic getStorageLogic() {
+		return _storageLogic;
+	}
+	
+	
+
+
 	
 	
 	
