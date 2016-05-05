@@ -63,7 +63,7 @@ public class DAOProduct extends DAO<Product> {
 
 	@Override
 	public Product getFromPK(String[] values) throws SQLException {
-		return search(new int[]{1,2,3,6,7,8},values).get(0);
+		return search(new int[]{1},values).get(0);
 	}
 
 

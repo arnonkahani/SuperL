@@ -14,4 +14,7 @@ public class Catagory {
 	public void setName_cat(String name_cat) {
 		this.name_cat = name_cat;
 	}
+	public String toString(){
+		return "Name: "  + name_cat ;
+	}
 }

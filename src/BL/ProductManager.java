@@ -35,9 +35,8 @@ public class ProductManager extends LogicManager<DAOSupplierProduct>{
 	}
 
 	
-	public Product getProductByPK(int id,String name,String producer_name,String catagory,
-			String sub_catagory,String sub_sub_catagory) throws SQLException {
-		String [] values = new String[]{}; 
+	public Product getProductByPK(int id) throws SQLException {
+		String [] values = new String[]{""+id}; 
 		return getFromPK(values);
 	}
 	

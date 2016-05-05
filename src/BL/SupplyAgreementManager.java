@@ -36,6 +36,7 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement>{
 	public ArrayList<SupplyAgreement> getAllSupplyAgreement() throws SQLException{
 		return getAll();
 	}
+	
 	public SupplyAgreementProduct getSupplyAgreementPrdouctByID_SN(String id,String sn) throws SQLException{
 		return _apm.getSupplyAgreementPrdouctByID_SN(id, sn);
 	}
