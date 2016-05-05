@@ -12,7 +12,7 @@ public class Product{
 	private String _sub_catagory;
 	private String _sub_sub_category;
 	private float _price;
-	private String _id;
+	private int _id;
 	
 	public Product()
 	{
@@ -79,10 +79,10 @@ public class Product{
 	{
 		return o.toString().toUpperCase().equals(toString().toUpperCase());
 	}
-	public String get_id() {
+	public int get_id() {
 		return _id;
 	}
-	public void set_id(String _id) {
+	public void set_id(int _id) {
 		this._id = _id;
 	}
 	public float get_price() {
