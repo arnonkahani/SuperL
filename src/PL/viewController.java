@@ -18,6 +18,7 @@ public class viewController {
 	private orderView _ov;
 	private BLFactory _bc; 
 	private ProductView _pv;
+	private GUI_storage _gs;
 	
 	public viewController() throws SQLException{
 		_vu = new viewUtils();
@@ -30,7 +31,7 @@ public class viewController {
 		_sv = new supplierView(_vu,_pv,(SupplierManager) _bc.getSupplierLogic().getManager(Supplier.class));
 		_sav = new supplyAgreementView(_vu,(SupplyAgreementManager) _bc.getSupplierLogic().getManager(SupplyAgreement.class),_sv);
 		_ov = new orderView(_vu,(OrderManager) _bc.getSupplierLogic().getManager(Order.class),_sav);
-		
+		_gs= new GUI_storage(_bc.getStorageLogic());
 		
 		run();
 	}
@@ -62,7 +63,7 @@ public class viewController {
 	
 	private void otherMenu() {
 		_vu.clear();
-		String menu[] = {"Print Order","Supllied Products From Supplier","Return"};
+		String menu[] = {"Print Order","Supllied Products From Supplier","Storage view","Return"};
 		int choise = -1;
 		while(true)
 		{
@@ -77,6 +78,9 @@ public class viewController {
 				_sv.supplierProducts();
 				break;
 			case 3:
+				_gs.start(0);
+				break;
+			case 4:
 				return;
 			}
 		}
