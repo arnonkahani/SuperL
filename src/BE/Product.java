@@ -8,9 +8,9 @@ public class Product{
 	private int _shelf_life;
 	private Producer _producer;
 	private int _min_amount;
-	private String _categoryname_cat;
-	private String _sub_categoryname_scat;
-	private String _sub_sub_categoryname_sscat;
+	private String _catagory;
+	private String _sub_catagory;
+	private String _sub_sub_category;
 	private float _price;
 	private String _id;
 	
@@ -91,23 +91,23 @@ public class Product{
 	public void set_price(float _price) {
 		this._price = _price;
 	}
-	public String get_sub_sub_categoryname_sscat() {
-		return _sub_sub_categoryname_sscat;
+	public String get_sub_sub_category() {
+		return _sub_sub_category;
 	}
-	public void set_sub_sub_categoryname_sscat(String _sub_sub_categoryname_sscat) {
-		this._sub_sub_categoryname_sscat = _sub_sub_categoryname_sscat;
+	public void set_sub_sub_category(String _sub_sub_categoryname_sscat) {
+		this._sub_sub_category = _sub_sub_categoryname_sscat;
 	}
-	public String get_sub_categoryname_scat() {
-		return _sub_categoryname_scat;
+	public String get_sub_category() {
+		return _sub_catagory;
 	}
-	public void set_sub_categoryname_scat(String _sub_categoryname_scat) {
-		this._sub_categoryname_scat = _sub_categoryname_scat;
+	public void set_sub_category(String _sub_categoryname_scat) {
+		this._sub_catagory = _sub_categoryname_scat;
 	}
-	public String get_categoryname_cat() {
-		return _categoryname_cat;
+	public String get_category() {
+		return _catagory;
 	}
-	public void set_categoryname_cat(String _categoryname_cat) {
-		this._categoryname_cat = _categoryname_cat;
+	public void set_category(String _categoryname_cat) {
+		this._catagory = _categoryname_cat;
 	}
 	public int get_min_amount() {
 		return _min_amount;

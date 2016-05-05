@@ -279,7 +279,7 @@ public class storage_controller {
 	    	Statement stmt;
 	    	for ( Product key : order.getProducts().keySet() ) {
 				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,AMOUNT) " +
-		                "VALUES ("+order.getDay()+","+ key.get_id()+","+key.get_name()+","+key.get_producer()+","+key.get_categoryname_cat()+","+key.get_sub_categoryname_scat()+","+key.get_sub_sub_categoryname_sscat()+","+order.getProducts().get(key)+");"; 
+		                "VALUES ("+order.getDay()+","+ key.get_id()+","+key.get_name()+","+key.get_producer()+","+key.get_category()+","+key.get_sub_categoryname_scat()+","+key.get_sub_sub_category()+","+order.getProducts().get(key)+");"; 
 		    	stmt = c.createStatement();
 		    	stmt.executeUpdate(sql);
 		    	c.commit();        

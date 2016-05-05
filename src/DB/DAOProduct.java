@@ -30,6 +30,18 @@ public class DAOProduct extends DAO<Product> {
 		try{
 			_producer.insert(object.get_producer());
 		}
+		catch(SQLException e){}
+		try{
+			_catagory.insert(new Catagory(object.get_category()));
+		}
+		catch(SQLException e){}
+		try{
+			_sub_catagory.insert(new SubCatagory(object.get_category(), object.get_sub_categoryname_scat()));
+		}
+		catch(SQLException e){}
+		try{
+			_sub_sub_catagory.insert(new SubSubCatagory(object.get_sub_sub_category(), object.get_sub_categoryname_scat()));
+		}
 		catch(SQLException e)
 		{
 		}
@@ -69,9 +81,9 @@ public class DAOProduct extends DAO<Product> {
 		product.set_producer(_producer.getFromPK(new String[]{"'"+rs.getString("PRODUCERNAME")+"'"}));
 		product.set_shelf_life(rs.getInt("SHELFLIFE"));
 		product.set_weight(rs.getInt("Weight"));
-		product.set_categoryname_cat(rs.getString("CATAGORY"));
-		product.set_sub_categoryname_scat(rs.getString("SUB_CATAGORY"));
-		product.set_sub_sub_categoryname_sscat(rs.getString("SUB_SUB_CATAGORY"));
+		product.set_category(rs.getString("CATAGORY"));
+		product.set_sub_category(rs.getString("SUB_CATAGORY"));
+		product.set_sub_sub_category(rs.getString("SUB_SUB_CATAGORY"));
 		product.set_id(""+rs.getInt("ID"));
 		product.set_min_amount(rs.getInt("MIN_AMOUNT"));
 		product.set_price(rs.getFloat("PRICE"));
@@ -84,8 +96,8 @@ public class DAOProduct extends DAO<Product> {
 	protected String[] getValues(Product object) {
 		
 		return new String[] {"'"+object.get_name()+"'","'"+object.get_producer().getName()+"'"
-				,""+object.get_weight(),""+object.get_shelf_life(),"'"+object.get_categoryname_cat()+"'",
-				"'"+object.get_sub_categoryname_scat()+"'","'"+object.get_sub_categoryname_scat()+"'","'"+object.get_sub_sub_categoryname_sscat()+"'",
+				,""+object.get_weight(),""+object.get_shelf_life(),"'"+object.get_category()+"'",
+				"'"+object.get_sub_categoryname_scat()+"'","'"+object.get_sub_categoryname_scat()+"'","'"+object.get_sub_sub_category()+"'",
 				object.get_min_amount()+"",""+object.get_price()};
 		
 	}
@@ -235,14 +247,12 @@ public class DAOProduct extends DAO<Product> {
 
 		@Override
 		public SubSubCatagory getFromPK(String[] values) throws SQLException {
-			// TODO Auto-generated method stub
-			return null;
+			return search(new int[]{1, 2},values).get(0);
 		}
 
 		@Override
 		public SubSubCatagory create(ResultSet rs) throws SQLException {
-			// TODO Auto-generated method stub
-			return null;
+			return new SubSubCatagory(rs.getString("NAME_SSCAT"), rs.getString("NAME_SCAT"));
 		}
 		
 	}

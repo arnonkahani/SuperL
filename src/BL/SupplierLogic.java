@@ -1,16 +1,12 @@
 package BL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import BE.*;
+public class SupplierLogic {
 
-public interface SupplierLogic {
-
-	public void makeOnDemandOrder(HashMap<Product,Integer> products) throws SQLException;
-	
-	public void makeWeeklyOrder(HashMap<Product,Integer> products,SupplyAgreement.Day day) throws SQLException;
-	
-	public void checkOrders();
-	
+	StorageLogic _storage_logic;
+	OrderManager _om;
+	public SupplierLogic()
+	{
+		WeeaklyOrder wo = _storage_logic.getDailyOrder();
+		_storage_logic.acceptSupply(_om.makeWeekelyOrder(wo));
+	}
 }
