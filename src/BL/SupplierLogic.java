@@ -12,9 +12,9 @@ public class SupplierLogic {
 
 	StorageLogic _storage_logic;
 	OrderManager _om;
-	public SupplierLogic()
+	public SupplierLogic() throws SQLException
 	{
-		WeeklyOrder wo = _storage_logic.getDailyOrder();
+		WeeklyOrder wo = _storage_logic.get_daily_order();
 		_storage_logic.getSupply(_om.makeWeekelyOrder(wo));
 	}
 	

@@ -34,6 +34,11 @@ public class SubSubCatagory {
 		this.name_scat = name_scat;
 	}
 	
+	public String toString()
+	{
+		return "Sub Catagory Name :" + name_scat + "Sub Sub Catagory Name: " + name_sscat ;
+	}
+	
 	
 }
 

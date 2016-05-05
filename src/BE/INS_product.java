@@ -57,12 +57,6 @@ public class INS_product extends Product {
 	public void setSerial_num(int serial_num) {
 		this.serial_num = serial_num;
 	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public Date getValid_date() {
 		return valid_date;
 	}
@@ -75,6 +69,10 @@ public class INS_product extends Product {
 
 	public void setDefected(int defected) {
 		this.defected = defected;
+	}
+	public String toString(){
+		return "Serial Number: "  + serial_num + 
+				" valid_date : " + getValid_date() + " Defected: " + defected;
 	}
 	
 }

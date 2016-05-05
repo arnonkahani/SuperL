@@ -29,7 +29,6 @@ public class issue_certificate {
 		this.s_sub_sub_cat = s_sub_sub_cat;
 		this.s_name = s_name;
 		this.s_producer = s_producer;
-		this.s_price = s_price;
 		this.s_valid_date = s_valid_date;
 	}
 	public int getS_id() {
@@ -94,6 +93,13 @@ public class issue_certificate {
 		this.s_valid_date = s_valid_date;
 	}
 	
+	public String toString(){
+		return "Id: "  + s_id + " Date: " + getS_date() + 
+				" Product Id : " + s_p_id + " Serial Number: " + s_serial_num+
+				"Catagory : " + s_cat + "Sub Catagory: " + s_sub_cat+
+				" Sub Sub Catagory : " + s_sub_sub_cat + " Name: " + s_name+
+				" Producer : " + s_producer + "Valid Date" + s_valid_date;
+	}
 	
 	
 	

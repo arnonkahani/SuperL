@@ -23,5 +23,10 @@ public class SubCatagory {
 	public void setName_scat(String name_scat) {
 		this.name_scat = name_scat;
 	}
+	
+	public String toString()
+	{
+		return "Catagory Name :" + name_cat + "Sub Catagory Name: " + name_scat ;
+	}
 
 }
