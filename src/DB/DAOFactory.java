@@ -136,7 +136,12 @@ public class DAOFactory {
                   " PRODUCTNAME     VARCHAR(15)    NOT NULL, " + 
                   " SUPPLIERCN      VARCHAR(15)     NOT NULL, "
                   + "PRODUCTPRODUCERNAME VARCHAR(15) NOT NULL," + 
-                  " FOREIGN KEY (PRODUCTNAME,PRODUCTPRODUCERNAME) REFERENCES PRODUCT(NAME,PRODUCERNAME),"
+                  "PRODUCT_ID INTEGER NOT NULL"+
+                  " PRODUCT_CATAGORY           CHARACTER(50)    NOT NULL, " + 
+                  " PRODUCT_SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+                  " PRODUCT_SUB_SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+                  " FOREIGN KEY (PRODUCTNAME,PRODUCTPRODUCERNAME,PRODUCT_ID,PRODUCT_CATAGORY,PRODUCT_SUB_CATAGORY,PRODUCT_SUB_SUB_CATAGORY) "
+                  + "REFERENCES PRODUCT(NAME,PRODUCERNAME,ID,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY),"
                   + "FOREIGN KEY (SUPPLIERCN) REFERENCES SUPPLIER(CN))"; 
 	      stmt.executeUpdate(sql);
 	      sql = "CREATE TABLE SUPPLIER " +
@@ -171,11 +176,11 @@ public class DAOFactory {
 	      stmt.executeUpdate(sql);
 	    sql = "CREATE TABLE ORDERS " +
 	    		"(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                  "SUPPLY_AGREEMENT_ID INTEGER  NOT NULL, " +
+                  "SUPPLIER_CN VARCHAR(15)  NOT NULL, " +
                   "WEIGHT REAL NOT NULL, "+
                   "DATE DATE NOT NULL, " + 
                   "PRICE REAL NOT NULL, "+
-                  "FOREIGN KEY (SUPPLY_AGREEMENT_ID) REFERENCES SUPPLY_AGREEMENT(ID))";
+                  "FOREIGN KEY (SUPPLIER_CN) REFERENCES SUPPLIER(CN))";
 	      stmt.executeUpdate(sql);
 	     sql = "CREATE TABLE ORDER_PRODUCT " +
                   "(ORDERID INTEGER NOT NULL," + 

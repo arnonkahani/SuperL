@@ -16,21 +16,21 @@ import BE.OrderProduct;
 public class DAOOrder extends DAO<Order> {
 
 	DAOOrderProduct _product;
-	DAOSupplyAgreement _agreement;
+	DAOSupplier _supplier;
 	public DAOOrder(Connection c) {
 		super(c);
 		_product = new DAOOrderProduct(c);
-		_agreement = new DAOSupplyAgreement(c);
+		_supplier = new DAOSupplier(c);
 	}
 
 	@Override
 	public String[] getSearchFields() {
-		return new String[]{"All","ID","SUPPLY_AGREEMENT_ID","WEIGHT","DATE","PRICE"};
+		return new String[]{"All","ID","SUPPLIER_CN","WEIGHT","DATE","PRICE"};
 	}
 
 	@Override
 	public String[] getSearchFieldsView() {
-		return new String[]{"All","ID","SUPPLY AGREEMENT ID","WEIGHT","DATE","PRICE"};
+		return new String[]{"All","ID","SUPPLIER CN","WEIGHT","DATE","PRICE"};
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class DAOOrder extends DAO<Order> {
 
 	@Override
 	protected String[] getValues(Order object) {
-		return new String[]{object.getOrderID(),object.get_samID().get_supplyID(),
+		return new String[]{object.getOrderID(),"'"+object.get_supplier().get_CN()+"'",
 				""+object.get_weight(),dateConvert(object.get_date()),""+object.get_price()};
 	}
 
@@ -65,7 +65,7 @@ public class DAOOrder extends DAO<Order> {
 		Order order = new Order();
 		order.set_date(stringConverDate(rs.getString("DATE")));
 		order.setOrderID(""+rs.getInt("ID"));
-		order.set_samID(_agreement.getFromPK(new String[]{""+rs.getInt("SUPPLY_AGREEMENT_ID")}));
+		order.set_supplier(_supplier.getFromPK(new String[]{""+rs.getInt("SUPPLIER_CN")}));
 		order.set_weight(rs.getFloat("WEIGHT"));
 		order.set_price(rs.getFloat("PRICE"));
 		ArrayList<OrderProduct> products = _product.search(new int[]{1}, new String[]{order.getOrderID()});

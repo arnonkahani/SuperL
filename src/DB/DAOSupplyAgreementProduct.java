@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import BE.SupplyAgreementProduct;
 import BE.Discount;
+import BE.Product;
 import BE.SupplierProduct;
 
 public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
@@ -60,7 +61,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 	@Override
 	public SupplyAgreementProduct create(ResultSet rs) throws SQLException {
 		SupplyAgreementProduct agreementProduct = new SupplyAgreementProduct(_product.getFromPK(new String[]{rs.getString("Supplier_Product_SN")}));
-		agreementProduct.set_price(rs.getFloat("price"));
+		agreementProduct.set_price(rs.getFloat("PRICE"));
 		agreementProduct.set_sp(rs.getString("SUPPLY_AGREEMENT_ID"));
 		ArrayList<Discount> discounts = _discount.search(new int[]{2,3},new String[]{
 				agreementProduct.get_serial_number(),agreementProduct.get_sp()});
@@ -74,6 +75,19 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
 		String sql = "SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE SUPPLIER_PRODUCT_SN IN (SELECT SN FROM SUPPLIER_PRODUCT WHERE PRODUCTPRODUCERNAME="+
 				producer + "PRODUCTNAME = " + name +")";
+		ResultSet rs = _stm.executeQuery(sql);
+		while(rs.next())
+		{
+			products.add(create(rs));
+		}
+		return products;
+	}
+
+	public ArrayList<SupplyAgreementProduct> getProductByDay(Product product,int day) throws SQLException {
+		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
+		String sql = "SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE (SUPPLY_AGREEMENT_ID IN (SELECT ID "
+				+ "FROM SUPPLY_AGREEMENT WHERE DAY LIKE '%" + day + "%')) AND Supplier_Product_SN IN (SELECT SN FROM SUPPLIER_PRODUCT WHERE "
+						+ "AND PRODUCT_ID = " + product.get_id() + ")";
 		ResultSet rs = _stm.executeQuery(sql);
 		while(rs.next())
 		{

@@ -36,17 +36,17 @@ public class DAOProduct extends DAO<Product> {
 		}
 		catch(SQLException e){}
 		try{
-			_sub_catagory.insert(new SubCatagory(object.get_category(), object.get_sub_categoryname_scat()));
+			_sub_catagory.insert(new SubCatagory(object.get_category(), object.get_sub_category()));
 		}
 		catch(SQLException e){}
 		try{
-			_sub_sub_catagory.insert(new SubSubCatagory(object.get_sub_sub_category(), object.get_sub_categoryname_scat()));
+			_sub_sub_catagory.insert(new SubSubCatagory(object.get_sub_sub_category(), object.get_sub_category()));
 		}
 		catch(SQLException e)
 		{
 		}
 	 insert(getValues(object),true);
-	 object.set_id(""+getLastAutoID());
+	 object.set_id(getLastAutoID());
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class DAOProduct extends DAO<Product> {
 		product.set_category(rs.getString("CATAGORY"));
 		product.set_sub_category(rs.getString("SUB_CATAGORY"));
 		product.set_sub_sub_category(rs.getString("SUB_SUB_CATAGORY"));
-		product.set_id(""+rs.getInt("ID"));
+		product.set_id(rs.getInt("ID"));
 		product.set_min_amount(rs.getInt("MIN_AMOUNT"));
 		product.set_price(rs.getFloat("PRICE"));
 
@@ -97,7 +97,7 @@ public class DAOProduct extends DAO<Product> {
 		
 		return new String[] {"'"+object.get_name()+"'","'"+object.get_producer().getName()+"'"
 				,""+object.get_weight(),""+object.get_shelf_life(),"'"+object.get_category()+"'",
-				"'"+object.get_sub_categoryname_scat()+"'","'"+object.get_sub_categoryname_scat()+"'","'"+object.get_sub_sub_category()+"'",
+				"'"+object.get_sub_category()+"'","'"+object.get_sub_category()+"'","'"+object.get_sub_sub_category()+"'",
 				object.get_min_amount()+"",""+object.get_price()};
 		
 	}

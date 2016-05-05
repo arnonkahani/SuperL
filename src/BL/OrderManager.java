@@ -1,19 +1,28 @@
 package BL;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import BE.*;
 import DB.DAO;
 import DB.DAOOrder;
+import PL.orderView;
 
 
 public class OrderManager extends LogicManager<DAOOrder>{
 	
-	
+	SupplierManager _sm;
+	SupplyAgreementManager _sam;
 	
 	public OrderManager(DAOOrder db) {
 		super(db);
@@ -53,6 +62,34 @@ public class OrderManager extends LogicManager<DAOOrder>{
 	public ArrayList<Order> getAllOrderes() throws SQLException
 	{
 		return getAll();
+	}
+	public ArrayList<OrderProduct> makeWeekelyOrder(WeeklyOrder wo) throws SQLException {
+		ArrayList<SupplyAgreementProduct> products = _sam.getCheapstProductsPerDay(wo.getDay(), wo.getProducts());
+		ArrayList<OrderProduct> product_list = new ArrayList<>();
+		HashMap<String,ArrayList<OrderProduct>> cn_map = new HashMap();
+		for (SupplyAgreementProduct product : products) {
+			if(cn_map.containsKey(product.get_supplier()))
+			{
+				OrderProduct o = new OrderProduct(product);
+				product_list.add(o);
+				cn_map.get(product.get_supplier()).add(new OrderProduct(product));
+		}
+			else{
+				OrderProduct o = new OrderProduct(product);
+				ArrayList<OrderProduct> cn_pro = new ArrayList<>();
+				product_list.add(o);
+				cn_pro.add(o);
+				cn_map.put(product.get_supplier(), cn_pro);
+			}
+				
+		}
+		for (Entry<String, ArrayList<OrderProduct>> cn : cn_map.entrySet()) {
+			float price = calculateDiscount(cn.getValue());
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date date = new Date();
+			Order or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),cn.getValue(),price);
+		}
+		return cn_pro;
 	}
 
 	

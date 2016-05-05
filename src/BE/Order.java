@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class Order {
 
 	private String orderID;
-	private SupplyAgreement _samID;
+	private Supplier _supplier;
 	private float _weight;
 	private Date _date;
 	private ArrayList<OrderProduct> _amountProduct = new ArrayList<>();
 	private float _price = 0;
 	
-	public Order(SupplyAgreement samID,Date date,ArrayList<OrderProduct> amountProduct,float price) {
-		this._samID = samID;
+	public Order(Supplier samID,Date date,ArrayList<OrderProduct> amountProduct,float price) {
+		this._supplier = samID;
 		this._date = date;
 		for (OrderProduct product : amountProduct) {
 			_amountProduct.add(product);
@@ -26,11 +26,11 @@ public class Order {
 	public Order() {
 		
 	}
-	public SupplyAgreement get_samID() {
-		return _samID;
+	public Supplier get_supplier() {
+		return _supplier;
 	}
-	public void set_samID(SupplyAgreement _samID) {
-		this._samID = _samID;
+	public void set_supplier(Supplier _supllier) {
+		this._supplier = _supllier;
 	}
 	public float get_weight() {
 		return _weight;
@@ -59,7 +59,7 @@ public class Order {
 	
 	public String toString(){
 		String str;
-		str = "Supplier CN: " + get_samID().get_sup().get_CN() + "\n"
+		str = "Supplier CN: " + get_supplier().get_CN() + "\n"
 				+ "Date: " + get_date().toString() + "\n"
 				+ "Weight: " +  get_weight() + "\n"
 				+ "Price: " + get_price() +"\n"
