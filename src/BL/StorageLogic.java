@@ -131,7 +131,7 @@ public class StorageLogic {
 		return answer;
 	}
 	
-	public void update_defected(Product p,int defected){
+	public void update_defected(INS_product p,int defected){
 		sc.update_defected(p,defected);
 	}
 }
