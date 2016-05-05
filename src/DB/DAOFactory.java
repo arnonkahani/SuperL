@@ -232,15 +232,46 @@ public class DAOFactory {
 	      
 	      sql = "CREATE TABLE WEEKLY_ORDER_PRODUCT " +
 	              "(DAY CHAR(50)      NOT NULL,"+
+	              "(ID INTEGER      NOT NULL,"+
 	              "NAME CHAR(50)      NOT NULL,"+
 	              "PRODUCERNAME CHAR(50)      NOT NULL,"+
 	              "CATAGORY CHAR(50)      NOT NULL,"+
 	              "SUB_CATAGORY CHAR(50)      NOT NULL,"+
 	              "SUB_SUB_CATAGORY CHAR(50)      NOT NULL,"+
 	              "AMOUNT INT     NOT NULL,"+
+	              "FOREIGN KEY (DAY) REFERENCES WEEKLY_ORDER(DAY),"+
+	              "FOREIGN KEY (ID,NAME, PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY) REFERENCES PRODUCT(ID ,NAME, PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY),"+
 	              "PRIMARY KEY (DAY ,NAME, PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY))"; 
 	      
 	      stmt.executeUpdate(sql); 
+	      
+	      sql = "CREATE TABLE INS_PRODUCT " +
+	    		  "(SERIAL_NUM INTEGER  NOT NULL,"+
+                  "ID INTEGER  NOT NULL,"+
+	    		  "NAME VARCHAR(15)  NOT NULL, " +  
+                  " PRODUCERNAME VARCHAR(15),"+
+                  " CATAGORY           CHARACTER(50)    NOT NULL, " + 
+                  " SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+                  " SUB_SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+                  "FOREIGN KEY (CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,NAME,PRODUCERNAME,ID) REFERENCES PRODUCT(CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,NAME,PRODUCERNAME,ID),"+
+                  "PRIMARY KEY (SERIAL_NUM))"; 
+	      stmt.executeUpdate(sql);
+	      
+	      sql = "CREATE TABLE ISSUE_CERTIFICATE " +
+	              "(S_ID INT PRIMARY KEY     NOT NULL," +
+	              " S_P_ID         INT     NOT NULL, " +
+	              " S_DATE   TEXT      NOT NULL, " + 
+	              " S_SERIAL_NUM INT     NOT NULL, " +
+	              " S_CATAGORY           CHARACTER(50)    NOT NULL, " + 
+	              " S_SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+	              " S_SUB_SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
+	              " S_NAME           CHAR(50)    NOT NULL, " + 
+	              " S_PRODUCER        CHAR(50)   NOT NULL, " + 
+	              " S_VALID_DATE   TEXT     NOT NULL, " + 
+	              "FOREIGN KEY(S_SERIAL_NUM) REFERENCES INS_PRODUCT(SERIAL_NUM))"; 
+	      
+	      
+	      stmt.executeUpdate(sql);
 	      
 	      stmt.close();
 	    } catch ( Exception e ) {

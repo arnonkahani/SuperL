@@ -3,16 +3,16 @@ package BE;
 public class Product{
 	
 	
-	private String _name;
-	private float _weight;
+	protected String _name;
+	protected float _weight;
 	private int _shelf_life;
-	private Producer _producer;
+	protected Producer _producer;
 	private int _min_amount;
-	private String _catagory;
-	private String _sub_catagory;
-	private String _sub_sub_category;
-	private float _price;
-	private int _id;
+	protected String _catagory;
+	protected String _sub_catagory;
+	protected String _sub_sub_category;
+	protected float _price;
+	protected int _id;
 	
 	public Product()
 	{

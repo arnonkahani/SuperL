@@ -9,6 +9,11 @@ public class WeeklyOrder {
 	private SupplyAgreement.Day day;
 	private HashMap<Product,Integer> products;
 	
+	public WeeklyOrder(){
+		
+	}
+	
+	
 	public WeeklyOrder(Day day, HashMap<Product, Integer> products) {
 		super();
 		this.day = day;

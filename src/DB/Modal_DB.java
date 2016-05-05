@@ -94,7 +94,6 @@ public class Modal_DB {
     	              " S_SUB_SUB_CATAGORY           CHAR(50)    NOT NULL, " + 
     	              " S_NAME           CHAR(50)    NOT NULL, " + 
     	              " S_PRODUCER        CHAR(50)   NOT NULL, " + 
-    	              " S_PRICE         REAL    NOT NULL, "+
     	              " S_VALID_DATE   TEXT     NOT NULL, " + 
     	              "FOREIGN KEY(S_SERIAL_NUM) REFERENCES INS_PRODUCT(SERIAL_NUM))"; 
     	      

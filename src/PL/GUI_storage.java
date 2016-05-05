@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import BL.StorageLogic;
+
 public class GUI_storage {
 
 	String catagory ="";
@@ -19,9 +21,9 @@ public class GUI_storage {
 	ArrayList<String> sub_cat = new ArrayList<String>();
 	ArrayList<String> sub_sub_cat = new ArrayList<String>();
 	ArrayList<String> products = new ArrayList<String>();
-	Logic logic;
+	StorageLogic logic;
 	
-    public GUI_storage(Logic logic) {
+    public GUI_storage(StorageLogic logic) {
         this.logic=logic;
     }
 
@@ -246,7 +248,7 @@ public class GUI_storage {
 		int is_defected;
 		if(n==0)
 		{
-			int check=logic.remove_from_storage(catagory, sub_catagory, sub_sub_catagory, product_name, amount);
+			int check=logic.remove_from_storage(catagory, sub_catagory, sub_sub_catagory, product_name,producer, amount);
 			if (check==0){
 				System.err.println("The proccess failed -the amount is higher then the current amount");
 				start(0);

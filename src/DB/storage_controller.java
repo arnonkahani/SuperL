@@ -2,12 +2,15 @@ package DB;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import BE.INS_product;
 import BE.OrderProduct;
+import BE.Producer;
 import BE.Product;
+import BE.SupplyAgreement;
 import BE.SupplyAgreement.Day;
 import BE.WeeklyOrder;
 import BE.issue_certificate;
@@ -20,16 +23,18 @@ public class storage_controller {
 	int index_product;
 	int index_ins_product;
 	int index_issue_certificate;
+	Connection c;
 	
 	
-	public storage_controller(int index_product,int index_ins_product,int index_issue_certificate) {
+	public storage_controller(int index_product,int index_ins_product,int index_issue_certificate,Connection c) {
 		this.index_product=index_product;
 		this.index_ins_product=index_ins_product;
 		this.index_issue_certificate=index_issue_certificate;
+		this.c=c;
 	}
 
 
-	public void getSupply(ArrayList<INS_product> products,Connection c){
+	public void getSupply(ArrayList<INS_product> products){
 	    
 		try {
 	    	
@@ -38,8 +43,8 @@ public class storage_controller {
 	    	
 	    	for(int j=0; j<products.size(); j++){
 				c.setAutoCommit(false);
-				 sql = "INSERT INTO INS_PRODUCT (SERIAL_NUM,ID,VALID_DATE,DEFECTED) " +
-	                   "VALUES ('"+index_ins_product+"','"+id+ "','" +ins.getValid_date()+"','"+ins.isDefected()+"');"; 
+				 sql = "INSERT INTO INS_PRODUCT (SERIAL_NUM,ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,VALID_DATE,DEFECTED) " +
+	                   "VALUES ('"+index_ins_product+"','"+products.get(j).get_id()+ "','" +products.get(j).get_name()+"','"+products.get(j).get_producer().getName()+"','"+products.get(j).get_category()+"','"+products.get(j).get_sub_category()+"','"+products.get(j).get_sub_sub_category()+"','"+products.get(j).getValid_date()+"','"+products.get(j).isDefected()+"');"; 
 				 stmt = c.createStatement();
 			
 				stmt.executeUpdate(sql);
@@ -47,17 +52,6 @@ public class storage_controller {
 				index_ins_product++;
 			}
 			
-			
-			sql =  "SELECT AMOUNT FROM PRODUCT WHERE ID="+id+";" ;
-			stmt = c.createStatement();
-			rs=stmt.executeQuery(sql);
-			int curr_amount = rs.getInt("AMOUNT");
-			curr_amount=curr_amount+amount;
-		     
-			
-			sql = "UPDATE PRODUCT set AMOUNT ="+curr_amount+" where ID="+id+";";
-			stmt = c.createStatement();
-		    stmt.executeUpdate(sql);
 		    c.commit();
 			
 		} catch (SQLException e) {
@@ -66,14 +60,13 @@ public class storage_controller {
 		}
 	}
 	
-	public  void remove_from_storage(Product prod, INS_product ins,issue_certificate issue,Connection c){
+	public  void remove_from_storage(INS_product ins,issue_certificate issue){
 		try {
 	    	String sql;
 	    	Statement stmt;
-	    	int id=0;
-	    	int curr_amount=0;
+	    	int curr_amount=get_Amount(ins.get_id());
 	    		c.setAutoCommit(false);
-				sql = "SELECT * FROM PRODUCT JOIN INS_PRODUCT WHERE CATAGORY="+prod.catagory+" AND SUB_CATAGORY="+prod.s_catagory+" AND SUB_SUB_CATAGORY="+prod.ss_catagory+" AND NAME="+prod.name+" AND INS_PRODUCT.ID = PRODUCT.ID ORDER BY VALID_DATE ASC LIMIT 1;" ;
+				sql = "SELECT * FROM INS_PRODUCT WHERE SERIAL_NUM="+ins.getSerial_num()+";" ;
 				stmt = c.createStatement();
 				ResultSet rs=stmt.executeQuery(sql);
 				issue.setS_id(index_issue_certificate);
@@ -86,21 +79,16 @@ public class storage_controller {
 				issue.setS_sub_sub_cat(rs.getString("SUB_SUB_CATAGORY"));
 				issue.setS_name(rs.getString("NAME"));
 				issue.setS_producer(rs.getString("PRODUCER"));
-				issue.setS_price(rs.getDouble("PRICE"));
 				issue.setS_valid_date(rs.getString("VALID_DATE"));
-				id =rs.getInt("ID");
 				curr_amount = rs.getInt("AMOUNT");
 				try{
 					sql = "DELETE from INS_PRODUCT where SERIAL_NUM="+issue.getS_serial_num()+";";
 					stmt.executeUpdate(sql);
-					create_issue(issue, c);
+					create_issue(issue);
 				} catch (SQLException e) {
 					 System.err.println("Product is not in the storage" );
 				}
 	    	curr_amount=curr_amount-1;
-	    	sql = "UPDATE PRODUCT set AMOUNT ="+curr_amount+" where ID="+id+";";
-			stmt = c.createStatement();
-		    stmt.executeUpdate(sql);
 		    c.commit();
 			
 		} catch (SQLException e) {
@@ -111,13 +99,13 @@ public class storage_controller {
 	
 	}
 	
-	public void create_issue (issue_certificate issue, Connection c){
+	public void create_issue (issue_certificate issue){
 		
 		try {
 			String sql;
 	    	Statement stmt;
-			sql = "INSERT INTO ISSUE_CERTIFICATE (S_ID,S_DATE,S_P_ID,S_SERIAL_NUM,S_CATAGORY,S_SUB_CATAGORY,S_SUB_SUB_CATAGORY,S_NAME,S_PRODUCER,S_PRICE,S_VALID_DATE) " +
-	                "VALUES ('"+issue.getS_id()+"','"+issue.getS_date()+"','"+issue.getS_p_id()+"','"+issue.getS_serial_num()+"','"+issue.getS_cat()+"','"+issue.getS_sub_cat()+"','"+issue.getS_sub_cat()+"','"+issue.getS_name()+"','"+issue.getS_producer()+"','"+issue.getS_price()+"','"+issue.getS_valid_date()+"');"; 
+			sql = "INSERT INTO ISSUE_CERTIFICATE (S_ID,S_DATE,S_P_ID,S_SERIAL_NUM,S_CATAGORY,S_SUB_CATAGORY,S_SUB_SUB_CATAGORY,S_NAME,S_PRODUCER,S_VALID_DATE) " +
+	                "VALUES ('"+issue.getS_id()+"','"+issue.getS_date()+"','"+issue.getS_p_id()+"','"+issue.getS_serial_num()+"','"+issue.getS_cat()+"','"+issue.getS_sub_cat()+"','"+issue.getS_sub_cat()+"','"+issue.getS_name()+"','"+issue.getS_producer()+"','"+issue.getS_valid_date()+"');"; 
 			stmt = c.createStatement();
 			stmt.executeUpdate(sql);
 			c.commit();
@@ -135,13 +123,13 @@ public class storage_controller {
 	
 	
 	
-	public int get_INS_serial (Product prod, Connection c){
+	public int get_INS_serial (Product prod){
 		
 		int serial = 0;
 		try {
 			String sql;
 			Statement stmt;
-			sql = "SELECT SERIAL_NUM FROM INS_PRODUCT WHERE ID="+prod.id+" ORDER BY VALID_DATE ASC LIMIT 1;" ;
+			sql = "SELECT SERIAL_NUM FROM INS_PRODUCT WHERE ID="+prod.get_id()+" ORDER BY VALID_DATE ASC LIMIT 1;" ;
 			stmt = c.createStatement();
 			ResultSet rs=stmt.executeQuery(sql);
 			serial=rs.getInt("SERIAL_NUM");
@@ -154,7 +142,7 @@ public class storage_controller {
 
 	}
 	
-	public Date get_INS_valid (Product prod, Connection c){
+	public Date get_INS_valid (Product prod){
 		
 		Date valid =new Date();	
 		String date="";
@@ -176,7 +164,7 @@ public class storage_controller {
 		
 	}
 	
-	public int get_INS_defected (Product prod, Connection c){
+	public int get_INS_defected (Product prod){
 		
 		int defected = 0;
 		try {
@@ -198,7 +186,7 @@ public class storage_controller {
 		
 	}
 	
-	public void add_new_product(String cat, String sub_cat, String sub_sub_cat,String name, String producer,double price ,int min_amount, Connection c){
+	public void add_new_product(String cat, String sub_cat, String sub_sub_cat,String name, String producer,double price ,int min_amount){
 		
 		try {
 
@@ -221,7 +209,7 @@ public class storage_controller {
 		
 	}
 	
-	public int Check_amount (Product prod, Connection c,int amount){
+	public int Check_amount (Product prod,int amount){
 		
 		int ans=2;
 		int curr_amount=0;
@@ -229,11 +217,11 @@ public class storage_controller {
 		try {
 			String sql;
 			Statement stmt;
-			sql = "SELECT AMOUNT,MIN_AMOUNT FROM PRODUCT WHERE ID="+prod.get_id()+";" ;
+			sql = "SELECT MIN_AMOUNT FROM PRODUCT WHERE ID="+prod.get_id()+";" ;
 			stmt = c.createStatement();
 			ResultSet rs=stmt.executeQuery(sql);
-			curr_amount=rs.getInt("AMOUNT");
 			min=rs.getInt("MIN_AMOUNT");
+			curr_amount=get_Amount(prod.get_id());
 			
 			
 		} catch (SQLException e) {
@@ -252,7 +240,7 @@ public class storage_controller {
 		
 	}
 	
-	public void create_weekly_order(WeeklyOrder order,Connection c){
+	public void create_weekly_order(WeeklyOrder order){
 		
 		try {
 			String sql;
@@ -274,7 +262,7 @@ public class storage_controller {
 	    	Statement stmt;
 	    	for ( Product key : order.getProducts().keySet() ) {
 				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,AMOUNT) " +
-		                "VALUES ("+order.getDay()+","+ key.get_id()+","+key.get_name()+","+key.get_producer()+","+key.get_category()+","+key.get_sub_categoryname_scat()+","+key.get_sub_sub_category()+","+order.getProducts().get(key)+");"; 
+		                "VALUES ("+order.getDay()+","+ key.get_id()+","+key.get_name()+","+key.get_producer()+","+key.get_category()+","+key.get_sub_category()+","+key.get_sub_sub_category()+","+order.getProducts().get(key)+");"; 
 		    	stmt = c.createStatement();
 		    	stmt.executeUpdate(sql);
 		    	c.commit();        
@@ -288,7 +276,7 @@ public class storage_controller {
 		
 	}
 	
-	public void remove_weekly_order(Day day, Connection c){
+	public void remove_weekly_order(Day day){
 		
 		try{
 			String sql;
@@ -298,7 +286,7 @@ public class storage_controller {
 			stmt.executeUpdate(sql);
 
 		} catch (SQLException e) {
-			 System.err.println("" );
+			 System.err.println("");
 		}
 		
 		try{
@@ -309,10 +297,77 @@ public class storage_controller {
 			stmt.executeUpdate(sql);
 
 		} catch (SQLException e) {
-			 System.err.println("" );
+			 System.err.println("");
 		}
 		
 		
+	}
+	
+	public int get_Amount (int id){
+		int curr_amount=0;
+		try {
+			String sql;
+			Statement stmt;
+			sql = "SELECT COUNT() FROM INS_PRODUCT WHERE ID="+id+";" ;
+			stmt = c.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			curr_amount=rs.getInt(0);
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	  return curr_amount;	
+	}
+	
+	public WeeklyOrder get_daily_order (int curr_day){
+		WeeklyOrder weekly=new WeeklyOrder();
+		HashMap<Product,Integer> products= new HashMap();
+		Product p=new Product();
+		String producer_name;
+		int amount=0;
+		try {			
+			String sql;
+			Statement stmt;
+			sql = "SELECT * FROM WEEKLY_ORDER_PRODUCT WHERE DAY="+curr_day+";" ;
+			stmt = c.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			while(rs.next()) {
+				p.set_id(rs.getInt("ID"));
+				p.set_name(rs.getString("NAME"));
+				p.set_category(rs.getString("CATAGORY"));
+				p.set_sub_category(rs.getString("SUB_CATAGORY"));
+				p.set_sub_sub_category(rs.getString("SUB_SUB_CATAGORY"));
+				producer_name=rs.getString("PRODUCERNAME");
+				p.set_producer(new Producer(producer_name));
+				amount = rs.getInt("AMOUNT");
+				products.put(p, amount);
+			}
+			weekly.setDay(SupplyAgreement.Day(curr_day));
+			weekly.setProducts(products);
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return weekly;
+	}
+	
+	public int get_evalute_amount (Product p){
+		int ev_amount=0;
+		try {
+			String sql;
+			Statement stmt;
+			sql = "SELECT MIN_AMOUNT FROM PRODUCT WHERE ID="+p.get_id()+";" ;
+			stmt = c.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			ev_amount=rs.getInt("MIN_AMOUNT");
+			ev_amount=ev_amount*2;
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return ev_amount;
 	}
 
 }

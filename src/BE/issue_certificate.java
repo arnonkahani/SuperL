@@ -11,7 +11,6 @@ public class issue_certificate {
 	private String s_sub_sub_cat;
 	private String s_name;
 	private String s_producer;
-	private double s_price;
 	private String s_valid_date;
 	
 	
@@ -87,12 +86,7 @@ public class issue_certificate {
 	public void setS_producer(String s_producer) {
 		this.s_producer = s_producer;
 	}
-	public double getS_price() {
-		return s_price;
-	}
-	public void setS_price(double s_price) {
-		this.s_price = s_price;
-	}
+
 	public String getS_valid_date() {
 		return s_valid_date;
 	}

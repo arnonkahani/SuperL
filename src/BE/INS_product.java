@@ -5,7 +5,6 @@ import java.util.Date;
 public class INS_product extends Product {
 	
 	private int serial_num;
-	private int id;
 	private Date valid_date;
 	private int defected;
 	
@@ -23,21 +22,35 @@ public class INS_product extends Product {
         this.defected = defected;
 	}
 	
-	public INS_product(int serial_num,int _id,String _catagory, String _sub_catagory, String _sub_sub_category ,String _name,Producer _producer,float _weight,float _price, int defected) {
-		this.serial_num=serial_num;
-		this.id = _id;
-		this._catagory = _catagory;
-		this._sub_catagory = _sub_catagory;
-		this._sub_sub_category = _sub_sub_category;
-		this._name = _name;
-		this._producer = _producer;
-		this._weight = _weight;
-		this._price = _price;
+	public INS_product(int _id,String _catagory, String _sub_catagory, String _sub_sub_category ,String _name,Producer _producer,float _weight,float _price, int defected) {
+		super._id = _id;
+		super._catagory = _catagory;
+		super._sub_catagory = _sub_catagory;
+		super._sub_sub_category = _sub_sub_category;
+		super._name = _name;
+		super._producer = _producer;
+		super._weight = _weight;
+		super._price = _price;
 		Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, get_shelf_life());
         this.valid_date = c.getTime();
 		this.defected = defected;
 	}
+	
+	public INS_product(Product product,Date valid,int serial_num, int defected) {
+		super._id = product.get_id();
+		super._catagory = product.get_category();
+		super._sub_catagory = product.get_sub_category();
+		super._sub_sub_category = product.get_sub_sub_category();
+		super._name = product.get_name();
+		super._producer = product.get_producer();
+		super._weight = product.get_weight();
+		super._price = product.get_price();
+        this.serial_num=serial_num;
+        this.valid_date = valid;
+		this.defected = defected;
+	}
+	
 	public int getSerial_num() {
 		return serial_num;
 	}

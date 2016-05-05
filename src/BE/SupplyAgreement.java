@@ -2,6 +2,8 @@ package BE;
 
 import java.util.ArrayList;
 
+import BE.SupplyAgreement.Day;
+
 
 
 public class SupplyAgreement{
@@ -111,5 +113,7 @@ public class SupplyAgreement{
 	public boolean equals(Object o){
 		return o.toString().toUpperCase().equals(toString().toUpperCase());
 	}
+
+
 	
 }

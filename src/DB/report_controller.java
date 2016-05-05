@@ -5,11 +5,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import BE.Producer;
+
 public class report_controller {
 	
+	Connection c;
+	
+	public report_controller(Connection c){
+		this.c=c;
+	}
 	
 	
-	public ArrayList<String> cat_search (Connection c){
+	
+	public ArrayList<String> cat_search (){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -31,7 +39,7 @@ public class report_controller {
 	
 	
 	
-	public ArrayList<String> sub_cat_search (String cat_name,Connection c){
+	public ArrayList<String> sub_cat_search (String cat_name){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -51,7 +59,7 @@ public class report_controller {
 		 	
 	}
 	
-	public ArrayList<String> sub_sub_cat_search (String cat_name,String sub_cat_name,Connection c){
+	public ArrayList<String> sub_sub_cat_search (String cat_name,String sub_cat_name){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -71,7 +79,7 @@ public class report_controller {
 		 	
 	}
 	
-	public ArrayList<String> product_search (String cat_name,String sub_cat_name,String sub_sub_cat_name,Connection c){
+	public ArrayList<String> product_search (String cat_name,String sub_cat_name,String sub_sub_cat_name){
 		ArrayList<String> s_arr = new ArrayList<String>();
 		try {
 			String sql;
@@ -91,12 +99,12 @@ public class report_controller {
 		 	
 	}
 	
-	public int product_search_ID (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,Connection c){
+	public int product_search_ID (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,Producer p){
 		int id=0;
 		try {
 			String sql;
 	    	Statement stmt;
-			sql = "SELECT ID FROM PRODUCT JOIN SUB_SUB_CATAGORY JOIN SUB_CATAGORY WHERE SUB_CATAGORY.NAME_CAT="+cat_name+"AND SUB_SUB_CATAGORY.NAME_SCAT="+sub_cat_name+"AND SUB_SUB_CATAGORY.NAME_SSCAT="+sub_sub_cat_name+"AND SUB_SUB_CATAGORY.NAME_SSCAT=PRODUCT.SUB_SUB_CATAGORY AND SUB_SUB_CATAGORY.NAME_SCAT= SUB_CATAGORY.NAME_SCAT AND PRODUCT.NAME="+name+" ;"; 
+			sql = "SELECT ID FROM PRODUCT JOIN SUB_SUB_CATAGORY JOIN SUB_CATAGORY WHERE SUB_CATAGORY.NAME_CAT="+cat_name+"AND SUB_SUB_CATAGORY.NAME_SCAT="+sub_cat_name+"AND SUB_SUB_CATAGORY.NAME_SSCAT="+sub_sub_cat_name+"AND SUB_SUB_CATAGORY.NAME_SSCAT=PRODUCT.SUB_SUB_CATAGORY AND SUB_SUB_CATAGORY.NAME_SCAT= SUB_CATAGORY.NAME_SCAT AND PRODUCT.NAME="+name+" AND PRODUCERNAME="+p.getName()+" ;"; 
 			stmt = c.createStatement();
 			ResultSet rs=stmt.executeQuery(sql);
 			id=rs.getInt ("ID"); 
@@ -110,7 +118,7 @@ public class report_controller {
 	}
 	
 	
-	public ArrayList<ArrayList<String>> get_report (ArrayList<String> parm,int count,String criter ,Connection c){
+	public ArrayList<ArrayList<String>> get_report (ArrayList<String> parm,int count,String criter){
 		ArrayList<ArrayList<String>> arr = new ArrayList<ArrayList<String>>();
 		try {
 			String sql;
