@@ -58,7 +58,7 @@ public class StorageLogic {
 		ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
 		for (int i=0;i<products.size();i++){
 			for(int j=0;j<products.get(i).getAmount();j++){
-				ins_products.add(new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),1));
+				ins_products.add(new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),defected()));
 				}
 		}
 		sc.getSupply(ins_products);
@@ -110,7 +110,6 @@ public class StorageLogic {
 	}
 	
 	public WeeklyOrder get_daily_order(){
-		//return WeeklyOrder for specipic day
 		WeeklyOrder weekly = new WeeklyOrder();
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
@@ -122,5 +121,13 @@ public class StorageLogic {
 		int ev_amount;
 		ev_amount=sc.get_evalute_amount(p);
 		return ev_amount;
+	}
+	
+	public int defected (){
+		int answer=0;
+		if(Math.random() < 0.2) {
+		    answer = 1; 
+		}
+		return answer;
 	}
 }
