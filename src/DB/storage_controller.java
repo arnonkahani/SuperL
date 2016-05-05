@@ -43,8 +43,8 @@ public class storage_controller {
 	    	
 	    	for(int j=0; j<products.size(); j++){
 				c.setAutoCommit(false);
-				 sql = "INSERT INTO INS_PRODUCT (SERIAL_NUM,ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,VALID_DATE,DEFECTED) " +
-	                   "VALUES ('"+index_ins_product+"','"+products.get(j).get_id()+ "','" +products.get(j).get_name()+"','"+products.get(j).get_producer().getName()+"','"+products.get(j).get_category()+"','"+products.get(j).get_sub_category()+"','"+products.get(j).get_sub_sub_category()+"','"+products.get(j).getValid_date()+"','"+products.get(j).isDefected()+"');"; 
+				 sql = "INSERT INTO INS_PRODUCT (SERIAL_NUM,ID,VALID_DATE,DEFECTED) " +
+	                   "VALUES ('"+index_ins_product+"','"+products.get(j).get_id()+ "','"+products.get(j).getValid_date()+"','"+products.get(j).isDefected()+"');"; 
 				 stmt = c.createStatement();
 			
 				stmt.executeUpdate(sql);
@@ -65,31 +65,27 @@ public class storage_controller {
 	    	String sql;
 	    	Statement stmt;
 	    	int curr_amount=get_Amount(ins.get_id());
-	    		c.setAutoCommit(false);
-				sql = "SELECT * FROM INS_PRODUCT WHERE SERIAL_NUM="+ins.getSerial_num()+";" ;
+			issue.setS_id(index_issue_certificate);
+			index_issue_certificate++;
+			issue.setS_serial_num(ins.getSerial_num());
+			issue.setS_date(new Date());
+			issue.setS_p_id(ins.get_id());
+			issue.setS_cat(ins.get_category());
+			issue.setS_sub_cat(ins.get_sub_category());
+			issue.setS_sub_sub_cat(ins.get_sub_sub_category());
+			issue.setS_name(ins.get_name());
+			issue.setS_producer(ins.get_producer().getName());
+			issue.setS_valid_date(ins.getValid_date().toString());
+			try{
+				sql = "DELETE from INS_PRODUCT where SERIAL_NUM="+issue.getS_serial_num()+";";
 				stmt = c.createStatement();
-				ResultSet rs=stmt.executeQuery(sql);
-				issue.setS_id(index_issue_certificate);
-				index_issue_certificate++;
-				issue.setS_serial_num(rs.getInt("SERIAL_NUM"));
-				issue.setS_date(new Date());
-				issue.setS_p_id(rs.getInt("ID"));
-				issue.setS_cat(rs.getString("CATAGORY"));
-				issue.setS_sub_cat(rs.getString("SUB_CATAGORY"));
-				issue.setS_sub_sub_cat(rs.getString("SUB_SUB_CATAGORY"));
-				issue.setS_name(rs.getString("NAME"));
-				issue.setS_producer(rs.getString("PRODUCER"));
-				issue.setS_valid_date(rs.getString("VALID_DATE"));
-				curr_amount = rs.getInt("AMOUNT");
-				try{
-					sql = "DELETE from INS_PRODUCT where SERIAL_NUM="+issue.getS_serial_num()+";";
-					stmt.executeUpdate(sql);
-					create_issue(issue);
-				} catch (SQLException e) {
-					 System.err.println("Product is not in the storage" );
-				}
-	    	curr_amount=curr_amount-1;
-		    c.commit();
+				stmt.executeUpdate(sql);
+				create_issue(issue);
+			} catch (SQLException e) {
+				 System.err.println("Product is not in the storage" );
+			}
+	    curr_amount=curr_amount-1;
+	    c.commit();
 			
 		} catch (SQLException e) {
 			 System.err.println("The Amount is less then zero" );
@@ -180,34 +176,12 @@ public class storage_controller {
 			e.printStackTrace();
 		}
 		return defected;
-		
 
-			
-		
 	}
 	
-	public void add_new_product(String cat, String sub_cat, String sub_sub_cat,String name, String producer,double price ,int min_amount){
 		
-		try {
-
-			String sql;
-	    	Statement stmt;
-			sql = "INSERT INTO PRODUCT (ID,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,NAME,AMOUNT,PRODUCER,PRICE,MIN_AMOUNT) " +
-	                "VALUES ("+index_product+","+cat+ "," +sub_cat+","+sub_sub_cat+","+name+","+0+","+producer+","+price+","+min_amount+");"; 
-			stmt = c.createStatement();
-			stmt.executeUpdate(sql);
-			index_product++;
-			c.commit();
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-	}
+	
+	
 	
 	public int Check_amount (Product prod,int amount){
 		
@@ -261,8 +235,8 @@ public class storage_controller {
 			String sql;
 	    	Statement stmt;
 	    	for ( Product key : order.getProducts().keySet() ) {
-				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY,AMOUNT) " +
-		                "VALUES ("+order.getDay()+","+ key.get_id()+","+key.get_name()+","+key.get_producer()+","+key.get_category()+","+key.get_sub_category()+","+key.get_sub_sub_category()+","+order.getProducts().get(key)+");"; 
+				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,AMOUNT) " +
+		                "VALUES ("+order.getDay()+","+ key.get_id()+","+order.getProducts().get(key)+");"; 
 		    	stmt = c.createStatement();
 		    	stmt.executeUpdate(sql);
 		    	c.commit();        
@@ -324,7 +298,6 @@ public class storage_controller {
 		WeeklyOrder weekly=new WeeklyOrder();
 		HashMap<Product,Integer> products= new HashMap();
 		Product p=new Product();
-		String producer_name;
 		int amount=0;
 		try {			
 			String sql;
@@ -334,12 +307,6 @@ public class storage_controller {
 			ResultSet rs=stmt.executeQuery(sql);
 			while(rs.next()) {
 				p.set_id(rs.getInt("ID"));
-				p.set_name(rs.getString("NAME"));
-				p.set_category(rs.getString("CATAGORY"));
-				p.set_sub_category(rs.getString("SUB_CATAGORY"));
-				p.set_sub_sub_category(rs.getString("SUB_SUB_CATAGORY"));
-				producer_name=rs.getString("PRODUCERNAME");
-				p.set_producer(new Producer(producer_name));
 				amount = rs.getInt("AMOUNT");
 				products.put(p, amount);
 			}

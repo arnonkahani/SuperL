@@ -99,6 +99,27 @@ public class report_controller {
 		 	
 	}
 	
+	
+	public ArrayList<String> producer_product_search (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name){
+		ArrayList<String> s_arr = new ArrayList<String>();
+		try {
+			String sql;
+	    	Statement stmt;
+			sql = "SELECT PRODUCERNAME FROM PRODUCT WHERE PRODUCT.CATAGORY="+cat_name+"AND PRODUCT.SUB_CATAGORY="+sub_cat_name+"AND PRODUCT.SUB_SUB_CATAGORY="+sub_sub_cat_name+" AND PRODUCT.NAME="+name+";"; 
+			stmt = c.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			while(rs.next()) {
+				s_arr.add(rs.getString ("PRODUCERNAME")); 
+			}
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return s_arr;
+		 	
+	}
+	
 	public int product_search_ID (String cat_name,String sub_cat_name,String sub_sub_cat_name,String name,Producer p){
 		int id=0;
 		try {
