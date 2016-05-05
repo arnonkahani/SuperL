@@ -343,7 +343,7 @@ public class storage_controller {
 				amount = rs.getInt("AMOUNT");
 				products.put(p, amount);
 			}
-			weekly.setDay(SupplyAgreement.Day(1));
+			weekly.setDay(SupplyAgreement.Day.values()[curr_day-1]);
 			weekly.setProducts(products);
 		
 		} catch (SQLException e) {
