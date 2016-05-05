@@ -343,7 +343,7 @@ public class storage_controller {
 				amount = rs.getInt("AMOUNT");
 				products.put(p, amount);
 			}
-			weekly.setDay(SupplyAgreement.Day(curr_day));
+			weekly.setDay(SupplyAgreement.Day(1));
 			weekly.setProducts(products);
 		
 		} catch (SQLException e) {
@@ -368,6 +368,20 @@ public class storage_controller {
 		}
 		
 		return ev_amount;
+	}
+	
+	
+	public void update_defected(INS_product p,int defected){
+		try {
+			String sql;
+			Statement stmt;
+			sql = "UPDATE INS_PRODUCT SET DEFECTED="+defected+" WHERE SERIAL_NUM="+p.getSerial_num()+";" ;
+			stmt = c.createStatement();
+			stmt.executeUpdate(sql);
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
