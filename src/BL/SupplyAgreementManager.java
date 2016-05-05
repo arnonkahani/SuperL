@@ -47,18 +47,21 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement>{
 	public String[] getAllProductsID(String supllyagreement) throws SQLException {
 		return _apm.getAllProductsSupplyAgreement(supllyagreement);
 	}
-	public String[] getAllProductsSN(String SN) throws SQLException {
+	
+public String[] getAllProductsSN(String SN) throws SQLException {
 		return _apm.getAllProductsSN(SN);
 	}
 	
 	public ArrayList<SupplyAgreementProduct> getCheapstProductsPerDay(SupplyAgreement.Day day,HashMap<Product,Integer> products) throws SQLException{
 		return _apm.getCheapestProductPerDay(products, day);
 	}
-	
-	public SupplierProduct getCheapestProduct(String producer,String product,int amount) throws SQLException{
-		return _apm.getCheapestProduct(producer,product,amount);
+	public ArrayList<SupplyAgreementProduct> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException{
+		return _apm.getCheapestProductOnDemand(products);
 	}
 	
+	public ArrayList<Product> getAllOnDemandProducts(){
+		return _apm.getAllOnDemandProducts();
+	}
 	
 	
 	
@@ -69,11 +72,25 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement>{
 			super(db);
 		}
 
+		public ArrayList<Product> getAllOnDemandProducts() throws SQLException {
+			
+			_db.getAllOnDemand();
+			
+		}
+
 		public ArrayList<SupplyAgreementProduct> getCheapestProductPerDay(HashMap<Product,Integer> products, Day day) throws SQLException {
 			ArrayList<SupplyAgreementProduct> to_order = new ArrayList<>();
 			
 			for (Product product : products.keySet()) {
 				to_order.add(getCheapstProduct(_db.getProductByDay(product,day.getValue()),products.get(product).intValue()));
+			}
+			return to_order;
+		}
+		public ArrayList<SupplyAgreementProduct> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException {
+			ArrayList<SupplyAgreementProduct> to_order = new ArrayList<>();
+			
+			for (Product product : products.keySet()) {
+				to_order.add(getCheapstProduct(_db.getProductOnDemand(product),products.get(product).intValue()));
 			}
 			return to_order;
 		}

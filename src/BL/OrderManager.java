@@ -29,10 +29,27 @@ public class OrderManager extends LogicManager<DAOOrder>{
 	}
 	@Override
 	public void create(Object[] values) throws SQLException{
-		float price = calculateDiscount((ArrayList<OrderProduct>)values[1]);
-		Order or = new Order((SupplyAgreement)values[0],(Date)values[2], (ArrayList<OrderProduct>)values[1],price);
-		_db.insert(or);
+		ArrayList<SupplyAgreementProduct> products = _sam.getCheapestProductOnDemand((HashMap<Product,Integer>)values[1]);
+		makeOrderProducts(products);
 	}
+	
+
+	public Order getOrderByID(String id) throws SQLException
+	{
+		return getFromPK(new String[]{id});
+	}
+	
+	public ArrayList<Order> getAllOrderes() throws SQLException
+	{
+		return getAll();
+	}
+	
+	public ArrayList<OrderProduct> makeWeekelyOrder(WeeklyOrder wo) throws SQLException {
+		ArrayList<SupplyAgreementProduct> products = _sam.getCheapstProductsPerDay(wo.getDay(), wo.getProducts());
+		return makeOrderProducts(products);
+	}
+	
+	
 	
 	private float calculateDiscount(ArrayList<OrderProduct> orderProducts) throws SQLException {
 		float price = 0;
@@ -54,17 +71,8 @@ public class OrderManager extends LogicManager<DAOOrder>{
 		}
 		return discount_price;
 	}
-	
-	public Order getOrderByID(String id) throws SQLException
+	private ArrayList<OrderProduct> makeOrderProducts(ArrayList<SupplyAgreementProduct> products) throws SQLException
 	{
-		return getFromPK(new String[]{id});
-	}
-	public ArrayList<Order> getAllOrderes() throws SQLException
-	{
-		return getAll();
-	}
-	public ArrayList<OrderProduct> makeWeekelyOrder(WeeklyOrder wo) throws SQLException {
-		ArrayList<SupplyAgreementProduct> products = _sam.getCheapstProductsPerDay(wo.getDay(), wo.getProducts());
 		ArrayList<OrderProduct> product_list = new ArrayList<>();
 		HashMap<String,ArrayList<OrderProduct>> cn_map = new HashMap();
 		for (SupplyAgreementProduct product : products) {
@@ -87,9 +95,17 @@ public class OrderManager extends LogicManager<DAOOrder>{
 			float price = calculateDiscount(cn.getValue());
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date date = new Date();
-			Order or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),cn.getValue(),price);
+			Order or = null;
+			try {
+				or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),cn.getValue(),price);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			_db.insert(or);
 		}
-		return cn_pro;
+		return product_list;
+	
 	}
 
 	

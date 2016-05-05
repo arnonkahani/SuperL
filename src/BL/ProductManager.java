@@ -28,17 +28,17 @@ public class ProductManager extends LogicManager<DAOSupplierProduct>{
 		pr.set_sub_sub_category((String)values[6]);
 		pr.set_min_amount((int)values[7]);
 		pr.set_price((float)values[8]);
-		
 		SupplierProduct supplierProduct = new SupplierProduct(pr);
 		supplierProduct.set_supplier((String)values[4]);
 		_db.insert(supplierProduct);
 		
 	}
 
-	@Override
-	public <K> K getFromPK(String[] values) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public Product getProductByPK(int id,String name,String producer_name,String catagory,
+			String sub_catagory,String sub_sub_catagory) throws SQLException {
+		String [] values = new String[]{}; 
+		return getFromPK(values);
 	}
 
 
