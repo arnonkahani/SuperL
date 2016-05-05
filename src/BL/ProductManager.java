@@ -44,7 +44,7 @@ public class ProductManager extends LogicManager<DAOSupplierProduct>{
 		return getAll();
 	}
 
-
+	
 
 	
 	

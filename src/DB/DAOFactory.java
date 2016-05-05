@@ -2,6 +2,7 @@ package DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -29,6 +30,35 @@ public class DAOFactory {
 			createTables();
 			}
 		
+	}
+	public storage_controller createStorageController() throws SQLException
+	{ int [] initialize_values=new int [3];
+	 Statement stmt = null;
+	 ResultSet rs;
+    String sql;
+	 sql = "SELECT SERIAL_NUM FROM INS_PRODUCT ORDER BY SERIAL_NUM DESC LIMIT 1;" ;
+	 stmt = _c.createStatement();
+	 rs=stmt.executeQuery(sql);
+	 if(rs.next()){
+		 initialize_values[0] = rs.getInt("SERIAL_NUM")+1;
+	 }
+	 else{
+		 initialize_values[0]=1;
+	 }
+	 sql = "SELECT S_ID FROM ISSUE_CERTIFICATE ORDER BY S_ID DESC LIMIT 1;" ;
+	 stmt = _c.createStatement();
+	 rs=stmt.executeQuery(sql);
+	 if(rs.next()){
+		 initialize_values[1] = rs.getInt("S_ID")+1;
+	 }
+	 else{
+		 initialize_values[1]=1;
+	 }
+	
+		return new storage_controller(initialize_values[0], initialize_values[1], _c);
+	}
+	public report_controller createReportController(){
+		return new report_controller(_c);
 	}
 	public DAO create(Class object_class)
 	{

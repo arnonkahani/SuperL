@@ -38,6 +38,8 @@ public class OrderManager extends LogicManager<DAOOrder>{
 	}
 	
 	public ArrayList<OrderProduct> makeWeekelyOrder(WeeklyOrder wo) throws SQLException {
+		if(wo.getProducts().size()==0)
+			return null;
 		ArrayList<SupplyAgreementProduct> products = _sam.getCheapstProductsPerDay(wo.getDay(), wo.getProducts());
 		return makeOrderProducts(products);
 	}

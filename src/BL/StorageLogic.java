@@ -17,10 +17,9 @@ public class StorageLogic {
 	
 	DB.storage_controller sc ;
 	DB.report_controller rc;
-	Connection c ;
 	
-	public StorageLogic(DB.storage_controller storage_controller, Connection c,DB.report_controller rc){
-		this.c=c;
+	public StorageLogic(DB.storage_controller storage_controller,DB.report_controller rc){
+
 		this.sc=storage_controller;
 		this.rc=rc;
 	}
@@ -55,6 +54,7 @@ public class StorageLogic {
 	
 
 	public void getSupply (ArrayList<OrderProduct> products){
+		if (products!=null){
 		ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
 		for (int i=0;i<products.size();i++){
 			for(int j=0;j<products.get(i).getAmount();j++){
@@ -62,6 +62,7 @@ public class StorageLogic {
 				}
 		}
 		sc.getSupply(ins_products);
+		}
 		
 	}
 	

@@ -20,14 +20,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
 public class storage_controller {
-	int index_product;
 	int index_ins_product;
 	int index_issue_certificate;
 	Connection c;
 	
 	
-	public storage_controller(int index_product,int index_ins_product,int index_issue_certificate,Connection c) {
-		this.index_product=index_product;
+	public storage_controller(int index_ins_product,int index_issue_certificate,Connection c) {
 		this.index_ins_product=index_ins_product;
 		this.index_issue_certificate=index_issue_certificate;
 		this.c=c;
@@ -314,7 +312,7 @@ public class storage_controller {
 			weekly.setProducts(products);
 		
 		} catch (SQLException e) {
-			e.printStackTrace();
+			
 		}
 		return weekly;
 	}
