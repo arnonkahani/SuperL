@@ -4,16 +4,17 @@ import java.sql.SQLException;
 import BE.Supplier;
 import BL.BLFactory;
 import DB.DAOFactory;
-import PL.viewController;
+import PL.ViewController;
 
 public class main {
 
+	
+	
 	public static void main(String[] args) {
 		
 		try {
-			viewController v = new viewController();
+			ViewController v = new ViewController();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

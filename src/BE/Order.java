@@ -71,6 +71,7 @@ public class Order {
 		for (OrderProduct product : get_amountProduct()) {
 			productlist = productlist + product.get_name() + " | " + product.getAmount() + " | " + product.getPrice() +"\n";
 		}
+		
 		return str + productlist;
 	}
 	public String getOrderID() {

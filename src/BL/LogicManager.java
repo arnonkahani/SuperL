@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import DB.DAO;
 
 
-public abstract class LogicManager<T extends DAO> {
+public abstract class LogicManager<T extends DAO,K> {
 
 	protected T _db;
 	
@@ -16,9 +16,9 @@ public abstract class LogicManager<T extends DAO> {
 		_db =db;
 	}
 	
-	public abstract void create(Object[] values) throws SQLException;
+	public abstract void create(K value) throws SQLException;
 	
-	public <K> ArrayList<K> search(int[] search_field,String[] query) throws SQLException
+	public ArrayList<K> search(int[] search_field,String[] query) throws SQLException
 	{
 			return _db.search(search_field,query);
 	}
@@ -27,11 +27,11 @@ public abstract class LogicManager<T extends DAO> {
 		return _db.getSearchFieldsView();
 	}
 	
-	protected <K> K getFromPK(String[] values) throws SQLException{
+	protected K getFromPK(String[] values) throws SQLException{
 		return (K)_db.getFromPK(values);
 	}
 	
-	protected <K> ArrayList<K> getAll() throws SQLException{
+	protected  ArrayList<K> getAll() throws SQLException{
 		return (ArrayList<K>)_db.getAll();
 	}
 }

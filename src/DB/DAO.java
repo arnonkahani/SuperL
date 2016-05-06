@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import PL.ViewController;
+
 
 
 
@@ -60,10 +62,13 @@ public abstract class DAO <T>{
 				sql = "SELECT * FROM " + getTable();
 			else{	
 			sql="SELECT * FROM "+ getTable();
-				sql = sql + " WHERE " + genrateQuery(search_feild,query);}
 			sql = sql.toUpperCase();
+				sql = sql + " WHERE " + genrateQuery(search_feild,query);}
+			
 			rs = _stm.executeQuery(sql);
-			System.out.println(sql);
+			//TODO: Delete
+			if(ViewController.debug)
+			System.out.println("DAO: QUERY: " + sql);
 		}
 		catch(Exception e){
 		}
@@ -73,17 +78,17 @@ public abstract class DAO <T>{
 	private String genrateQuery(int[] columns, String[] values) {
 		String sql = "";
 		for (int i = 0; i < columns.length - 1; i++) {
-			sql = sql + getSearchFields()[columns[i]] + " = " + values[i] + " AND ";
+			sql = sql + getSearchFields()[columns[i]].toUpperCase() + " = " + values[i] + " AND ";
 			
 		}
-		sql = sql + getSearchFields()[columns[columns.length-1]] + " = " + values[columns.length-1];
+		sql = sql + getSearchFields()[columns[columns.length-1]].toUpperCase() + " = " + values[columns.length-1];
 		return sql;
 	}
 	
 	protected void insert(String[] values,boolean auto_flag) throws SQLException
 	{
 		_stm = _c.createStatement();
-		String sql="INSERT INTO "+getTable() +" (";
+		String sql="INSERT INTO "+getTable().toUpperCase() +" (";
 		String columns = "";
 		String insert_columns = "";
 		for (int i = 0; i < values.length; i++) {
@@ -103,11 +108,15 @@ public abstract class DAO <T>{
 					insert_columns = insert_columns + getSearchFields()[i] +",";
 			
 		}
-		sql = sql + insert_columns + ") VALUES (" +columns + ")";
-		sql = sql.toUpperCase();
+		sql = sql + insert_columns.toUpperCase() + ") VALUES (" +columns + ")";
+	
+		//TODO: Delete
+				if(ViewController.debug)
 		System.out.println(sql);
 		
 		_stm.executeUpdate(sql);
+		//TODO: Delete
+				if(ViewController.debug)
 		System.out.println("Added to: " + getTable());
 		
 	}

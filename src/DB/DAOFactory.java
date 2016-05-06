@@ -25,15 +25,13 @@ public class DAOFactory {
 			    }
 			    System.out.println("Opened supplier database successfully");
 			
-			if(first_time){
-				
-				
+			if(first_time){	
 			drop();
 			createTables();
 			}
 		
 	}
-	public storage_controller createStorageController() throws SQLException
+	public StorageController createStorageController() throws SQLException
 	{ int [] initialize_values=new int [3];
 	 Statement stmt = null;
 	 ResultSet rs;
@@ -57,10 +55,10 @@ public class DAOFactory {
 		 initialize_values[1]=1;
 	 }
 	
-		return new storage_controller(initialize_values[0], initialize_values[1], _c);
+		return new StorageController(initialize_values[0], initialize_values[1], _c);
 	}
-	public report_controller createReportController(){
-		return new report_controller(_c);
+	public ReportController createReportController(){
+		return new ReportController(_c);
 	}
 	public DAO create(Class object_class)
 	{
@@ -96,9 +94,13 @@ public class DAOFactory {
 	private void drop() {
 		
 		Statement stmt = null;
+		String sql = "";
 	    try{
+	    	
 	    stmt = _c.createStatement();
-	    String sql = "DROP TABLE IF EXISTS PRODUCER";
+	    sql = "PRAGMA foreign_keys = OFF";
+	    stmt.executeUpdate(sql);
+	    sql = "DROP TABLE IF EXISTS PRODUCER";
 	    stmt.executeUpdate(sql);
 	    sql = "DROP TABLE IF EXISTS PRODUCT";
 	    stmt.executeUpdate(sql);
@@ -118,7 +120,6 @@ public class DAOFactory {
 	    stmt.executeUpdate(sql);
 	    sql = "DROP TABLE IF EXISTS DISCOUNT";
 	    stmt.executeUpdate(sql);
-	    
 	    sql = "DROP TABLE IF EXISTS ORDER_PRODUCT";
 	    stmt.executeUpdate(sql);
 	    sql = "DROP TABLE IF EXISTS SUB_SUB_CATAGORY";
@@ -138,6 +139,7 @@ public class DAOFactory {
 	    
 	    }catch(Exception e)
 	    {
+	    	System.out.println(sql);
 	    	System.out.println(e.getMessage());
 	    }
 		
@@ -169,7 +171,7 @@ public class DAOFactory {
                   "FOREIGN KEY (SUB_CATAGORY,CATAGORY) REFERENCES SUB_CATAGORY(NAME_SCAT,NAME_CAT),"+
                   "FOREIGN KEY (SUB_SUB_CATAGORY,SUB_CATAGORY,CATAGORY) REFERENCES SUB_SUB_CATAGORY(NAME_SSCAT,NAME_SCAT,NAME_CAT),"+
                   "FOREIGN KEY (PRODUCERNAME) REFERENCES PRODUCER(NAME),"
-                  + "UNIQUE (ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY))"; 
+                  + "UNIQUE (NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY))"; 
 	      stmt.executeUpdate(sql);
 	      sql = "CREATE TABLE SUPPLIER_PRODUCT " +
                   "(SN INTEGER PRIMARY KEY AUTOINCREMENT," +

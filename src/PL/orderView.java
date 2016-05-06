@@ -5,31 +5,33 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import BE.Product;
+import BE.SupplyAgreement;
+import BE.SupplyAgreement.Day;
 import BL.OrderManager;
 
 
-public class orderView {
-	private OrderManager _om;
+public class OrderView {
+	private OrderManager _order_manager;
 	private Scanner scn;
-	private viewUtils _vu;
-	private supplyAgreementView _sav;
+	private ViewUtils _view_utils;
+	private SupplyAgreementView _supply_agreement_view;
 	
-	public orderView(viewUtils vu, OrderManager logicManager, supplyAgreementView sav) {
-		_sav=sav;
-		_om=logicManager;
-		_vu=vu;
+	public OrderView(ViewUtils vu, OrderManager logicManager, SupplyAgreementView sav) {
+		_supply_agreement_view=sav;
+		_order_manager=logicManager;
+		_view_utils=vu;
 		scn = new Scanner(System.in);
 	}
 
-	public void createOrder(){
-		_vu.clear();
+	public void createOnDemandOrder(){
+		_view_utils.clear();
 		try {
 		
 		System.out.println("Please enter number of products at the order:");
-		int n= Integer.parseInt(_vu.tryGetNumber());
+		int n= Integer.parseInt(_view_utils.tryGetNumber());
 		HashMap<Product,Integer> product_table  = new HashMap<>();
 		for(int i=0;i<n;i++){
-			Product product = _sav.chooseOnDemandAgreementProduct();
+			Product product = _supply_agreement_view.chooseOnDemandAgreementProduct();
 			if(product == null)
 			{
 				System.out.println("No products");
@@ -37,27 +39,62 @@ public class orderView {
 				
 			}
 			System.out.println("Please enter amount of the product :");
-			int l= Integer.parseInt(_vu.tryGetNumber());
+			int l= Integer.parseInt(_view_utils.tryGetNumber());
 			
 			product_table.put(product, new Integer(l));
 		}
 		
 		
 		
-		_om.create(new Object[]{product_table});
+		_order_manager.makeOnDemand(product_table);
 		} catch (SQLException e1) {
-			System.out.println(_vu.exceptionHandler(e1));
+			System.out.println(_view_utils.exceptionHandler(e1));
 		}
 	}
 	
+	public void	createWeeklyOrder(){
+		
+		System.out.println("Create Weekly Order");
+		System.out.println("Choose Day:");
+		_view_utils.printList(Day.values());
+		int d = Integer.parseInt(_view_utils.tryGetNumber(1,7));
+		Day day = Day.values()[d-1];
+		_view_utils.clear();
+		try {
+		System.out.println("Please enter number of products at the order:");
+		int n= Integer.parseInt(_view_utils.tryGetNumber());
+		HashMap<Product,Integer> product_table  = new HashMap<>();
+		for(int i=0;i<n;i++){
+			Product product = _supply_agreement_view.chooseWeeklyAgreementProduct(d);
+			if(product == null)
+			{
+				System.out.println("No products");
+				return;
+				
+			}
+			System.out.println("Please enter amount of the product :");
+			int l= Integer.parseInt(_view_utils.tryGetNumber());
+			
+			product_table.put(product, new Integer(l));
+		}
+		
+		
+		
+		_order_manager.makeWeeklyOrder(product_table,day);
+		} catch (SQLException e1) {
+			System.out.println(_view_utils.exceptionHandler(e1));
+		}
+	}
+	
+	
 	public void printOrder(){
-		_vu.clear();
+		_view_utils.clear();
 		
 		System.out.println("Please enter order's number:");
 		String str=scn.nextLine();
 		
 		try {
-			System.out.println(_om.getOrderByID(str));
+			System.out.println(_order_manager.getOrderByID(str));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,15 +102,15 @@ public class orderView {
 	}
 	
 	public void searchMenu(){
-		_vu.clear();
-		String[] menu = _om.getFileds();
-		menu = _vu.createMenu(menu);
+		_view_utils.clear();
+		String[] menu = _order_manager.getFileds();
+		menu = _view_utils.createMenu(menu);
 		int choise = -1;
 		String query;
 		while(true)
 		{
 			System.out.println("Order Search Menu");
-			choise = _vu.listChoose(menu);
+			choise = _view_utils.listChoose(menu);
 			if(menu[choise-1].equals("Return"))
 				return;
 			else{
@@ -84,7 +121,7 @@ public class orderView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_om.search(new int[]{choise-1},new String[]{query}));
+					_view_utils.showResult(_order_manager.search(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

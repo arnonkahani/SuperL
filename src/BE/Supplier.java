@@ -12,10 +12,10 @@ public class Supplier{
 	private ArrayList<Contact> _contacts = new ArrayList<>();
 	private ArrayList<SupplierProduct> _products = new ArrayList<>();
 	
-	public Supplier(String _name,String _cn, int paymentMethod,String companyNumber){
+	public Supplier(String _name,String _cn, int paymentMethod,String bankNumber){
 		this._name=_name;
 		this.paymentMethod=paymentMethod;
-		this.bankNumber=companyNumber;
+		this.bankNumber=bankNumber;
 		_CN = _cn;
 	}
 	

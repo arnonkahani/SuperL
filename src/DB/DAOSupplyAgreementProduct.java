@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import BE.SupplyAgreementProduct;
+import PL.ViewController;
 import BE.Discount;
 import BE.Product;
 import BE.SupplierProduct;
@@ -24,7 +25,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 
 	@Override
 	public String[] getSearchFields() {
-		return new String[]{"All","SUPPLY_AGREEMENT_ID","Supplier_Product_SN","Price"};
+		return new String[]{"All","SUPPLY_AGREEMENT_ID","SUPPLIER_PRODUCT_SN","PRICE"};
 	}
 
 	@Override
@@ -49,6 +50,9 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		for (Discount discount : object.get_discounts()) {
 			discount.setAgreementProductSN(object.get_serial_number());
 			discount.setSupplyid(object.get_sp());
+			//TODO: Delete
+			if(ViewController.debug)
+			System.out.println("DAOSppluAgreementProdt: " + discount.get_precent());
 			_discount.insert(discount);
 		}
 		
@@ -60,12 +64,14 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 
 	@Override
 	public SupplyAgreementProduct create(ResultSet rs) throws SQLException {
+		//TODO: Delete
+				if(ViewController.debug)
 		System.out.println("DAOSupplyAgreementProduct : " + _product.getFromPK(new String[]{rs.getString("Supplier_Product_SN")}));
 		SupplyAgreementProduct agreementProduct = new SupplyAgreementProduct(_product.getFromPK(new String[]{""+rs.getInt("Supplier_Product_SN")}));
 		agreementProduct.set_price(rs.getFloat("PRICE"));
 		agreementProduct.set_sp(rs.getString("SUPPLY_AGREEMENT_ID"));
 		ArrayList<Discount> discounts = _discount.search(new int[]{2,3},new String[]{
-				agreementProduct.get_serial_number(),agreementProduct.get_sp()});
+				agreementProduct.get_sp(),agreementProduct.get_serial_number()});
 		agreementProduct.set_discounts(discounts);
 		return agreementProduct;
 		
@@ -99,10 +105,14 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 
 	public ArrayList<SupplyAgreementProduct> getProductOnDemand(Product product) throws SQLException {
 		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
+		//TODO: Delete
+				if(ViewController.debug)
 		System.out.println(product.get_id());
 		String sql = "SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE (SUPPLY_AGREEMENT_ID IN (SELECT ID "
 				+ "FROM SUPPLY_AGREEMENT WHERE DAY LIKE '%" + 0 + "%')) AND Supplier_Product_SN IN (SELECT SN FROM SUPPLIER_PRODUCT WHERE "
 						+ "PRODUCT_ID = " + product.get_id() + ")";
+		//TODO: Delete
+				if(ViewController.debug)
 		System.out.println(sql);
 		ResultSet rs = _stm.executeQuery(sql);
 		while(rs.next())
@@ -124,6 +134,20 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		}
 		return products;
 		
+	}
+
+	public ArrayList<SupplyAgreementProduct> getAllDay(int d) throws SQLException {
+		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
+		String sql = "SELECT SUPPLY_AGREEMENT_ID,SUPPLIER_PRODUCT_SN,PRICE FROM"
+				+ "((SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE (SUPPLY_AGREEMENT_ID IN (SELECT ID "
+				+ "FROM SUPPLY_AGREEMENT WHERE DAY LIKE '%" + d + "%'))) JOIN SUPPLIER_PRODUCT ON SUPPLIER_PRODUCT_SN = SN) GROUP BY PRODUCT_ID";
+		_stm = _c.createStatement();
+		ResultSet rs = _stm.executeQuery(sql);
+		while(rs.next())
+		{
+			products.add(create(rs));
+		}
+		return products;
 	}
 
 

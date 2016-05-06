@@ -5,8 +5,9 @@ public class Discount{
 	private String supplier_product_SN;
 	private int _quantity;
 	private float _precent;
-	public Discount(int amount, Float precent) {
+	public Discount(int amount, float precent) {
 		_quantity=amount;
+		_precent = precent;
 		
 	}
 	public Discount() {

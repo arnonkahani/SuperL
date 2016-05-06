@@ -5,11 +5,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class viewUtils {
+import BE.Product;
+
+public class ViewUtils {
 
 	Scanner scn;
 	
-	public viewUtils(){
+	public ViewUtils(){
 		scn = new Scanner(System.in);
 	}
 	
@@ -138,7 +140,7 @@ public class viewUtils {
 		clear();
 		System.out.println("Search Results");
 		if(result.size() == 0)
-			System.out.println("There are no onjects matching this search");
+			System.out.println("There are no objects matching this search");
 		else{
 			for (int i = 0; i < result.size(); i++) {
 				System.out.println("---------------- " + (i + 1) + "---------------- ");
@@ -256,6 +258,19 @@ public class viewUtils {
 		}
 		}
 		return flo;
+	}
+	
+	public <T> T choose(ArrayList<T> list){
+			if(list.isEmpty())
+				return null;
+			T product = null;
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println((i+1) + ". " + list.get(i));
+			}
+			int choise = Integer.parseInt(tryGetNumber(1, list.size()));
+			product = list.get(choise-1);
+			return product;
+		
 	}
 	
 

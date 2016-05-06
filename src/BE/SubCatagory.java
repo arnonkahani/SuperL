@@ -26,7 +26,7 @@ public class SubCatagory {
 	
 	public String toString()
 	{
-		return "Catagory Name :" + name_cat + "Sub Catagory Name: " + name_scat ;
+		return "Catagory Name: " + name_cat + "Sub Catagory Name: " + name_scat ;
 	}
 
 }

@@ -10,6 +10,7 @@ import BE.Catagory;
 import BE.SubCatagory;
 import BE.SubSubCatagory;
 import BE.SupplierProduct;
+import PL.ViewController;
 
 public class DAOSupplierProduct extends DAO<SupplierProduct> {
 
@@ -63,6 +64,8 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 		
 		 insert(getValues(object),true);
 		 sn = getLastAutoID();
+		//TODO: Delete
+			if(ViewController.debug)
 		 System.out.println("SN:" + sn);
 		object.set_serial_number(""+sn);
 		
@@ -70,6 +73,8 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 	
 	@Override
 	public SupplierProduct create(ResultSet rs) throws SQLException {
+		//TODO: Delete
+		if(ViewController.debug)
 		System.out.println("DAOSupplierProduct : " + _product.getFromPK(new String[]{""+rs.getInt("PRODUCT_ID")}));
 		SupplierProduct supplierProduct = new SupplierProduct(_product.getFromPK(new String[]{""+rs.getInt("PRODUCT_ID")}));
 		supplierProduct.set_supplier(rs.getString("SUPPLIERCN"));

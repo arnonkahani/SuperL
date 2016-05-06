@@ -15,66 +15,84 @@ import BL.ProductManager;
 
 public class ProductView {
 
-	private ProductManager _pm;
+	private ProductManager _product_manager;
+	private SupplierView _supplier_view;
 	private Scanner scn;
-	private viewUtils _vu;
+	private ViewUtils _view_utils;
 	
-	public ProductView(ProductManager logicManager,viewUtils vu){
-		_pm = logicManager;
+	public ProductView(ProductManager logicManager,ViewUtils vu){
+		_product_manager = logicManager;
 		scn = new Scanner(System.in);
-		_vu = vu;
+		_view_utils = vu;
+	}
+	public void setSupplierView(SupplierView supplier_view){
+		_supplier_view = supplier_view;
 	}
 	
 	public void createProduct(){
-		_vu.clear();
-		Object[] values = new Object[10];
+		_view_utils.clear();
+		
 		System.out.println("Choose insert option:");
-		int choise = _vu.listChoose(new String[]{"Exsisting product","New Product"}) - 1;
+		int choise = _view_utils.listChoose(new String[]{"Exsisting product","New Product"}) - 1;
 		if(choise == 1){
 		System.out.println("Please enter producer name:");
-		String producername = _vu.tryGetOnlyLetters();
-		values[0] = producername;
+		String producername = _view_utils.tryGetOnlyLetters();
+		
 		
 		System.out.println("Please enter product name:");
 		String productname = scn.nextLine();
-		values[3] = productname;
+	
 		
 		System.out.println("Please enter Shelf Life:");
-		int dayofvalid = Integer.parseInt(_vu.tryGetNumber());
-		values[2] = dayofvalid;
+		int dayofvalid = Integer.parseInt(_view_utils.tryGetNumber());
+	
 		
 		System.out.println("Please enter weight:");
-		float weight =Float.parseFloat(_vu.tryGetFloat());
-		values[1] = weight;
+		float weight =Float.parseFloat(_view_utils.tryGetFloat());
+	
 		
 		System.out.println("Please enter supplierCN:");
-		String supplierid = _vu.tryGetNumber();
-		values[9] = supplierid;
+		String supplierid = _supplier_view.chooseCN();
+		if(supplierid == null)
+		{
+			System.out.println("No suplliers - Press Enter To Return");
+			scn.nextLine();
+			return;
+		}
+	
 		
 		System.out.println("Please choose catagory:");
 		String catagory = chooseCatagory();
-		values[4] = catagory;
+		
 		
 		System.out.println("Please choose sub catagory:");
 		String sub_catagory = chooseSubCatagory(catagory);
-		values[5] = sub_catagory;
+	
 		
 		System.out.println("Please choose sub sub catagory:");
 		String sub_sub_catagory = chooseSubSubCatagory(catagory,sub_catagory);
-		values[6] = sub_sub_catagory;
+		
 		
 		System.out.println("Please store price:");
-		float price = Float.parseFloat(_vu.tryGetFloat());
-		values[8] = price;
+		float price = Float.parseFloat(_view_utils.tryGetFloat());
+		
 		
 		System.out.println("Please minimum amount:");
-		int amount = Integer.parseInt(_vu.tryGetNumber());
-		values[7] = amount;
+		int amount = Integer.parseInt(_view_utils.tryGetNumber());
+		
 		try{
-			_pm.create(values);
+			Product pr = new Product(weight,dayofvalid,productname);
+			pr.set_producer(new Producer(producername));
+			pr.set_category(catagory);
+			pr.set_sub_category(sub_catagory);
+			pr.set_sub_sub_category(sub_sub_catagory);
+			pr.set_min_amount(amount);
+			pr.set_price(price);
+			_product_manager.create(pr);
+			_product_manager.createSupplyProduct(pr, supplierid);
 		}
 		catch(SQLException e){
-			System.out.println(_vu.exceptionHandler(e));
+			System.out.println(_view_utils.exceptionHandler(e));
 		}
 		}
 		else{
@@ -85,12 +103,17 @@ public class ProductView {
 			 return;
 		
 		 }
-		System.out.println("Please enter supplierCN:");
-		String supplierid = _vu.tryGetNumber();
+		 String supplierid = _supplier_view.chooseCN();
+			if(supplierid == null)
+			{
+				System.out.println("No suplliers - Press Enter To Return");
+				scn.nextLine();
+				return;
+			}
 		try {
-			_pm.createFromProduct(pro,supplierid);
+			_product_manager.createSupplyProduct(pro,supplierid);
 		} catch (SQLException e) {
-			System.out.println(_vu.exceptionHandler(e));
+			System.out.println(_view_utils.exceptionHandler(e));
 		}
 		}
 		 
@@ -98,29 +121,24 @@ public class ProductView {
 	}
 	
 	private Product chooseProducts() {
-		Product product = null;
+		ArrayList<Product> products = new ArrayList<>();
 		try {
-			ArrayList<Product> products = _pm.getAllProducts();
-			for (int i = 0; i < products.size(); i++) {
-				System.out.println((i+1) + ". " + products.get(i));
-			}
-			int choise = Integer.parseInt(_vu.tryGetNumber(1, products.size()));
-			product = products.get(choise-1);
+			products = _product_manager.getAllProducts();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
-		return product;
+		return _view_utils.choose(products);
 	}
 
 	private String chooseCatagory() {
 		String catagory_name = "";
 		try {
-			ArrayList<Catagory> catagory = _pm.getAllCatagory();
+			ArrayList<Catagory> catagory = _product_manager.getAllCatagory();
 			if(catagory.size() == 0)
 			{
 				System.out.println("No Catagories - Please enter a new catagory");
-				catagory_name = _vu.tryGetOnlyLetters();
+				catagory_name = _view_utils.tryGetOnlyLetters();
 				
 			}
 			else{
@@ -128,11 +146,11 @@ public class ProductView {
 				for (Catagory cat : catagory) {
 					all_catagory.add(cat.getName_cat());
 				}
-				catagory_name = all_catagory.get(_vu.listChoose(all_catagory));
+				catagory_name = all_catagory.get(_view_utils.listChoose(all_catagory));
 			}
 		} catch (SQLException e) {
 			System.out.println("No Catagories - Please enter a new catagory");
-			catagory_name = _vu.tryGetOnlyLetters();
+			catagory_name = _view_utils.tryGetOnlyLetters();
 		}
 		return catagory_name;
 	}
@@ -140,11 +158,11 @@ public class ProductView {
 	private String chooseSubCatagory(String catagory) {
 		String sub_catagory_name = "";
 		try {
-			ArrayList<SubCatagory> sub_catagory = _pm.getAllSubCatagory(catagory);
+			ArrayList<SubCatagory> sub_catagory = _product_manager.getAllSubCatagory(catagory);
 			if(sub_catagory.size() == 0)
 			{
 				System.out.println("No Sub Catagories - Please enter a new sub catagory");
-				sub_catagory_name = _vu.tryGetOnlyLetters();
+				sub_catagory_name = _view_utils.tryGetOnlyLetters();
 				
 			}
 			else{
@@ -152,11 +170,11 @@ public class ProductView {
 				for (SubCatagory cat : sub_catagory) {
 					all_sub_catagory.add(cat.getName_scat());
 				}
-				sub_catagory_name = all_sub_catagory.get(_vu.listChoose(all_sub_catagory));
+				sub_catagory_name = all_sub_catagory.get(_view_utils.listChoose(all_sub_catagory));
 			}
 		} catch (SQLException e) {
 			System.out.println("No Sub Catagories - Please enter a new sub catagory");
-			sub_catagory_name = _vu.tryGetOnlyLetters();
+			sub_catagory_name = _view_utils.tryGetOnlyLetters();
 		}
 		return sub_catagory_name;
 	}
@@ -164,11 +182,11 @@ public class ProductView {
 	private String chooseSubSubCatagory(String catagory,String sub_catagory) {
 		String sub_sub_catagory_name = "";
 		try {
-			ArrayList<SubSubCatagory> sub_sub_catagory = _pm.getAllSubSubCatagory(catagory,sub_catagory);
+			ArrayList<SubSubCatagory> sub_sub_catagory = _product_manager.getAllSubSubCatagory(catagory,sub_catagory);
 			if(sub_sub_catagory.size() == 0)
 			{
 				System.out.println("No Sub Sub Catagories - Please enter a new sub sub catagory");
-				sub_sub_catagory_name = _vu.tryGetOnlyLetters();
+				sub_sub_catagory_name = _view_utils.tryGetOnlyLetters();
 				
 			}
 			else{
@@ -176,25 +194,25 @@ public class ProductView {
 				for (SubSubCatagory subcat : sub_sub_catagory) {
 					all_sub_sub_catagory.add(subcat.getName_sscat());
 				}
-				sub_sub_catagory_name = all_sub_sub_catagory.get(_vu.listChoose(all_sub_sub_catagory));
+				sub_sub_catagory_name = all_sub_sub_catagory.get(_view_utils.listChoose(all_sub_sub_catagory));
 			}
 		} catch (SQLException e) {
 			System.out.println("No Sub Sub Catagories - Please enter a new sub catagory");
-			sub_sub_catagory_name = _vu.tryGetOnlyLetters();
+			sub_sub_catagory_name = _view_utils.tryGetOnlyLetters();
 		}
 		return sub_sub_catagory_name;
 	}
 	
 	public void productSearch(){
-		_vu.clear();
-		String [] menu = _pm.getFileds();
-		menu = _vu.createMenu(menu);
+		_view_utils.clear();
+		String [] menu = _product_manager.getFileds();
+		menu = _view_utils.createMenu(menu);
 		int choise = -1;
 		String query;
 		while(true)
 		{
 			System.out.println("Product Search Menu");
-			choise = _vu.listChoose(menu);
+			choise = _view_utils.listChoose(menu);
 			if(menu[choise-1].equals("Return"))
 				return;
 
@@ -206,9 +224,9 @@ public class ProductView {
 				else
 					query = "";
 				try {
-					_vu.showResult(_pm.search(new int[]{choise-1},new String[]{query}));
+					_view_utils.showResult(_product_manager.search(new int[]{choise-1},new String[]{query}));
 				} catch (SQLException e) {
-					_vu.exceptionHandler(e);
+					_view_utils.exceptionHandler(e);
 				}
 				}
 			}
@@ -220,11 +238,11 @@ public class ProductView {
 			
 			SupplierProduct product = null;
 			try {
-				ArrayList<SupplierProduct> products = _pm.searchSupplierProduct(new int[]{2}, new String[]{CN});
+				ArrayList<SupplierProduct> products = _product_manager.searchSupplierProduct(new int[]{2}, new String[]{CN});
 				for (int i = 0; i < products.size(); i++) {
 					System.out.println((i+1) + ". " + products.get(i));
 				}
-				int choise = Integer.parseInt(_vu.tryGetNumber(1, products.size()));
+				int choise = Integer.parseInt(_view_utils.tryGetNumber(1, products.size()));
 				product = products.get(choise-1);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -234,7 +252,7 @@ public class ProductView {
 	}
 
 	public ArrayList<SupplierProduct> getSupplierProduct(String CN) throws SQLException {
-		return _pm.searchSupplierProduct(new int[]{2}, new String[]{CN});
+		return _product_manager.searchSupplierProduct(new int[]{2}, new String[]{CN});
 	}
 	
 	

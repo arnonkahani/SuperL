@@ -19,6 +19,7 @@ import DB.DAOSupplier;
 import DB.DAOSupplierProduct;
 import DB.DAOSupplyAgreement;
 import DB.DAOSupplyAgreementProduct;
+import PL.ViewController;
 
 public class SupplierLogic {
 	private StorageLogic _storage_logic;
@@ -42,13 +43,17 @@ public class SupplierLogic {
 		_pm.setSupplierProductManager((DAOSupplierProduct) db.create(SupplierProduct.class));
 		_sam.setAgreementProductManager((DAOSupplyAgreementProduct) db.create(SupplyAgreementProduct.class));
 		_storage_logic.getSupply(_om.makeWeekelyOrder(wo));
+		_om.setStorageLogic(_storage_logic);
 	}
 	
 	
 	public void supplyOnDemand(HashMap<Product, Integer> products) throws SQLException{
+		//TODO: Delete
+		if(ViewController.debug)
+			System.out.println("Called supply on demand supplier logic");
 		if(products.size()==0)
 			return;
-		_storage_logic.getSupply(_om.makeOnDemand(products));
+		_om.makeOnDemand(products);
 	}
 	
 	public LogicManager getManager(Class view_object)

@@ -115,8 +115,8 @@ public class Product{
 	public String toString()
 	{
 		return "Name :" + _name + " Weight: " + _weight + " Shelf Life: " + _shelf_life + " " + _producer.toString()
-		+"Min Amount :" + _min_amount + "Category :" + _catagory + "Sub Category :" + _sub_catagory + "Sub Sub Category :" 
-		+ _sub_sub_category + "Price :" + _price + "Id :" + _id;
+		+" Min Amount: " + _min_amount + " Category: " + _catagory + " Sub Category: " + _sub_catagory + "S ub Sub Category: " 
+		+ _sub_sub_category + " Price: " + _price + " Id: " + _id;
 	}
 	
 	public boolean equals(Object o)

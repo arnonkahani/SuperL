@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import BE.*;
 import DB.DAOSupplier;
 
-public class SupplierManager extends LogicManager<DAOSupplier>{
+public class SupplierManager extends LogicManager<DAOSupplier,Supplier>{
 	
 	
 	
@@ -15,11 +15,9 @@ public class SupplierManager extends LogicManager<DAOSupplier>{
 	}
 	
 	@Override
-	public void create(Object[] values) throws SQLException{
-		Supplier sp = new Supplier((String)values[1],(String)values[0], (int)values[2], (String)values[3]);
-		sp.set_contacts((ArrayList<Contact>)values[4]);
-		sp.set_address((String)values[5]);
-		_db.insert(sp);
+	public void create(Supplier value) throws SQLException{
+		
+		_db.insert(value);
 	}
 
 	public Supplier getSupplierByCN(String cn) throws SQLException{

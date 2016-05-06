@@ -6,20 +6,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import BE.Contact;
-
 import BE.Supplier;
 import BE.SupplierProduct;
-import BL.LogicManager;
 import BL.SupplierManager;
 
-public class supplierView {
+public class SupplierView {
 	
 	private SupplierManager _sp;
 	private ProductView _pv;
 	private Scanner scn;
-	private viewUtils _vu;
+	private ViewUtils _vu;
 	
-	public supplierView(viewUtils vu,ProductView pv ,SupplierManager logicManager) {
+	public SupplierView(ViewUtils vu,ProductView pv ,SupplierManager logicManager) {
 		_sp=logicManager;
 		_vu=vu;
 		_pv=pv;
@@ -41,7 +39,7 @@ public class supplierView {
 		System.out.println("Please enter supplier bank number:");
 		String banknumber = _vu.tryGetNumber();
 		System.out.println("Please enter number of contacts:");
-		int i = Integer.parseInt(_vu.tryGetNumber());
+		int i = Integer.parseInt(_vu.tryGetNumber(1,100));
 		ArrayList<Contact> contacts = new ArrayList<>();
 		for (int j = 0; j < i; j++) {
 			System.out.println("Please enter tel number of contact:");
@@ -53,7 +51,10 @@ public class supplierView {
 			contacts.add(new Contact(_name, _email, _tel));
 		}
 		try{
-			_sp.create(new Object[]{cn,name,paymentmethod,banknumber,contacts,address});
+			Supplier sp = new Supplier(name, cn, paymentmethod, banknumber);
+			sp.set_contacts(contacts);
+			sp.set_address(address);
+			_sp.create(sp);
 		}
 		catch(SQLException e){
 			System.out.println(_vu.exceptionHandler(e));
@@ -126,7 +127,7 @@ public class supplierView {
 			if(sup.size() == 0)
 				return null;
 			for (int i = 0; i < sup.size(); i++) {
-				System.out.println(i + ". " + sup.get(0));
+				System.out.println(i + ". " + sup.get(i));
 			}
 			System.out.println("Choose supplier: ");
 			int choise = Integer.parseInt(_vu.tryGetNumber(0, sup.size() - 1));

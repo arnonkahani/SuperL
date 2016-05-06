@@ -39,7 +39,7 @@ public class DAOSupplier extends DAO<Supplier> {
 
 	@Override
 	protected String[] getValues(Supplier object) {
-		return new String[]{"'"+object.get_CN()+"'","'"+object.get_name()+"'",""+object.getPaymentMethod(),"'"+object.getBankNumber()+"'","'"+object.get_address()+"'"};
+		return new String[]{"'"+object.get_CN()+"'","'"+object.get_name()+"'","'"+object.getBankNumber()+"'",""+object.getPaymentMethod(),"'"+object.get_address()+"'"};
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class DAODiscount extends DAO<Discount> {
 		Discount discount = new Discount();
 		discount.set_precent(rs.getFloat("precent"));
 		discount.set_quantity(rs.getInt("amount"));
-		discount.setAgreementProductSN(""+rs.getInt("SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID"));
+		discount.setAgreementProductSN(""+rs.getInt("SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN"));
 		discount.setSupplyid(""+rs.getInt("SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID"));
 		
 		return discount;

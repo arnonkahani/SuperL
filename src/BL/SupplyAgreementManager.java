@@ -4,14 +4,16 @@ package BL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import BE.*;
 import BE.SupplyAgreement.*;
 import DB.DAOSupplyAgreement;
 import DB.DAOSupplyAgreementProduct;
+import PL.ViewController;
 
 
-public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement>{
+public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,SupplyAgreement>{
 	private AgreementProductManager _apm;
 	public SupplyAgreementManager(DAOSupplyAgreement db){
 		super(db);
@@ -21,13 +23,10 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement>{
 	}
 	
 	@Override
-	public void create(Object[] values) throws SQLException{
+	public void create(SupplyAgreement value) throws SQLException{
 	
-	Supplier sp = new Supplier();
-	sp.set_CN((String)values[0]);
-	SupplyAgreement sa = new SupplyAgreement(sp,SupplyType.values()[(int)values[1]], 
-			(ArrayList<Day>)values[2], DelevryType.values()[(int)values[3]],(ArrayList<SupplyAgreementProduct>)values[4]);
-	_db.insert(sa);
+
+	_db.insert(value);
 	
 	}
 	
@@ -55,10 +54,10 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 		return _apm.getAllProductsSN(SN);
 	}
 	
-	public HashMap<SupplyAgreementProduct, Integer> getCheapstProductsPerDay(SupplyAgreement.Day day,HashMap<Product,Integer> products) throws SQLException{
+	public ArrayList<OrderProduct> getCheapstProductsPerDay(SupplyAgreement.Day day,HashMap<Product,Integer> products) throws SQLException{
 		return _apm.getCheapestProductPerDay(products, day);
 	}
-	public HashMap<SupplyAgreementProduct, Integer> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException{
+	public ArrayList<OrderProduct> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException{
 		return _apm.getCheapestProductOnDemand(products);
 	}
 	
@@ -70,7 +69,7 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 	}
 	
 	
-	class AgreementProductManager extends LogicManager<DAOSupplyAgreementProduct>
+	class AgreementProductManager extends LogicManager<DAOSupplyAgreementProduct,SupplyAgreementProduct>
 	{
 
 		public AgreementProductManager(DAOSupplyAgreementProduct db) {
@@ -89,24 +88,24 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 			
 		}
 
-		public HashMap<SupplyAgreementProduct, Integer> getCheapestProductPerDay(HashMap<Product,Integer> products, Day day) throws SQLException {
-			HashMap<SupplyAgreementProduct,Integer> to_order = new HashMap();
+		public ArrayList<OrderProduct> getCheapestProductPerDay(HashMap<Product,Integer> products, Day day) throws SQLException {
+			ArrayList<OrderProduct> to_order = new ArrayList<OrderProduct>();
 			
 			for (Product product : products.keySet()) {
-				to_order.put(getCheapstProduct(_db.getProductByDay(product,day.getValue()),products.get(product).intValue()),products.get(product).intValue());
+				to_order.add(getCheapstProduct(_db.getProductByDay(product,day.getValue()),products.get(product).intValue()));
 			}
 			return to_order;
 		}
-		public HashMap<SupplyAgreementProduct, Integer> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException {
-			HashMap<SupplyAgreementProduct, Integer> to_order = new HashMap();
+		public ArrayList<OrderProduct> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException {
+			ArrayList<OrderProduct> to_order = new ArrayList<>();
 			
 			for (Product product : products.keySet()) {
-				to_order.put(getCheapstProduct(_db.getProductOnDemand(product),products.get(product).intValue()),products.get(product).intValue());
+				to_order.add(getCheapstProduct(_db.getProductOnDemand(product),products.get(product).intValue()));
 			}
 			return to_order;
 		}
 
-		private SupplyAgreementProduct getCheapstProduct(ArrayList<SupplyAgreementProduct> products,int amount)
+		private OrderProduct getCheapstProduct(ArrayList<SupplyAgreementProduct> products,int amount)
 		{
 			float min_price = products.get(0).get_price();
 			SupplyAgreementProduct min_product = products.get(0);
@@ -117,15 +116,20 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 					if((discount.get_quantity() < amount) 
 							&& discount_price > original_price*discount.get_precent())
 						discount_price=original_price*discount.get_precent();
-						
+					//TODO: Delete
+					if(ViewController.debug)
+					System.out.println("discount : " + discount);
 				}
+				//TODO: Delete
+				if(ViewController.debug)
+				System.out.println("discount price: " + discount_price);
 				if(discount_price<min_price)
 				{
 					min_price = discount_price;
 					min_product = product;
 				}
 			}
-			return min_product;
+			return new OrderProduct(min_product, min_price, amount);
 		}
 		public SupplyAgreementProduct getCheapestProductBy(String producer, String name, int amount) throws SQLException {
 			ArrayList<SupplyAgreementProduct> products = _db.getProductByNameProducer(producer, name);
@@ -152,9 +156,6 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 			
 		}
 
-		@Override
-		public void create(Object[] values) throws SQLException {
-		}
 		
 		
 		public String[] getAllProductsSN(String SN) throws SQLException {
@@ -184,8 +185,23 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 		public SupplyAgreementProduct getSupplyAgreementPrdouctByID_SN(String id,String sn) throws SQLException{
 			return getFromPK(new String[]{id,sn});
 		}
+
+		@Override
+		public void create(SupplyAgreementProduct value) throws SQLException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public ArrayList<SupplyAgreementProduct> getAllDayProducts(int d) throws SQLException {
+			return _db.getAllDay(d);
+		}
 		
 
 		
+	}
+
+
+	public ArrayList<SupplyAgreementProduct> getAllDayProducts(int d) throws SQLException {
+		return _apm.getAllDayProducts(d);
 	}
 }

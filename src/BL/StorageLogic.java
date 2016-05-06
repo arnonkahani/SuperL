@@ -10,16 +10,17 @@ import java.util.HashMap;
 
 import BE.*;
 import BE.SupplyAgreement.Day;
+import PL.ViewController;
 
 
 public class StorageLogic {
 
 	
-	DB.storage_controller sc ;
-	DB.report_controller rc;
+	DB.StorageController sc ;
+	DB.ReportController rc;
 	SupplierLogic sl;
 	
-	public StorageLogic(DB.storage_controller storage_controller,DB.report_controller rc){
+	public StorageLogic(DB.StorageController storage_controller,DB.ReportController rc){
 
 		this.sc=storage_controller;
 		this.rc=rc;
@@ -57,6 +58,9 @@ public class StorageLogic {
 	
 
 	public void getSupply (ArrayList<OrderProduct> products){
+		//TODO: Delete
+				if(ViewController.debug && products!=null)
+		{System.out.println(products.get(0).getAmount());};
 		if (products!=null){
 		ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
 		for (int i=0;i<products.size();i++){

@@ -48,7 +48,7 @@ public class SubSubCatagory {
 
 	public String toString()
 	{
-		return "Sub Catagory Name :" + name_scat + "Sub Sub Catagory Name: " + name_sscat ;
+		return "Catagory: " + name_catagory + " Sub Catagory Name: " + name_scat + " Sub Sub Catagory Name: " + name_sscat ;
 	}
 	
 	

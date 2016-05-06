@@ -138,7 +138,7 @@ public void get_producer_prod(int n){
 			System.out.println("Invalid option. Please try again");
 		}
 		producers = logic.producer_product_search(catagory,sub_catagory,sub_sub_catagory,product_name);
-		System.out.println("Please select product:");
+		System.out.println("Please select producer:");
 		for (int i = 1; i <= producers.size(); i++)
 		{
 			System.out.println(i+". "+producers.get(i-1));
@@ -183,8 +183,7 @@ public void start(int n){
 	        	 reports(0);
 	            break;
 	         case "#" :
-	        	 System.exit(0);
-	            break;
+	        	return;
 	         default :
 	        	 start(1);
 	            
@@ -211,6 +210,8 @@ public void add_remove(int n){
 		
 		get_prod(0);
 		
+		get_producer_prod(0);
+		
 		add_remove_a(n,0);
 		
 	}
@@ -226,35 +227,34 @@ public void add_remove_a(int n,int m){
 		{
 			System.out.println("Invalid input. Please enter a positive number");
 		}
-		else
+		else if (n==0)
 		{
 			System.out.println("Please enter amount:");
+			@SuppressWarnings("resource")
+			Scanner scanner = new Scanner(System.in);
+			String option = scanner.next();
+			try
+			{
+				amount = Integer.parseInt(option);
+				if (amount < 0)
+					add_remove_a(n,2);
+				else
+					{
+					add_remove_c(n,0,amount,new Date());
+					}
+			}
+			catch(Exception e)
+			{
+				add_remove_a(n,1);
+			}
 		}
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String option = scanner.next();
-		try
-		{
-			amount = Integer.parseInt(option);
-			if (amount < 0)
-				add_remove_a(n,2);
+		
 			else
 			{
-				if(n==1)
-				{
 				   update_defected();
-				}
-				else
-				{
-					add_remove_c(n,0,amount,new Date());
-				}
 			}
 				
-		}
-		catch(Exception e)
-		{
-			add_remove_a(n,1);
-		}
+		
 	}
 
 public void update_defected(){
@@ -522,44 +522,44 @@ public void display_report(int n,String search){
 	param.add(sub_sub_catagory);
 	param.add(product_name);
 	param.add(producer_name);
-	String[] category_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Weight","Min Amount","Price","Valid Date","Is Defected?"};
+	String[] category_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Weight","Price","Valid Date","Is Defected?"};
 	String[] defected_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Price","Valid Date","Is Defected?"};
 	String[] min_arr ={"Product Id","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Amount","Min Amount"};
-	String[] issu_arr ={"Issue Certificate Id","Issue Date","Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Price","Valid Date"};
+	String[] issu_arr ={"Issue Certificate Id","Issue Date","Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Valid Date"};
 	ArrayList<ArrayList<String>> report = logic.get_report(param,n+1,search);
 	if(search.equals("CATAGORY")){
 		for(int i=0; i<category_arr.length; i++){
-			System.out.format("%-25s",category_arr[i]);
+			System.out.format("%-33s",category_arr[i]);
 		}
 		System.out.println("");
 		System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 	}
 	else if(search.equals("DEFECTED")){
 		for(int i=0; i<defected_arr.length; i++){
-			System.out.format("%-25s",defected_arr[i]);
+			System.out.format("%-33s",defected_arr[i]);
 		}
 		System.out.println("");
-		System.out.print("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.print("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 	}
 	else if(search.equals("MIN_AMOUNT")){
 		for(int i=0; i<min_arr.length; i++){
-			System.out.format("%-25s",min_arr[i]);
+			System.out.format("%-33s",min_arr[i]);
 		}
 		System.out.println("");
-		System.out.print("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 	}
 	else if(search.equals("ISSUE_CERTIFICATE")){
 		for(int i=0; i<issu_arr.length; i++){
-			System.out.format("%-25s",issu_arr[i]);
+			System.out.format("%-33s",issu_arr[i]);
 		}
 		System.out.println("");
-		System.out.print("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.print("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 	}
 	
 	for(int i=0; i< report.size();i++){
 		System.out.println("");
 		for(int j=0; j<report.get(i).size();j++){
-			System.out.format("%-25s",report.get(i).get(j));
+			System.out.format("%-33s",report.get(i).get(j));
 		}
 	}
 	
