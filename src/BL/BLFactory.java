@@ -17,6 +17,7 @@ public class BLFactory {
 		_db = new DAOFactory(first_time);
 		_storageLogic = new StorageLogic(_db.createStorageController(), _db.createReportController());
 		_supplierLogic = new SupplierLogic(_db, _storageLogic);
+		_storageLogic.run(_supplierLogic);
 		
 	}
 

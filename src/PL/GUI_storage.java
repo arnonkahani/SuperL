@@ -1,6 +1,7 @@
 package PL;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -147,7 +148,7 @@ public void get_producer_prod(int n){
 		String option = scanner.next();
 		if (Integer.parseInt(option)>cat.size())
 		{
-			get_prod(1);
+			get_producer_prod(1);
 		}
 		else
 		{
@@ -318,7 +319,7 @@ public void update_defected(){
 		
 	}
 	
-public void add_remove_c(int n,int m,int amount,Date date){
+public void add_remove_c(int n,int m,int amount,Date date) throws SQLException{
 		//int is_defected;
 		//if(n==0)
 		//{
@@ -471,7 +472,7 @@ public void rep_by_cat(int n,String search){
 	{
 		get_prod(0);
 	}
-	else 
+	else if (n==4) 
 	{
 		get_producer_prod(0);
 	}
@@ -520,6 +521,10 @@ public void display_report(int n,String search){
 	param.add(sub_catagory);
 	param.add(sub_sub_catagory);
 	param.add(product_name);
+	param.add(producer_name);
+	param.add(producer_name);
+	ArrayList<String> param2 = new ArrayList<String>();
+	param2.add(producer_name);
 	String[] category_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Weight","Min Amount","Price","Valid Date","Is Defected?"};
 	String[] defected_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Price","Valid Date","Is Defected?"};
 	String[] min_arr ={"Product Id","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Amount","Min Amount"};

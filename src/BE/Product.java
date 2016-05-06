@@ -19,6 +19,21 @@ public class Product{
 		
 	}
 	
+	public Product(String _name, float _weight, int _shelf_life, Producer _producer, int _min_amount, String _catagory,
+			String _sub_catagory, String _sub_sub_category, float _price, int _id) {
+		super();
+		this._name = _name;
+		this._weight = _weight;
+		this._shelf_life = _shelf_life;
+		this._producer = _producer;
+		this._min_amount = _min_amount;
+		this._catagory = _catagory;
+		this._sub_catagory = _sub_catagory;
+		this._sub_sub_category = _sub_sub_category;
+		this._price = _price;
+		this._id = _id;
+	}
+
 	public Product(int _id,String _catagory, String _sub_catagory, String _sub_sub_category , String _name, Producer _producer){
 		this._id=_id;
 		this._catagory=_catagory;

@@ -17,19 +17,21 @@ public class StorageLogic {
 	
 	DB.storage_controller sc ;
 	DB.report_controller rc;
+	SupplierLogic sl;
 	
 	public StorageLogic(DB.storage_controller storage_controller,DB.report_controller rc){
 
 		this.sc=storage_controller;
 		this.rc=rc;
 	}
+
+	public void run(SupplierLogic sl){
+		this.sl = sl;
+	}
 	
-	
-	
-	
-	
-	public int remove_from_storage (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,String producer ,int amount){
+	public int remove_from_storage (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,String producer ,int amount) throws SQLException{
 		int check=0;
+		HashMap<Product,Integer> products = new HashMap<Product,Integer>();
 		Producer produc = new Producer(producer);
 		int id = rc.product_search_ID(catagory,sub_catagory,sub_sub_catagory,product_name,produc);
 		Product prod = new Product(id,catagory,sub_catagory,sub_sub_catagory,product_name,produc);
@@ -45,7 +47,8 @@ public class StorageLogic {
 				sc.remove_from_storage(ins_prod,issue);}
 			if (check==1){
 				int order_amount=sc.get_evalute_amount(prod);
-				
+				products.put(prod, order_amount);
+				sl.supplyOnDemand(products);
 			}
 			
 		}
