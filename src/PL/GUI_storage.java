@@ -522,9 +522,6 @@ public void display_report(int n,String search){
 	param.add(sub_sub_catagory);
 	param.add(product_name);
 	param.add(producer_name);
-	param.add(producer_name);
-	ArrayList<String> param2 = new ArrayList<String>();
-	param2.add(producer_name);
 	String[] category_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Weight","Min Amount","Price","Valid Date","Is Defected?"};
 	String[] defected_arr ={"Product Id","Serial Number","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Price","Valid Date","Is Defected?"};
 	String[] min_arr ={"Product Id","Catagory","Sub Catagory","Sub-Sub Catagory","Product Name", "Producer","Amount","Min Amount"};
