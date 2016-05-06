@@ -70,6 +70,7 @@ public class DAOSupplierProduct extends DAO<SupplierProduct> {
 	
 	@Override
 	public SupplierProduct create(ResultSet rs) throws SQLException {
+		System.out.println("DAOSupplierProduct : " + _product.getFromPK(new String[]{""+rs.getInt("PRODUCT_ID")}));
 		SupplierProduct supplierProduct = new SupplierProduct(_product.getFromPK(new String[]{""+rs.getInt("PRODUCT_ID")}));
 		supplierProduct.set_supplier(rs.getString("SUPPLIERCN"));
 		supplierProduct.set_serial_number(""+rs.getInt("SN"));

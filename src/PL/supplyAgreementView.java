@@ -43,10 +43,11 @@ public class supplyAgreementView {
 		
 		System.out.println("Please enter number of SupplyType:");
 		int supplyType = _vu.listChoose(SupplyType.values());
-		
+		ArrayList<Day> supplyDays = new ArrayList<>();
+		if(supplyType == 0){
 		System.out.println("Please enter number of days of delevery or enter 0 if there is not day:");
 		int j= Integer.parseInt(_vu.tryGetNumber());
-		ArrayList<Day> supplyDays = new ArrayList<>();
+		
 		if(j!=0){
 			boolean error = false;
 			for(int i=0;i<j;i++){
@@ -68,7 +69,7 @@ public class supplyAgreementView {
 					supplyDays.add(Day.values()[d]);
 			}
 		}
-		
+		}
 		System.out.println("Please enter number of products at the agreement:");
 		int n=Integer.parseInt(_vu.tryGetNumber());
 		ArrayList<SupplyAgreementProduct> product_table  = new ArrayList<>();

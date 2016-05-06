@@ -40,7 +40,7 @@ public class OrderManager extends LogicManager<DAOOrder>{
 	public ArrayList<OrderProduct> makeWeekelyOrder(WeeklyOrder wo) throws SQLException {
 		if(wo.getProducts().size()==0)
 			return null;
-		ArrayList<SupplyAgreementProduct> products = _sam.getCheapstProductsPerDay(wo.getDay(), wo.getProducts());
+		HashMap<SupplyAgreementProduct,Integer> products = _sam.getCheapstProductsPerDay(wo.getDay(), wo.getProducts());
 		return makeOrderProducts(products);
 	}
 	
@@ -66,19 +66,22 @@ public class OrderManager extends LogicManager<DAOOrder>{
 		}
 		return discount_price;
 	}
-	private ArrayList<OrderProduct> makeOrderProducts(ArrayList<SupplyAgreementProduct> products) throws SQLException
+	private ArrayList<OrderProduct> makeOrderProducts(HashMap<SupplyAgreementProduct, Integer> products) throws SQLException
 	{
 		ArrayList<OrderProduct> product_list = new ArrayList<>();
 		HashMap<String,ArrayList<OrderProduct>> cn_map = new HashMap();
-		for (SupplyAgreementProduct product : products) {
+		for (SupplyAgreementProduct product : products.keySet()) {
 			if(cn_map.containsKey(product.get_supplier()))
 			{
+				
 				OrderProduct o = new OrderProduct(product);
+				o.setAmount(products.get(product).intValue());
 				product_list.add(o);
 				cn_map.get(product.get_supplier()).add(new OrderProduct(product));
 		}
 			else{
 				OrderProduct o = new OrderProduct(product);
+				o.setAmount(products.get(product).intValue());
 				ArrayList<OrderProduct> cn_pro = new ArrayList<>();
 				product_list.add(o);
 				cn_pro.add(o);
@@ -103,8 +106,16 @@ public class OrderManager extends LogicManager<DAOOrder>{
 	
 	}
 	public ArrayList<OrderProduct> makeOnDemand(HashMap<Product, Integer> products_to_order) throws SQLException {
-		ArrayList<SupplyAgreementProduct> products = _sam.getCheapestProductOnDemand(products_to_order);
+		HashMap<SupplyAgreementProduct,Integer> products = _sam.getCheapestProductOnDemand(products_to_order);
 		return makeOrderProducts(products);
+	}
+	public void setSupplyAgreementManger(SupplyAgreementManager sam) {
+		_sam = sam;
+		
+	}
+	public void setSupplierManger(SupplierManager sm) {
+		_sm = sm;
+		
 	}
 
 	

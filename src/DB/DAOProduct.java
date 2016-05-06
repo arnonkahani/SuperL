@@ -96,7 +96,7 @@ public class DAOProduct extends DAO<Product> {
 	@Override
 	protected String[] getValues(Product object) {
 		
-		return new String[] {"'"+object.get_name()+"'","'"+object.get_producer().getName()+"'"
+		return new String[] {""+object.get_id(),"'"+object.get_name()+"'","'"+object.get_producer().getName()+"'"
 				,""+object.get_weight(),""+object.get_shelf_life(),"'"+object.get_category()+"'",
 				"'"+object.get_sub_category()+"'","'"+object.get_sub_sub_category()+"'",
 				object.get_min_amount()+"",""+object.get_price()};

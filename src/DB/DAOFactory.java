@@ -82,7 +82,7 @@ public class DAOFactory {
 		case "BE.Product":
 			dao = new DAOProduct(_c);
 			break;
-		case "BE.AgreementProduct":
+		case "BE.SupplyAgreementProduct":
 			dao = new DAOSupplyAgreementProduct(_c);
 			break;
 		}
@@ -167,7 +167,7 @@ public class DAOFactory {
                   " MIN_AMOUNT      INT  NOT NULL,"+
                   "FOREIGN KEY (CATAGORY) REFERENCES CATAGORY(NAME_CAT),"+
                   "FOREIGN KEY (SUB_CATAGORY,CATAGORY) REFERENCES SUB_CATAGORY(NAME_SCAT,NAME_CAT),"+
-                  "FOREIGN KEY (SUB_SUB_CATAGORY,SUB_CATAGORY) REFERENCES SUB_SUB_CATAGORY(NAME_SSCAT,NAME_SCAT),"+
+                  "FOREIGN KEY (SUB_SUB_CATAGORY,SUB_CATAGORY,CATAGORY) REFERENCES SUB_SUB_CATAGORY(NAME_SSCAT,NAME_SCAT,NAME_CAT),"+
                   "FOREIGN KEY (PRODUCERNAME) REFERENCES PRODUCER(NAME),"
                   + "UNIQUE (ID,NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY))"; 
 	      stmt.executeUpdate(sql);
@@ -254,8 +254,7 @@ public class DAOFactory {
 	    		  "NAME_SCAT CHAR(50)      NOT NULL,"+
 	    		  "NAME_CAT CHAR(50)      NOT NULL,"+
 	    		  "PRIMARY KEY (NAME_SSCAT, NAME_SCAT,NAME_CAT),"+
-	    		  "FOREIGN KEY(NAME_SCAT) REFERENCES SUB_CATAGORY(NAME_SCAT),"
-	    		  + "FOREIGN KEY(NAME_CAT) REFERENCES CATAGORY(NAME_CAT))"; 
+	    		  "FOREIGN KEY(NAME_SCAT,NAME_CAT) REFERENCES SUB_CATAGORY(NAME_SCAT,NAME_CAT))"; 
 	      
 	      
 	      stmt.executeUpdate(sql);

@@ -77,6 +77,7 @@ public class Product{
 		this._sub_sub_category = _product._sub_sub_category;
 		this._price = _product._price;
 		this._min_amount = _product._min_amount;
+		this._id = _product._id;
 	}
 
 	public String get_name() {

@@ -15,6 +15,8 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement>{
 	private AgreementProductManager _apm;
 	public SupplyAgreementManager(DAOSupplyAgreement db){
 		super(db);
+		
+		
 
 	}
 	
@@ -53,17 +55,19 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 		return _apm.getAllProductsSN(SN);
 	}
 	
-	public ArrayList<SupplyAgreementProduct> getCheapstProductsPerDay(SupplyAgreement.Day day,HashMap<Product,Integer> products) throws SQLException{
+	public HashMap<SupplyAgreementProduct, Integer> getCheapstProductsPerDay(SupplyAgreement.Day day,HashMap<Product,Integer> products) throws SQLException{
 		return _apm.getCheapestProductPerDay(products, day);
 	}
-	public ArrayList<SupplyAgreementProduct> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException{
+	public HashMap<SupplyAgreementProduct, Integer> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException{
 		return _apm.getCheapestProductOnDemand(products);
 	}
 	
 	public ArrayList<Product> getAllOnDemandProducts() throws SQLException{
 		return _apm.getAllOnDemandProducts();
 	}
-	
+	public void setAgreementProductManager(DAOSupplyAgreementProduct db){
+		_apm = new AgreementProductManager(db);
+	}
 	
 	
 	class AgreementProductManager extends LogicManager<DAOSupplyAgreementProduct>
@@ -85,19 +89,19 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 			
 		}
 
-		public ArrayList<SupplyAgreementProduct> getCheapestProductPerDay(HashMap<Product,Integer> products, Day day) throws SQLException {
-			ArrayList<SupplyAgreementProduct> to_order = new ArrayList<>();
+		public HashMap<SupplyAgreementProduct, Integer> getCheapestProductPerDay(HashMap<Product,Integer> products, Day day) throws SQLException {
+			HashMap<SupplyAgreementProduct,Integer> to_order = new HashMap();
 			
 			for (Product product : products.keySet()) {
-				to_order.add(getCheapstProduct(_db.getProductByDay(product,day.getValue()),products.get(product).intValue()));
+				to_order.put(getCheapstProduct(_db.getProductByDay(product,day.getValue()),products.get(product).intValue()),products.get(product).intValue());
 			}
 			return to_order;
 		}
-		public ArrayList<SupplyAgreementProduct> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException {
-			ArrayList<SupplyAgreementProduct> to_order = new ArrayList<>();
+		public HashMap<SupplyAgreementProduct, Integer> getCheapestProductOnDemand(HashMap<Product,Integer> products) throws SQLException {
+			HashMap<SupplyAgreementProduct, Integer> to_order = new HashMap();
 			
 			for (Product product : products.keySet()) {
-				to_order.add(getCheapstProduct(_db.getProductOnDemand(product),products.get(product).intValue()));
+				to_order.put(getCheapstProduct(_db.getProductOnDemand(product),products.get(product).intValue()),products.get(product).intValue());
 			}
 			return to_order;
 		}

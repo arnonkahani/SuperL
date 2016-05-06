@@ -103,7 +103,7 @@ public class viewUtils {
 				error = false;
 			}
 			printList(menu);
-			choise = scn.nextInt() -1;
+			choise = Integer.parseInt(tryGetNumber()) -1;
 			if(choise<0 || choise > menu.size()-1)
 			{
 				error = true;
@@ -123,7 +123,7 @@ public class viewUtils {
 				error = false;
 			}
 			printList(menu);
-			choise = Integer.parseInt(tryGetNumber());
+			choise = Integer.parseInt(tryGetNumber()) - 1;
 			if(choise<0 || choise > menu.length-1)
 			{
 				error = true;

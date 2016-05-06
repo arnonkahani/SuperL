@@ -60,7 +60,8 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 
 	@Override
 	public SupplyAgreementProduct create(ResultSet rs) throws SQLException {
-		SupplyAgreementProduct agreementProduct = new SupplyAgreementProduct(_product.getFromPK(new String[]{rs.getString("Supplier_Product_SN")}));
+		System.out.println("DAOSupplyAgreementProduct : " + _product.getFromPK(new String[]{rs.getString("Supplier_Product_SN")}));
+		SupplyAgreementProduct agreementProduct = new SupplyAgreementProduct(_product.getFromPK(new String[]{""+rs.getInt("Supplier_Product_SN")}));
 		agreementProduct.set_price(rs.getFloat("PRICE"));
 		agreementProduct.set_sp(rs.getString("SUPPLY_AGREEMENT_ID"));
 		ArrayList<Discount> discounts = _discount.search(new int[]{2,3},new String[]{
@@ -98,9 +99,11 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 
 	public ArrayList<SupplyAgreementProduct> getProductOnDemand(Product product) throws SQLException {
 		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
+		System.out.println(product.get_id());
 		String sql = "SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE (SUPPLY_AGREEMENT_ID IN (SELECT ID "
 				+ "FROM SUPPLY_AGREEMENT WHERE DAY LIKE '%" + 0 + "%')) AND Supplier_Product_SN IN (SELECT SN FROM SUPPLIER_PRODUCT WHERE "
 						+ "PRODUCT_ID = " + product.get_id() + ")";
+		System.out.println(sql);
 		ResultSet rs = _stm.executeQuery(sql);
 		while(rs.next())
 		{
@@ -113,6 +116,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
 		String sql = "SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE (SUPPLY_AGREEMENT_ID IN (SELECT ID "
 				+ "FROM SUPPLY_AGREEMENT WHERE DAY LIKE '%" + 0 + "%'))";
+		_stm = _c.createStatement();
 		ResultSet rs = _stm.executeQuery(sql);
 		while(rs.next())
 		{
