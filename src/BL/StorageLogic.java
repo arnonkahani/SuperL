@@ -44,22 +44,22 @@ public class StorageLogic {
 		Producer produc = new Producer(producer);
 		int id = rc.product_search_ID(catagory,sub_catagory,sub_sub_catagory,product_name,produc);
 		Product prod = new Product(id,catagory,sub_catagory,sub_sub_catagory,product_name,produc);
-		for (int i=0; i<amount;i++)
-		{
-			check = sc.Check_amount(prod, amount);
-			if (check!=0){
-				int serial = sc.get_INS_serial(prod);
-				Date Valid=sc.get_INS_valid(prod);
-				int defected =sc.get_INS_defected(prod);
-				INS_product ins_prod = new INS_product(prod,Valid,serial,defected);
-				IssueCertificate issue = new IssueCertificate();
-				sc.remove_from_storage(ins_prod,issue);}
+		check = sc.Check_amount(prod, amount);
+		if (check!=0){
+			for (int i=0; i<amount;i++)
+			{
+					int serial = sc.get_INS_serial(prod);
+					Date Valid=sc.get_INS_valid(prod);
+					int defected =sc.get_INS_defected(prod);
+					INS_product ins_prod = new INS_product(prod,Valid,serial,defected);
+					IssueCertificate issue = new IssueCertificate();
+					sc.remove_from_storage(ins_prod,issue);
+			}
 			if (check==1){
 				int order_amount=sc.get_evalute_amount(prod);
 				products.put(prod, order_amount);
 				sl.supplyOnDemand(products);
-			}
-			
+			} 
 		}
 		return check;
 	}
