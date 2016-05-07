@@ -42,7 +42,7 @@ public class SupplierLogic {
 		_pm = new ProductManager((DAOProduct) db.create(Product.class));
 		_pm.setSupplierProductManager((DAOSupplierProduct) db.create(SupplierProduct.class));
 		_sam.setAgreementProductManager((DAOSupplyAgreementProduct) db.create(SupplyAgreementProduct.class));
-		_storage_logic.getSupply(_om.makeWeekelyOrder(wo));
+		_om.makeWeekelyOrder(wo);
 		_om.setStorageLogic(_storage_logic);
 	}
 	
