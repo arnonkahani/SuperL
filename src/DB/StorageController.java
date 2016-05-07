@@ -14,7 +14,7 @@ import BE.SupplyAgreement;
 import BE.SupplyAgreement.Day;
 import PL.ViewController;
 import BE.WeeklyOrder;
-import BE.issue_certificate;
+import BE.IssueCertificate;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -61,7 +61,7 @@ public class StorageController {
 		}
 	}
 	
-	public  void remove_from_storage(INS_product ins,issue_certificate issue){
+	public  void remove_from_storage(INS_product ins,IssueCertificate issue){
 		try {
 	    	String sql;
 	    	Statement stmt;
@@ -98,7 +98,7 @@ public class StorageController {
 	
 	}
 	
-	public void create_issue (issue_certificate issue){
+	public void create_issue (IssueCertificate issue){
 		
 		try {
 			String sql;

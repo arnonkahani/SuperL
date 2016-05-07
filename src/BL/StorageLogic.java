@@ -44,7 +44,7 @@ public class StorageLogic {
 				Date Valid=sc.get_INS_valid(prod);
 				int defected =sc.get_INS_defected(prod);
 				INS_product ins_prod = new INS_product(prod,Valid,serial,defected);
-				issue_certificate issue = new issue_certificate();
+				IssueCertificate issue = new IssueCertificate();
 				sc.remove_from_storage(ins_prod,issue);}
 			if (check==1){
 				int order_amount=sc.get_evalute_amount(prod);

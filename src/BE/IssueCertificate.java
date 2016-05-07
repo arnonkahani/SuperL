@@ -1,7 +1,7 @@
 package BE;
 import java.util.Date;
 
-public class issue_certificate {
+public class IssueCertificate {
 	private int s_id;
 	private Date s_date;
 	private int s_p_id;
@@ -14,12 +14,12 @@ public class issue_certificate {
 	private String s_valid_date;
 	
 	
-	public issue_certificate() {
+	public IssueCertificate() {
 		super();
 	}
 	
 	
-	public issue_certificate(Date s_date, int s_p_id, int s_serial_num, String s_cat, String s_sub_cat,
+	public IssueCertificate(Date s_date, int s_p_id, int s_serial_num, String s_cat, String s_sub_cat,
 			String s_sub_sub_cat, String s_name, String s_producer, double s_price, String s_valid_date) {
 		this.s_date = s_date;
 		this.s_p_id = s_p_id;
