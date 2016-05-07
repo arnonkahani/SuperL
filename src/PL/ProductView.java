@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import BE.catagory;
+import BE.Catagory;
 import BE.Producer;
 import BE.Product;
 import BE.SubCatagory;
@@ -134,7 +134,7 @@ public class ProductView {
 	private String chooseCatagory() {
 		String catagory_name = "";
 		try {
-			ArrayList<catagory> catagory = _product_manager.getAllCatagory();
+			ArrayList<Catagory> catagory = _product_manager.getAllCatagory();
 			if(catagory.size() == 0)
 			{
 				System.out.println("No Catagories - Please enter a new catagory");
@@ -143,7 +143,7 @@ public class ProductView {
 			}
 			else{
 				ArrayList<String> all_catagory = new ArrayList<>();
-				for (catagory cat : catagory) {
+				for (Catagory cat : catagory) {
 					all_catagory.add(cat.getName_cat());
 				}
 				catagory_name = all_catagory.get(_view_utils.listChoose(all_catagory));

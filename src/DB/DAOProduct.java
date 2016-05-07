@@ -9,7 +9,7 @@ import BE.Producer;
 import BE.Product;
 import BE.SubCatagory;
 import BE.SubSubCatagory;
-import BE.catagory;
+import BE.Catagory;
 
 public class DAOProduct extends DAO<Product> {
 
@@ -33,7 +33,7 @@ public class DAOProduct extends DAO<Product> {
 		}
 		catch(SQLException e){}
 		try{
-			_catagory.insert(new catagory(object.get_category()));
+			_catagory.insert(new Catagory(object.get_category()));
 		}
 		catch(SQLException e){}
 		try{
@@ -104,7 +104,7 @@ public class DAOProduct extends DAO<Product> {
 	}
 	
 	
-	public ArrayList<catagory> getAllCatagory() throws SQLException {
+	public ArrayList<Catagory> getAllCatagory() throws SQLException {
 		return _catagory.getAll();
 	}
 
@@ -159,7 +159,7 @@ public class DAOProduct extends DAO<Product> {
 
 	}
 	
-	class DAOCatagory extends DAO<catagory>{
+	class DAOCatagory extends DAO<Catagory>{
 
 		public DAOCatagory(Connection c) {
 			super(c);
@@ -181,21 +181,21 @@ public class DAOProduct extends DAO<Product> {
 		}
 
 		@Override
-		protected String[] getValues(catagory object) {
+		protected String[] getValues(Catagory object) {
 			return new String[]{"'"+object.getName_cat()+"'"};
 		}
 
 		@Override
-		public catagory getFromPK(String[] values) throws SQLException {
+		public Catagory getFromPK(String[] values) throws SQLException {
 			return search(new int[]{1}, values).get(0);
 		}
 
 		@Override
-		public catagory create(ResultSet rs) throws SQLException {
-			return new catagory(rs.getString("NAME_CAT"));
+		public Catagory create(ResultSet rs) throws SQLException {
+			return new Catagory(rs.getString("NAME_CAT"));
 		}
 		@Override
-		public ArrayList<catagory> getAll() throws SQLException {
+		public ArrayList<Catagory> getAll() throws SQLException {
 			return search(new int[]{0}, new String[]{});
 		}
 		
