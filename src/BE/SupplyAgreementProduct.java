@@ -54,7 +54,7 @@ public class SupplyAgreementProduct extends SupplierProduct{
 	}
 
 	public String toString(){
-		return "Supply ID: " + _sp + " Product SN: " + get_serial_number() + " Prodcut Name: " + get_name() + " Price: " + _price;
+		return "Supply ID: " + _sp + " Product SN: " + get_serial_number() + " " + super.toString() + " Agreement Price: " + _price;
 	}
 
 	public boolean equals(Object o){

@@ -1,6 +1,8 @@
 package PL;
 
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -59,6 +61,12 @@ public class OrderView {
 		_view_utils.printList(Day.values());
 		int d = Integer.parseInt(_view_utils.tryGetNumber(1,7));
 		Day day = Day.values()[d-1];
+		if(day.getValue() == Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+		{
+			System.out.println("Wrong day - press Enter to return");
+			scn.nextLine();
+			return;
+		}
 		_view_utils.clear();
 		try {
 		System.out.println("Please enter number of products at the order:");

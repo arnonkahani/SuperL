@@ -78,15 +78,15 @@ public class SupplyAgreementView {
 			ArrayList<Discount> dicount = new ArrayList<>();
 			SupplierProduct pr = _supplier_view.chooseSupplierProduct(supplierID);
 			System.out.println("Please enter price to the product :");
-			float l=scn.nextFloat();
+			float l= Float.parseFloat(_view_utils.tryGetFloat());
 			SupplyAgreementProduct agp = new SupplyAgreementProduct(pr, l);
 			System.out.println("Please enter number of discounts:");
 			int k=scn.nextInt();
 			for(int p=0;p<k;p++){
 				System.out.println("Please enter amount:");
-				int amount = scn.nextInt();
+				int amount = Integer.parseInt(_view_utils.tryGetNumber());
 				System.out.println("Please enter precent for discount:");
-				float precent = scn.nextFloat();
+				float precent = Float.parseFloat(_view_utils.tryGetFloat());
 				System.out.println("SupplyGrreView: " + precent);
 				dicount.add(new Discount(amount, precent));
 				}
@@ -190,48 +190,48 @@ public class SupplyAgreementView {
 	
 	 
 	public SupplyAgreementProduct chooseAgreementProduct(ArrayList<SupplyAgreementProduct> get_prices) {
-		try {
-			
+		
+			System.out.println("Choose Agreement Product: ");
 			for (int i = 0; i < get_prices.size(); i++) {
 				System.out.println(i + ". " + get_prices.get(i));
 			}
-			System.out.println("Choose Agreement Product: ");
+			
 			int choise = Integer.parseInt(_view_utils.tryGetNumber(0, get_prices.size() - 1));
 			return get_prices.get(choise);
-		} catch (Exception e) {
-			return null;
-		}
+		
 	}
 
-	public Product chooseOnDemandAgreementProduct() {
-		try {
+	public Product chooseOnDemandAgreementProduct() throws SQLException {
+			System.out.println("Choose Agreement Product: ");
 			ArrayList<Product> products =_sam.getAllOnDemandProducts();
+			if(products.size() == 0)
+				return null;
 			for (int i = 0; i < products.size(); i++) {
-				System.out.println("Choose Agreement Product: ");
+				
 				System.out.println(i + ". " + products.get(i));
-				int choise = Integer.parseInt(_view_utils.tryGetNumber(0, products.size() - 1));
-				return products.get(choise);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+			int choise = Integer.parseInt(_view_utils.tryGetNumber(0, products.size() - 1));
+			return products.get(choise);
+		
+		
 	}
 	public Product chooseWeeklyAgreementProduct(int d) throws SQLException {
 		
-			
+			System.out.println("Choose Agreement Product: ");
 			ArrayList<SupplyAgreementProduct> products =_sam.getAllDayProducts(d);
+			if(products.size() == 0)
+				return null;
 			for (int i = 0; i < products.size(); i++) {
 				Product p = products.get(i);
-				System.out.println("Choose Agreement Product: ");
+				
 				System.out.println(i + ". " + p);
 				
-				int choise = Integer.parseInt(_view_utils.tryGetNumber(0, products.size() - 1));
-				return products.get(choise);
+				
 			}
+			int choise = Integer.parseInt(_view_utils.tryGetNumber(0, products.size() - 1));
+			return products.get(choise);
 	
-		return null;
+		
 	}
 
 	}

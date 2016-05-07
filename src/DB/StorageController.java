@@ -12,6 +12,7 @@ import BE.Producer;
 import BE.Product;
 import BE.SupplyAgreement;
 import BE.SupplyAgreement.Day;
+import PL.ViewController;
 import BE.WeeklyOrder;
 import BE.issue_certificate;
 
@@ -220,7 +221,7 @@ public class StorageController {
 		try {
 			String sql;
 	    	Statement stmt;
-			sql = "INSERT INTO WEEKLY_ORDER (DAY) " +
+			sql = "INSERT OR IGNORE INTO WEEKLY_ORDER (DAY) " +
 	                "VALUES ('"+order.getDay()+"');"; 
 			stmt = c.createStatement();
 			stmt.executeUpdate(sql);
@@ -237,9 +238,13 @@ public class StorageController {
 	    	Statement stmt;
 	    	for ( Product key : order.getProducts().keySet() ) {
 				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,AMOUNT) " +
-		                "VALUES ("+order.getDay()+","+ key.get_id()+","+order.getProducts().get(key)+");"; 
+		                "VALUES ("+"'"+order.getDay()+"',"+ key.get_id()+","+order.getProducts().get(key)+");"; 
 		    	stmt = c.createStatement();
+		    	//TODO: Delete
+				if(ViewController.debug)
+					System.out.println(sql);
 		    	stmt.executeUpdate(sql);
+		    	
 		    	c.commit();        
 	    	}
 			
