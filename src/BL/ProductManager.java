@@ -3,7 +3,7 @@ package BL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import BE.Catagory;
+import BE.catagory;
 import BE.Producer;
 import BE.Product;
 import BE.SubCatagory;
@@ -46,7 +46,7 @@ public class ProductManager extends LogicManager<DAOProduct,Product>{
 		return getAll();
 	}
 
-	public ArrayList<Catagory> getAllCatagory() throws SQLException{
+	public ArrayList<catagory> getAllCatagory() throws SQLException{
 		return _db.getAllCatagory();
 	}
 	

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import BE.Catagory;
+import BE.catagory;
 import BE.SubCatagory;
 import BE.SubSubCatagory;
 import BE.SupplierProduct;
