@@ -73,7 +73,8 @@ public class StorageLogic {
 		ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
 		for (int i=0;i<products.size();i++){
 			for(int j=0;j<products.get(i).getAmount();j++){
-				ins_products.add(new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),defected()));
+				INS_product ins = new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),defected(),products.get(i).get_shelf_life());
+				ins_products.add(ins);
 				}
 		}
 		sc.getSupply(ins_products);
@@ -134,6 +135,8 @@ public class StorageLogic {
 		WeeklyOrder order = new WeeklyOrder(day,products);
 		sc.create_weekly_order(order);
 	}
+	
+	
 	
 	public void remove_weekly_order(Day day){
 		sc.remove_weekly_order(day);

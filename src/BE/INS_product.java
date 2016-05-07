@@ -1,4 +1,7 @@
 package BE;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,7 +25,7 @@ public class INS_product extends Product {
         this.defected = defected;
 	}
 	
-	public INS_product(int _id,String _catagory, String _sub_catagory, String _sub_sub_category ,String _name,Producer _producer,float _weight,float _price, int defected) {
+	public INS_product(int _id,String _catagory, String _sub_catagory, String _sub_sub_category ,String _name,Producer _producer,float _weight,float _price, int defected,int shelf_life) {
 		super._id = _id;
 		super._catagory = _catagory;
 		super._sub_catagory = _sub_catagory;
@@ -32,8 +35,10 @@ public class INS_product extends Product {
 		super._weight = _weight;
 		super._price = _price;
 		Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, get_shelf_life());
-        this.valid_date = c.getTime();
+        c.add(Calendar.DAY_OF_MONTH, shelf_life);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String x= format1.format(c.getTime());
+        this.valid_date = stringConverDate(format1.format(c.getTime()));
 		this.defected = defected;
 	}
 	
@@ -75,4 +80,27 @@ public class INS_product extends Product {
 				" valid_date : " + getValid_date() + " Defected: " + defected;
 	}
 	
+	public Date stringConverDate(String date)
+	{
+		Date date1 = null;
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			date1 = df.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	return date1;
+	}
+
+
+	public String dateConvert(Date date)
+	{
+		String date1 = "";
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		date1 = df.format(date);
+	return ""+date1+"";
+	}
+
 }
+	

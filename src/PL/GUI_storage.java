@@ -330,6 +330,7 @@ public void add_remove_c(int n,int m,int amount,Date date) throws SQLException{
 			}
 			else if (check==1){
 				System.err.println("The proccess succeed -NOTICE!! THE CURRENT AMOUNT IS LESS THEN THE MINIMUM ");
+				System.err.println("Automatic reservation has been made!!");
 				start(0);
 			}
 			else{

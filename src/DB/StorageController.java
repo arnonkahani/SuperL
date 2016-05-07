@@ -44,8 +44,9 @@ public class StorageController {
 	    	
 	    	for(int j=0; j<products.size(); j++){
 				//TODO: change: c.setAutoCommit(false);
-				 sql = "INSERT INTO INS_PRODUCT (SERIAL_NUM,ID,VALID_DATE,DEFECTED) " +
-	                   "VALUES ('"+index_ins_product+"','"+products.get(j).get_id()+ "','"+products.get(j).getValid_date()+"','"+products.get(j).isDefected()+"');"; 
+				String date= products.get(j).dateConvert(products.get(j).getValid_date());
+	    		sql = "INSERT INTO INS_PRODUCT (SERIAL_NUM,ID,VALID_DATE,DEFECTED) " +
+	                   "VALUES ('"+index_ins_product+"','"+products.get(j).get_id()+ "','"+date+"','"+products.get(j).isDefected()+"');"; 
 				 stmt = c.createStatement();
 			
 				stmt.executeUpdate(sql);
@@ -369,7 +370,7 @@ public class StorageController {
 		int defected;
 		String d;
 		INS_product ins;
-	    DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
+	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
 	    Date startDate=new Date();
 		try {
 			String sql;
@@ -427,6 +428,8 @@ public class StorageController {
 		return prod;
 		 	
 	}
+	
+	
 	
 
 }
