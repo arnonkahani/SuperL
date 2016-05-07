@@ -27,7 +27,15 @@ public class StorageLogic {
 	}
 
 	public void run(SupplierLogic sl){
+		//TODO: delete
+		System.out.println("running");
 		this.sl = sl;
+		try {
+			sl.supplyWeekly(get_daily_order());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public int remove_from_storage (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,String producer ,int amount) throws SQLException{

@@ -19,8 +19,9 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	SupplierManager _sm;
 	SupplyAgreementManager _sam;
 	StorageLogic _storage_logic;
-	public OrderManager(DAOOrder db) {
+	public OrderManager(DAOOrder db,StorageLogic storage_logic) {
 		super(db);
+		_storage_logic = storage_logic;
 	}
 	
 	@Override

@@ -36,7 +36,7 @@ public class SupplierLogic {
 		
 		_sm = new SupplierManager((DAOSupplier) db.create(Supplier.class));
 		_sam = new SupplyAgreementManager((DAOSupplyAgreement) db.create(SupplyAgreement.class));
-		_om = new OrderManager((DAOOrder) db.create(Order.class));
+		_om = new OrderManager((DAOOrder) db.create(Order.class),_storage_logic);
 		_om.setSupplyAgreementManger(_sam);
 		_om.setSupplierManger(_sm);
 		_pm = new ProductManager((DAOProduct) db.create(Product.class));
@@ -54,6 +54,20 @@ public class SupplierLogic {
 		if(products.size()==0)
 			return;
 		_om.makeOnDemand(products);
+	}
+	
+	public void supplyWeekly(WeeklyOrder wo) throws SQLException{
+		//TODO: Delete
+		if(ViewController.debug){
+			System.out.println("Called supply weekly supplier logic");
+			if(wo.getProducts() != null && wo.getProducts().size()>0)
+				System.out.println(wo.getProducts().size());
+			else
+				System.out.println("no products");
+		}
+		if(wo.getProducts().size()==0)
+			return;
+		_om.makeWeekelyOrder(wo);
 	}
 	
 	public LogicManager getManager(Class view_object)

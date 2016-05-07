@@ -22,6 +22,10 @@ public class ViewController {
 	
 	public ViewController() throws SQLException{
 		_vu = new ViewUtils();
+		scn = new Scanner(System.in);
+		System.out.println("Debug? true/false");
+		debug = scn.nextBoolean();
+		
 		System.out.println("Is this the first time the program is running? Yes = 1 , No = 0");
 		boolean first_time = 1 == Integer.parseInt(_vu.tryGetNumber(0, 1));
 		
@@ -33,9 +37,8 @@ public class ViewController {
 		_sav = new SupplyAgreementView(_vu,(SupplyAgreementManager) _bc.getSupplierLogic().getManager(SupplyAgreement.class),_sv);
 		_ov = new OrderView(_vu,(OrderManager) _bc.getSupplierLogic().getManager(Order.class),_sav);
 		_gs= new GUI_storage(_bc.getStorageLogic());
-		scn = new Scanner(System.in);
-		System.out.println("Debug? true/false");
-		debug = scn.nextBoolean();
+		
+		
 		
 		run();
 	}

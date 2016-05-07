@@ -309,9 +309,15 @@ public class StorageController {
 			String sql;
 			Statement stmt;
 			sql = "SELECT * FROM WEEKLY_ORDER_PRODUCT WHERE DAY="+curr_day+";" ;
+			//TODO: Delete
+			if(ViewController.debug)
+				System.out.println(sql);
 			stmt = c.createStatement();
 			ResultSet rs=stmt.executeQuery(sql);
 			while(rs.next()) {
+				//TODO: Delete
+				if(ViewController.debug)
+					System.out.println("first product");
 				p.set_id(rs.getInt("ID"));
 				amount = rs.getInt("AMOUNT");
 				products.put(p, amount);

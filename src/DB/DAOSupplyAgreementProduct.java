@@ -82,6 +82,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
 		String sql = "SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE SUPPLIER_PRODUCT_SN IN (SELECT SN FROM SUPPLIER_PRODUCT WHERE PRODUCTPRODUCERNAME="+
 				producer + "PRODUCTNAME = " + name +")";
+		_stm = _c.createStatement();
 		ResultSet rs = _stm.executeQuery(sql);
 		while(rs.next())
 		{
@@ -95,6 +96,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		String sql = "SELECT * FROM SUPPLY_AGREEMENT_PRODUCT WHERE (SUPPLY_AGREEMENT_ID IN (SELECT ID "
 				+ "FROM SUPPLY_AGREEMENT WHERE DAY LIKE '%" + day + "%')) AND Supplier_Product_SN IN (SELECT SN FROM SUPPLIER_PRODUCT WHERE "
 						+"PRODUCT_ID = " + product.get_id() + ")";
+		_stm = _c.createStatement();
 		ResultSet rs = _stm.executeQuery(sql);
 		while(rs.next())
 		{
@@ -115,6 +117,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		//TODO: Delete
 				if(ViewController.debug)
 		System.out.println(sql);
+		_stm = _c.createStatement();
 		ResultSet rs = _stm.executeQuery(sql);
 		while(rs.next())
 		{
