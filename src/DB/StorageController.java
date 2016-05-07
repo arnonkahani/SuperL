@@ -222,7 +222,7 @@ public class StorageController {
 			String sql;
 	    	Statement stmt;
 			sql = "INSERT OR IGNORE INTO WEEKLY_ORDER (DAY) " +
-	                "VALUES ('"+order.getDay()+"');"; 
+	                "VALUES ("+order.getDay().getValue() +");"; 
 			stmt = c.createStatement();
 			stmt.executeUpdate(sql);
 			// TODO  c.commit();
@@ -238,7 +238,7 @@ public class StorageController {
 	    	Statement stmt;
 	    	for ( Product key : order.getProducts().keySet() ) {
 				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,AMOUNT) " +
-		                "VALUES ("+"'"+order.getDay()+"',"+ key.get_id()+","+order.getProducts().get(key)+");"; 
+		                "VALUES ("+order.getDay()+","+ key.get_id()+","+order.getProducts().get(key)+");"; 
 		    	stmt = c.createStatement();
 		    	//TODO: Delete
 				if(ViewController.debug)

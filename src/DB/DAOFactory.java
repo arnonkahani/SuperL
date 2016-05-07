@@ -271,11 +271,6 @@ public class DAOFactory {
 	      sql = "CREATE TABLE WEEKLY_ORDER_PRODUCT " +
 	              "(DAY CHAR(50)      NOT NULL,"+
 	              "ID INTEGER      NOT NULL,"+
-	              "NAME CHAR(50)      NOT NULL,"+
-	              "PRODUCERNAME CHAR(50)      NOT NULL,"+
-	              "CATAGORY CHAR(50)      NOT NULL,"+
-	              "SUB_CATAGORY CHAR(50)      NOT NULL,"+
-	              "SUB_SUB_CATAGORY CHAR(50)      NOT NULL,"+
 	              "AMOUNT INT     NOT NULL,"+
 	              "FOREIGN KEY (DAY) REFERENCES WEEKLY_ORDER(DAY),"+
 	              "FOREIGN KEY (ID) REFERENCES PRODUCT(ID),"+
