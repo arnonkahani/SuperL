@@ -57,6 +57,8 @@ public class OrderView {
 		_view_utils.printList(Day.values());
 		int d = Integer.parseInt(_view_utils.tryGetNumber(1, 7));
 		Day day = Day.values()[d - 1];
+		//TODO: DELETE
+		if(ViewController.debug == false)
 		if (day.getValue() == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
 			System.out.println("Wrong day - press Enter to return");
 			scn.nextLine();
