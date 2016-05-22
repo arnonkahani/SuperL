@@ -12,13 +12,14 @@ public class Order {
 	private String orderID;
 	private Supplier _supplier;
 	private float _weight;
-	private Date _date;
+	private Date _order_date;
+	private Date _delevery_date;
 	private ArrayList<OrderProduct> _amountProduct = new ArrayList<>();
 	private float _price = 0;
 	
 	public Order(Supplier samID,Date date,ArrayList<OrderProduct> amountProduct,float price) {
 		this._supplier = samID;
-		this._date = date;
+		this._order_date = date;
 		for (OrderProduct product : amountProduct) {
 			_amountProduct.add(product);
 			_weight = _weight + (product.get_weight()*product.getAmount());
@@ -40,11 +41,11 @@ public class Order {
 	public void set_weight(float _weight) {
 		this._weight = _weight;
 	}
-	public Date get_date() {
-		return _date;
+	public Date get_order_date() {
+		return _order_date;
 	}
-	public void set_date(Date _date) {
-		this._date = _date;
+	public void set_order_date(Date _date) {
+		this._order_date = _date;
 	}
 	public ArrayList<OrderProduct> get_amountProduct() {
 		return _amountProduct;
@@ -62,7 +63,7 @@ public class Order {
 	public String toString(){
 		String str;
 		str = "Supplier CN: " + get_supplier().get_CN() + "\n"
-				+ "Date: " + get_date().toString() + "\n"
+				+ "Date: " + get_order_date().toString() + "\n"
 				+ "Weight: " +  get_weight() + "\n"
 				+ "Price: " + get_price() +"\n"
 				+ "Product    Amount     Price\n"
@@ -84,6 +85,12 @@ public class Order {
 	public boolean equals(Object o)
 	{
 		return o.toString().toUpperCase().equals(toString().toUpperCase());
+	}
+	public Date get_delevery_date() {
+		return _delevery_date;
+	}
+	public void set_delevery_date(Date _delevery_date) {
+		this._delevery_date = _delevery_date;
 	}
 
 	

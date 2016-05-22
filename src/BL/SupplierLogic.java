@@ -2,6 +2,7 @@ package BL;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import BE.Order;
@@ -32,7 +33,7 @@ public class SupplierLogic {
 	{
 		
 		_storage_logic = storage_logic;
-		WeeklyOrder wo = _storage_logic.get_daily_order();
+		
 		
 		_sm = new SupplierManager((DAOSupplier) db.create(Supplier.class));
 		_sam = new SupplyAgreementManager((DAOSupplyAgreement) db.create(SupplyAgreement.class));
@@ -42,11 +43,30 @@ public class SupplierLogic {
 		_pm = new ProductManager((DAOProduct) db.create(Product.class));
 		_pm.setSupplierProductManager((DAOSupplierProduct) db.create(SupplierProduct.class));
 		_sam.setAgreementProductManager((DAOSupplyAgreementProduct) db.create(SupplyAgreementProduct.class));
-		_om.makeWeekelyOrder(wo);
+		
 		_om.setStorageLogic(_storage_logic);
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK); 
+		WeeklyOrder wo = db.get_daily_order(day+1);
+		_om.makeWeekelyOrder(wo);
+		
+		_storage_logic.getSupply(_om.getWeeklyOrder(day));
+		sendDailyOrders();
 	}
 	
 	
+	private void sendDailyOrders() {
+		try {
+			_storage_logic.getSupply(_om.getOnDemand());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
 	public void supplyOnDemand(HashMap<Product, Integer> products) throws SQLException{
 		//TODO: Delete
 		if(ViewController.debug)

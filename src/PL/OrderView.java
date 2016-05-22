@@ -59,7 +59,7 @@ public class OrderView {
 		Day day = Day.values()[d - 1];
 		//TODO: DELETE
 		if(ViewController.debug == false)
-		if (day.getValue() == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+		if (day.getValue() == Calendar.getInstance().get(Calendar.DAY_OF_WEEK) || day.getValue() == Calendar.getInstance().get(Calendar.DAY_OF_WEEK) + 1) {
 			System.out.println("Wrong day - press Enter to return");
 			scn.nextLine();
 			return;
@@ -83,6 +83,7 @@ public class OrderView {
 			}
 
 			_order_manager.makeWeeklyOrder(product_table, day);
+			
 		} catch (SQLException e1) {
 			System.out.println(_view_utils.exceptionHandler(e1));
 		}

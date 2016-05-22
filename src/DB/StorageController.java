@@ -217,72 +217,7 @@ public class StorageController {
 		
 	}
 	
-	public void create_weekly_order(WeeklyOrder order){
-		
-		try {
-			String sql;
-	    	Statement stmt;
-			sql = "INSERT OR IGNORE INTO WEEKLY_ORDER (DAY) " +
-	                "VALUES ("+order.getDay().getValue() +");"; 
-			stmt = c.createStatement();
-			stmt.executeUpdate(sql);
-			// TODO  c.commit();
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			String sql;
-	    	Statement stmt;
-	    	for ( Product key : order.getProducts().keySet() ) {
-				sql = "INSERT INTO WEEKLY_ORDER_PRODUCT (DAY,ID,AMOUNT) " +
-		                "VALUES ("+order.getDay()+","+ key.get_id()+","+order.getProducts().get(key)+");"; 
-		    	stmt = c.createStatement();
-		    	//TODO: Delete
-				if(ViewController.debug)
-					System.out.println(sql);
-		    	stmt.executeUpdate(sql);
-		    	
-		    	c.commit();        
-	    	}
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public void remove_weekly_order(Day day){
-		
-		try{
-			String sql;
-	    	Statement stmt;
-			sql = "DELETE from WEEKLY_ORDER_PRODUCT where DAY="+day+";";
-			stmt = c.createStatement();
-			stmt.executeUpdate(sql);
 
-		} catch (SQLException e) {
-			 System.err.println("");
-		}
-		
-		try{
-			String sql;
-	    	Statement stmt;
-			sql = "DELETE from WEEKLY_ORDER where DAY="+day+";";
-			stmt = c.createStatement();
-			stmt.executeUpdate(sql);
-
-		} catch (SQLException e) {
-			 System.err.println("");
-		}
-		
-		
-	}
 	
 	public int get_Amount (int id){
 		int curr_amount=0;
@@ -301,36 +236,7 @@ public class StorageController {
 	  return curr_amount;	
 	}
 	
-	public WeeklyOrder get_daily_order (int curr_day){
-		WeeklyOrder weekly=new WeeklyOrder();
-		HashMap<Product,Integer> products= new HashMap();
-		Product p=new Product();
-		int amount=0;
-		try {			
-			String sql;
-			Statement stmt;
-			sql = "SELECT * FROM WEEKLY_ORDER_PRODUCT WHERE DAY="+curr_day+";" ;
-			//TODO: Delete
-			if(ViewController.debug)
-				System.out.println(sql);
-			stmt = c.createStatement();
-			ResultSet rs=stmt.executeQuery(sql);
-			while(rs.next()) {
-				//TODO: Delete
-				if(ViewController.debug)
-					System.out.println("first product");
-				p.set_id(rs.getInt("ID"));
-				amount = rs.getInt("AMOUNT");
-				products.put(p, amount);
-			}
-			weekly.setDay(SupplyAgreement.Day.values()[curr_day-1]);
-			weekly.setProducts(products);
-		
-		} catch (SQLException e) {
-			
-		}
-		return weekly;
-	}
+	
 	
 	public int get_evalute_amount (Product p){
 		int ev_amount=0;

@@ -29,6 +29,7 @@ public class ProductManager extends LogicManager<DAOProduct,Product>{
 		
 		
 		
+		
 	}
 	public void createSupplyProduct(Product pro, String supplierid) throws SQLException {
 		SupplierProduct supplierProduct = new SupplierProduct(pro);

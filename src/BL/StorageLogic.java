@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import BE.*;
 import BE.SupplyAgreement.Day;
@@ -30,12 +31,7 @@ public class StorageLogic {
 		//TODO: delete
 		System.out.println("running");
 		this.sl = sl;
-		try {
-			sl.supplyWeekly(get_daily_order());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 	
 	public int remove_from_storage (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,String producer ,int amount) throws SQLException{
@@ -67,13 +63,16 @@ public class StorageLogic {
 
 	public void getSupply (ArrayList<OrderProduct> products){
 		//TODO: Delete
-				if(ViewController.debug && products!=null)
+				if(ViewController.debug && products!=null && products.size() > 0)
 		{System.out.println(products.get(0).getAmount());};
-		if (products!=null){
+		if (products!=null && products.size() > 0){
+		System.err.println("Order Arrived - Press Enter To Recive");
+		Scanner scn = new Scanner(System.in);
+		scn.nextLine();
 		ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
 		for (int i=0;i<products.size();i++){
 			for(int j=0;j<products.get(i).getAmount();j++){
-				INS_product ins = new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),defected(),products.get(i).get_shelf_life());
+				INS_product ins = new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),0,products.get(i).get_shelf_life());
 				ins_products.add(ins);
 				}
 		}
@@ -132,23 +131,11 @@ public class StorageLogic {
 	}
 	
 	public void create_weekly_order(Day day, HashMap<Product,Integer> products){
-		WeeklyOrder order = new WeeklyOrder(day,products);
-		sc.create_weekly_order(order);
+		
 	}
 	
 	
-	
-	public void remove_weekly_order(Day day){
-		sc.remove_weekly_order(day);
-	}
-	
-	public WeeklyOrder get_daily_order(){
-		WeeklyOrder weekly = new WeeklyOrder();
-		Calendar calendar = Calendar.getInstance();
-		int day = calendar.get(Calendar.DAY_OF_WEEK); 
-		weekly=sc.get_daily_order(day);
-		return weekly;
-	}
+
 	
 	public int get_evalute_amount (Product p){
 		int ev_amount;

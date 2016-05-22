@@ -7,7 +7,7 @@ public class Contact{
 	
 
 	private String _supplier_cn;
-
+	
 	private String _tel;
 	private String _email;
 	private String _name;

@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -27,7 +28,8 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	@Override
 	public void create(Order value) throws SQLException{
 		_db.insert(value);
-		_storage_logic.getSupply(value.get_amountProduct());
+		//TODO : DELETE
+		//_storage_logic.getSupply(value.get_amountProduct());
 	}
 	
 
@@ -69,14 +71,22 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 		}
 		for (Entry<String, ArrayList<OrderProduct>> cn : cn_map.entrySet()) {
 			float price = calculateTotalPrice(cn.getValue());
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = new Date();
 			Order or = null;
 			try {
 				or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),cn.getValue(),price);
+				Calendar cl = Calendar.getInstance();
+				cl.set(Calendar.HOUR_OF_DAY, 0);
+				cl.set(Calendar.MINUTE, 0);
+				cl.set(Calendar.SECOND, 0);
+				cl.add(Calendar.DAY_OF_MONTH, 1);
+				or.set_delevery_date(format.parse(format.format(cl.getTime())));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
+				
+
 			create(or);
 		}
 		return product_list;
@@ -84,12 +94,14 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	}
 	
 	private float calculateTotalPrice(ArrayList<OrderProduct> value) {
+
 		float price =0;
 		for (OrderProduct orderProduct : value) {
 			price = price + orderProduct.getPrice()*orderProduct.getAmount();
 		}
 		return price;
 	}
+	
 	public ArrayList<OrderProduct> makeOnDemand(HashMap<Product, Integer> products_to_order) throws SQLException {
 		ArrayList<OrderProduct> products = _sam.getCheapestProductOnDemand(products_to_order);
 		return makeOrder(products);
@@ -110,8 +122,19 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	}
 
 	public void makeWeeklyOrder(HashMap<Product, Integer> product_table, Day day) {
-		_storage_logic.create_weekly_order(day, product_table);
+		WeeklyOrder order = new WeeklyOrder(day,product_table);
+		_db.create_weekly_order(order);
 		
+		
+	}
+	
+	public ArrayList<OrderProduct> getWeeklyOrder(int day) throws SQLException
+	{
+		return _db.getWeeklyOrder(day);
+	}
+
+	public ArrayList<OrderProduct> getOnDemand() throws SQLException {
+		return _db.getOnDemand();
 	}
 
 	

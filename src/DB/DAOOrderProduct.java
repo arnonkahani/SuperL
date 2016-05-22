@@ -3,8 +3,15 @@ package DB;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import BE.OrderProduct;
+import PL.ViewController;
 
 public class DAOOrderProduct extends DAO<OrderProduct>{
 
@@ -50,6 +57,54 @@ public class DAOOrderProduct extends DAO<OrderProduct>{
 		orderProduct.setAmount(rs.getInt("amount"));
 		
 		return orderProduct;
+	}
+	
+	public ArrayList<OrderProduct> getWeeklyOrder(int day) throws SQLException{
+		ArrayList<OrderProduct> products = new ArrayList<>();
+		
+		String sql = "SELECT * FROM ORDER_PRODUCT WHERE ORDERID IN (SELECT ID FROM ORDERS WHERE DELEVRYDATE = " + getDate() +") "
+				+ "AND SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID IN (SELECT ID FROM SUPPLY_AGREEMENT WHERE DAY LIKE '%" + day + "%')";
+		_stm = _c.createStatement();
+		ResultSet rs = _stm.executeQuery(sql);
+		//TODO: Delete
+				if(ViewController.debug)
+				System.out.println("DAOOrderPRoduct: QUERY: " + sql);
+		while(rs.next())
+		{
+			products.add(create(rs));
+		}
+		return products;
+	}
+	
+	
+	private String getDate()
+	{
+		Calendar cl = Calendar.getInstance();
+		cl.set(Calendar.HOUR_OF_DAY, 0);
+		cl.set(Calendar.MINUTE, 0);
+		cl.set(Calendar.SECOND, 0);
+		String date1 = "";
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		date1 = df.format(cl.getTime());
+	return "'"+date1+"'";
+	}
+
+	public ArrayList<OrderProduct> getOnDemand() throws SQLException {
+		ArrayList<OrderProduct> products = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		int d = calendar.get(Calendar.DAY_OF_WEEK); 
+		String sql = "SELECT * FROM ORDER_PRODUCT WHERE ORDERID IN (SELECT ID FROM ORDERS WHERE DELEVRYDATE = " + getDate() +") "
+				+ "AND SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID IN (SELECT ID FROM SUPPLY_AGREEMENT WHERE DAY = 0)";
+		//TODO: Delete
+		if(ViewController.debug)
+		System.out.println("DAOOrderPRoduct: QUERY: " + sql);
+		_stm = _c.createStatement();
+		ResultSet rs = _stm.executeQuery(sql);
+		while(rs.next())
+		{
+			products.add(create(rs));
+		}
+		return products;
 	}
 
 }

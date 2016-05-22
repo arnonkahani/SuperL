@@ -6,6 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import BE.Product;
+import BE.SupplyAgreement;
+import BE.WeeklyOrder;
+import BE.SupplyAgreement.Day;
+import PL.ViewController;
 
 public class DAOFactory {
 
@@ -145,7 +152,39 @@ public class DAOFactory {
 		
 	}
 
+	public WeeklyOrder get_daily_order (int curr_day){
+		WeeklyOrder weekly=new WeeklyOrder();
+		HashMap<Product,Integer> products= new HashMap();
+		Product p=new Product();
+		int amount=0;
+		try {			
+			String sql;
+			Statement stmt;
+			sql = "SELECT * FROM WEEKLY_ORDER_PRODUCT WHERE DAY="+curr_day+";" ;
+			//TODO: Delete
+			if(ViewController.debug)
+				System.out.println(sql);
+			stmt = _c.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			while(rs.next()) {
+				//TODO: Delete
+				if(ViewController.debug)
+					System.out.println("first product");
+				p.set_id(rs.getInt("ID"));
+				amount = rs.getInt("AMOUNT");
+				products.put(p, amount);
+			}
+			weekly.setDay(SupplyAgreement.Day.values()[curr_day-1]);
+			weekly.setProducts(products);
+		
+		} catch (SQLException e) {
+			
+		}
+		return weekly;
+	}
 	
+	
+
 	private void createTables(){
 	    Statement stmt = null;
 	    try{
@@ -215,7 +254,8 @@ public class DAOFactory {
 	    		"(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                   "SUPPLIER_CN VARCHAR(15)  NOT NULL, " +
                   "WEIGHT REAL NOT NULL, "+
-                  "DATE DATE NOT NULL, " + 
+                  "ORDERDATE DATE NOT NULL, "
+                  + "DELEVRYDATE DATE NOY NULL," + 
                   "PRICE REAL NOT NULL, "+
                   "FOREIGN KEY (SUPPLIER_CN) REFERENCES SUPPLIER(CN))";
 	      stmt.executeUpdate(sql);
