@@ -1,27 +1,3 @@
-import static org.junit.Assert.*;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-import org.junit.*;
-
-import BE.SupplyAgreementProduct;
-import BE.Contact;
-import BE.Discount;
-import BE.Product;
-import BE.Supplier;
-import BE.SupplierProduct;
-import BE.SupplyAgreement;
-import BE.SupplyAgreement.Day;
-import BE.SupplyAgreement.DelevryType;
-import BE.SupplyAgreement.SupplyType;
-import BL.BLFactory;
-import BL.LogicManager;
-import BL.SupplierManager;
-
 public class Testing {
 //
 //	private static BLFactory _blfactory;	

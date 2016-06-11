@@ -1,10 +1,7 @@
 
 import java.sql.SQLException;
 
-import BE.Supplier;
-import BL.BLFactory;
-import DB.DAOFactory;
-import PL.ViewController;
+import com.SupplierStorage.PL.ViewController;
 
 public class main {
 

@@ -1,6 +1,6 @@
 # SuperL
 In order to use the software:
-* Choose if its the first time the progrm runs in order to reset the DB (1/0)
+* Choose if its the first time the progrm runs in order to reset the com.SupplierStorage.DB (1/0)
 * If it is the first time copy the text in the SQL text file and excute the command in sqlbrowser and save the changes
 * Choose if the software should be in debug mode (true/false)
 * Enter the create menu and choose supply agreement enter 0 to choose the first supplier
