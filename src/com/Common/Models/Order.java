@@ -1,4 +1,7 @@
-package com.SupplierStorage.BE;
+package com.Common.Models;
+
+import com.SupplierStorage.BE.OrderProduct;
+import com.SupplierStorage.BE.Supplier;
 
 import java.util.Date;
 

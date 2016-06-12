@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import com.SupplierStorage.BE.Order;
+import com.Common.Models.Order;
 import com.SupplierStorage.BE.Product;
 import com.SupplierStorage.BE.Supplier;
 import com.SupplierStorage.BE.SupplierProduct;
@@ -94,7 +94,7 @@ public class SupplierLogic {
 			LogicManager managar = null;
 			switch(view_object.getName())
 			{
-			case "com.SupplierStorage.BE.Order":
+			case "com.Common.Models.Order":
 				managar = _om;
 				break;
 			case "com.SupplierStorage.BE.Supplier":

@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.SupplierStorage.BE.Order;
+import com.Common.Models.Order;
 import com.SupplierStorage.BE.OrderProduct;
 import com.SupplierStorage.BE.Product;
 import com.SupplierStorage.BE.WeeklyOrder;

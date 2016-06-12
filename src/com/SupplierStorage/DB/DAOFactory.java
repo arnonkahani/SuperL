@@ -70,7 +70,7 @@ public class DAOFactory {
 		DAO dao = null;
 		switch(object_class.getName())
 		{
-		case "com.SupplierStorage.BE.Order":
+		case "com.Common.Models.Order":
 			dao = new DAOOrder(_c);
 			break;
 		case "com.SupplierStorage.BE.Supplier":
