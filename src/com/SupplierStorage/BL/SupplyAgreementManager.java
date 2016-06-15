@@ -36,7 +36,10 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,Supp
 	_db.insert(value);
 	
 	}
-	
+
+    public DelevryType getDelevryType(String id) throws SQLException {
+        _db.getDelevryType(id);
+    }
 	public SupplyAgreement getSupplyAgreementByID(String id) throws SQLException{
 		return getFromPK(new String[]{id});
 	}

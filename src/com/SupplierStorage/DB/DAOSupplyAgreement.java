@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.SupplierStorage.BE.SupplyAgreement.DelevryType;
 import com.SupplierStorage.BE.SupplyAgreementProduct;
 import com.SupplierStorage.BE.SupplyAgreement;
 import com.SupplierStorage.BE.SupplyAgreement.Day;
@@ -86,4 +87,7 @@ public class DAOSupplyAgreement extends DAO<SupplyAgreement> {
 		return supplyAgreement;
 	}
 
+	public DelevryType getDelevryType(String id) throws SQLException {
+		return getFromPK(new String[]{id}).get_dType();
+	}
 }
