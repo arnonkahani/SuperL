@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import com.SupplierStorage.BE.SupplyAgreement;
 import com.SupplierStorage.BE.SupplyAgreementProduct;
 import com.SupplierStorage.PL.ViewController;
 import com.SupplierStorage.BE.Discount;
@@ -154,6 +157,51 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		//TODO: Delete
 		if(ViewController.debug)
 			System.out.println("number of products in day: "+products.size());
+		return products;
+	}
+
+
+	public ArrayList<SupplyAgreementProduct> getDeliveryType(Product product , SupplyAgreement.Day day) throws SQLException {
+		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
+		//TODO: Delete
+		if(ViewController.debug)
+			System.out.println(product.get_id());
+		String sql = "SELECT PRICE , SUPPLYID , Supplier_Product_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCTID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLYID= SUPPLY_AGREEMENT.ID"
+				+ "AND PRODUCT.ID="+ product.get_id()+"AND SUPPLY_AGREEMENT.DELIVERYTYPE= 'deliver' AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' ;";
+
+		//TODO: Delete
+		if(ViewController.debug)
+			System.out.println(sql);
+		_stm = _c.createStatement();
+		ResultSet rs = _stm.executeQuery(sql);
+		while(rs.next())
+		{
+			products.add(create(rs));
+		}
+		if (products.size()==0){
+			 sql = "SELECT PRICE , SUPPLYID , Supplier_Product_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCTID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLYID= SUPPLY_AGREEMENT.ID"
+					+ "AND PRODUCT.ID="+ product.get_id()+"AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'setday' ;";
+
+			//TODO: Delete
+			if(ViewController.debug)
+				System.out.println(sql);
+			_stm = _c.createStatement();
+			rs = _stm.executeQuery(sql);
+			while(rs.next())
+			{
+				products.add(create(rs));
+			}
+			ArrayList<SupplyAgreementProduct> min_products = new ArrayList<>();
+			Calendar c = Calendar.getInstance();
+			Date date = new Date();
+            c.setTime(date);
+			int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+			int min_day = dayOfWeek+1;
+			for(int i=0; i<products.size(); i++){
+                if (products.get(i).ge)
+
+			}
+		}
 		return products;
 	}
 

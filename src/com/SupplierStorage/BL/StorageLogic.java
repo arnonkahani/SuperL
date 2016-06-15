@@ -62,10 +62,10 @@ public class StorageLogic {
 				if(ViewController.debug && products!=null && products.size() > 0)
 		{System.out.println(products.get(0).getAmount());};
 		if (products!=null && products.size() > 0){
-		System.err.println("Order Arrived - Press Enter To Recive");
-		Scanner scn = new Scanner(System.in);
-		scn.nextLine();
-		ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
+			System.err.println("Order Arrived - Press Enter To Recive");
+			Scanner scn = new Scanner(System.in);
+			scn.nextLine();
+			ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
 		for (int i=0;i<products.size();i++){
 			for(int j=0;j<products.get(i).getAmount();j++){
 				INS_product ins = new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),0,products.get(i).get_shelf_life());
