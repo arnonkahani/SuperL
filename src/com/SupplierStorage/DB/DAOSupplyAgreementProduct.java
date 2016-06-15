@@ -198,13 +198,57 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
             c.setTime(date);
 			int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 			int min_day = dayOfWeek+1;
-			for(int i=0; i<products.size(); i++){
-                if (products.get(i).ge)
+            for(int i=0; i<products.size(); i++) {
+                SupplyAgreement sp = _supplyagreemnt.getFromPK(new String[]{products.get(i).get_sp()});
+                products.get(i).set_supplyAgreement(sp);
 
-			}
-            SupplyAgreement sp = _supplyagreemnt.getFromPK(new String[]{products.get(0).get_sp()});
-            products.get(0).set_supplyAgreement(sp);
-		}
+            }
+            boolean found=false;
+            boolean finish=false;
+            while (!found && !finish) {
+                for (int j = 0; j < products.size(); j++) {
+                    for (int i = 0; i < products.get(j).get_supplyAgreement().get_day().size(); i++){
+                        if (products.get(j).get_supplyAgreement().get_day().get(i).getValue() == min_day) {
+                            found = true;
+                            min_products.add(products.get(j));
+                        }
+                    }
+                }
+                if (!found){
+                    if (min_day== day.getValue()-1){
+                        finish=true;
+                    }
+                    else{
+                        if (min_day==7){
+                            min_day=1;
+                        }
+                        else{
+                            min_day++;
+                        }
+                    }
+
+                }
+
+            }
+            if (!found){
+                sql = "SELECT PRICE , SUPPLYID , Supplier_Product_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCTID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLYID= SUPPLY_AGREEMENT.ID"
+                        + "AND PRODUCT.ID="+ product.get_id()+"AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' AND SUPPLY_AGREEMENT.DELIVERYTYPE= 'cometake';";
+
+                //TODO: Delete
+                if(ViewController.debug)
+                    System.out.println(sql);
+                _stm = _c.createStatement();
+                rs = _stm.executeQuery(sql);
+                while(rs.next())
+                {
+                    products.add(create(rs));
+                }
+            }
+            else{
+                products=min_products;
+            }
+
+            }
 		return products;
 	}
 
