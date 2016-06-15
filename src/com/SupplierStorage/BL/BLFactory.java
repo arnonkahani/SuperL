@@ -1,6 +1,7 @@
 package com.SupplierStorage.BL;
 
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.SupplierStorage.DB.DAOFactory;
@@ -12,9 +13,9 @@ public class BLFactory {
 	SupplierLogic _supplierLogic;
 	StorageLogic _storageLogic;
 	
-	public BLFactory(boolean first_time) throws SQLException
+	public BLFactory(boolean first_time, Connection c) throws SQLException
 	{
-		_db = new DAOFactory(first_time);
+		_db = new DAOFactory(first_time,c);
 		_storageLogic = new StorageLogic(_db.createStorageController(), _db.createReportController());
 		_supplierLogic = new SupplierLogic(_db, _storageLogic);
 		

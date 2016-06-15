@@ -1,7 +1,9 @@
 package com.SupplierStorage.PL;
 
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -20,16 +22,16 @@ public class ViewController {
 	private ProductView _pv;
 	private GUI_storage _gs;
 	
-	public ViewController() throws SQLException{
+	public ViewController(boolean first_time, Connection c) throws SQLException{
 		_vu = new ViewUtils();
 		scn = new Scanner(System.in);
 		System.out.println("Debug? true/false");
 		debug = scn.nextBoolean();
 		
 		System.out.println("Is this the first time the program is running? Yes = 1 , No = 0");
-		boolean first_time = 1 == Integer.parseInt(_vu.tryGetNumber(0, 1));
+
 		
-		_bc = new BLFactory(first_time); 
+		_bc = new BLFactory(first_time,c);
 		_vu = new ViewUtils();
 		_pv = new ProductView((ProductManager) _bc.getSupplierLogic().getManager(Product.class), _vu);
 		_sv = new SupplierView(_vu,_pv,(SupplierManager) _bc.getSupplierLogic().getManager(Supplier.class));
@@ -40,37 +42,45 @@ public class ViewController {
 		
 		
 		
-		run();
+
 	}
-	public void run()
+	public void showSupplier()
 	{
-		
 		String menu[] = {"Create","Search","Other","Quit"};
 		int choise = -1;
 		while(true)
 		{
-		System.out.println("Main Menu");
-		choise = _vu.listChoose(menu);
+			System.out.println("Main Menu");
+			choise = _vu.listChoose(menu);
 			switch(choise)
 			{
-			case 1:
-				createMenu();
-				break;
-			case 2:
-				searchMenu();
-				break;
-			case 3:
-				otherMenu();
-				break;
-			case 4:
-				return;
+				case 1:
+					createMenu();
+					break;
+				case 2:
+					searchMenu();
+					break;
+				case 3:
+					otherMenu();
+					break;
+				case 4:
+					return;
 			}
 		}
+	}
+	public void showStorage()
+	{
+		_gs.start(0);
+	}
+
+	public void getSupply(ArrayList<OrderProduct> products)
+	{
+		_bc.getStorageLogic().getSupply(products);
 	}
 	
 	private void otherMenu() {
 		_vu.clear();
-		String menu[] = {"Print Order","Supllied Products From Supplier","Storage view","Return"};
+		String menu[] = {"Print Order","Supllied Products From Supplier","Return"};
 		int choise = -1;
 		while(true)
 		{
@@ -85,9 +95,6 @@ public class ViewController {
 				_sv.supplierProducts();
 				break;
 			case 3:
-				_gs.start(0);
-				break;
-			case 4:
 				return;
 			}
 		}
