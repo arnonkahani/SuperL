@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class SupplyAgreementProduct extends SupplierProduct{
 	private String _sp;
+
+
+
+	private SupplyAgreement _supplyAgreement;
 	private ArrayList<Discount> _discounts;
 	private float _price;
 	
@@ -55,6 +59,15 @@ public class SupplyAgreementProduct extends SupplierProduct{
 
 	public String toString(){
 		return "Supply ID: " + _sp + " Product SN: " + get_serial_number() + " " + super.toString() + " Agreement Price: " + _price;
+	}
+
+
+	public SupplyAgreement get_supplyAgreement() {
+		return _supplyAgreement;
+	}
+
+	public void set_supplyAgreement(SupplyAgreement _supplyAgreement) {
+		this._supplyAgreement = _supplyAgreement;
 	}
 
 	public boolean equals(Object o){

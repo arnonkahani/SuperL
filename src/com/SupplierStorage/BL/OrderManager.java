@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.Common.ITransportation;
 import com.Common.Models.Order;
 import com.SupplierStorage.BE.*;
 import com.SupplierStorage.BE.SupplyAgreement.Day;
@@ -21,6 +22,8 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	SupplierManager _sm;
 	SupplyAgreementManager _sam;
 	StorageLogic _storage_logic;
+	ITransportation itransportation;
+
 	public OrderManager(DAOOrder db,StorageLogic storage_logic) {
 		super(db);
 		_storage_logic = storage_logic;
@@ -71,24 +74,35 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 				
 		}
 		for (Entry<String, ArrayList<OrderProduct>> cn : cn_map.entrySet()) {
-			float price = calculateTotalPrice(cn.getValue());
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = new Date();
-			Order or = null;
-			try {
-				or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),cn.getValue(),price);
-				Calendar cl = Calendar.getInstance();
-				cl.set(Calendar.HOUR_OF_DAY, 0);
-				cl.set(Calendar.MINUTE, 0);
-				cl.set(Calendar.SECOND, 0);
-				cl.add(Calendar.DAY_OF_MONTH, 1);
-				or.set_delevery_date(format.parse(format.format(cl.getTime())));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-				
+			for (int i = 0; i < 2; i++) {
+				ArrayList<OrderProduct> temp_products = new ArrayList<>();
+				if(i==0)
+				{
+					cn.getValue().forEach((p)-> { if(p.ge) });
+				}
+				float price = calculateTotalPrice(cn.getValue());
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = new Date();
+				Order or = null;
+				try {
+					or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),cn.getValue(),price);
+					Calendar cl = Calendar.getInstance();
+					cl.set(Calendar.HOUR_OF_DAY, 0);
+					cl.set(Calendar.MINUTE, 0);
+					cl.set(Calendar.SECOND, 0);
+					cl.add(Calendar.DAY_OF_MONTH, 1);
+					or.set_delevery_date(format.parse(format.format(cl.getTime())));
+				} catch (ParseException e) {
 
-			create(or);
+				}
+
+
+				create(or);
+				if(or.get_amountProduct().get(0).){
+					itransportation.makeTransportation();
+				}
+			}
+
 		}
 		return product_list;
 	

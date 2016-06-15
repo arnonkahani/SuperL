@@ -12,6 +12,7 @@ import com.SupplierStorage.BE.Product;
 
 public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 
+
 	DAOSupplierProduct _product;
 	DAODiscount _discount;
 	

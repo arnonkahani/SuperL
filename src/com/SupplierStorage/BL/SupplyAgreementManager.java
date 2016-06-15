@@ -2,9 +2,11 @@ package com.SupplierStorage.BL;
 
 
 import java.sql.SQLException;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.Common.IWorkers;
 import com.SupplierStorage.BE.*;
 import com.SupplierStorage.BE.SupplyAgreement.*;
 import com.SupplierStorage.DB.DAOSupplyAgreement;
@@ -14,6 +16,7 @@ import com.SupplierStorage.PL.ViewController;
 
 public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,SupplyAgreement>{
 	private AgreementProductManager _apm;
+	IWorkers iworker;
 	public SupplyAgreementManager(DAOSupplyAgreement db){
 		super(db);
 		
@@ -23,8 +26,13 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,Supp
 	
 	@Override
 	public void create(SupplyAgreement value) throws SQLException{
-	
-
+		if(value.get_dType().equals(DelevryType.cometake) && value.get_sType().equals(SupplyType.setday)) {
+			ArrayList<DayOfWeek> days = new ArrayList<>();
+			for (Day d:value.get_day()) {
+				days.add(DayOfWeek.of(d.getValue()-1));
+			}
+			iworker.setWeeklyDeleveryShifts(days);
+		}
 	_db.insert(value);
 	
 	}
