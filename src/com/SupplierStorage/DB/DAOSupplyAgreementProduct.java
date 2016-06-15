@@ -15,7 +15,7 @@ import com.SupplierStorage.BE.Product;
 
 public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 
-
+    DAOSupplyAgreement _supplyagreemnt;
 	DAOSupplierProduct _product;
 	DAODiscount _discount;
 	
@@ -23,6 +23,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		super(c);
 		_product = new DAOSupplierProduct(c);
 		_discount = new DAODiscount(c);
+        _supplyagreemnt = new DAOSupplyAgreement(c);
 	}
 
 	@Override
@@ -201,6 +202,8 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
                 if (products.get(i).ge)
 
 			}
+            SupplyAgreement sp = _supplyagreemnt.getFromPK(new String[]{products.get(0).get_sp()});
+            products.get(0).set_supplyAgreement(sp);
 		}
 		return products;
 	}
