@@ -15,11 +15,11 @@ import com.SupplierStorage.PL.ViewController;
 public class DAOFactory {
 
 	private Connection _c;
-	public DAOFactory(boolean first_time)
+	public DAOFactory(boolean first_time,Connection c)
 	{
 			try {
 			      Class.forName("org.sqlite.JDBC");
-			      _c = DriverManager.getConnection("jdbc:sqlite:supllier.db");
+			      _c = c;
 			      Statement stmt = _c.createStatement();
 				    String sql;
 				    sql = "PRAGMA foreign_keys = ON";
