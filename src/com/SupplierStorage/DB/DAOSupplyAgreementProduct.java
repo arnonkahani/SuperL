@@ -162,7 +162,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 	}
 
 
-	public ArrayList<SupplyAgreementProduct> getDeliveryType(Product product , SupplyAgreement.Day day) throws SQLException {
+	/*public ArrayList<SupplyAgreementProduct> getDeliveryType(Product product , SupplyAgreement.Day day) throws SQLException {
 		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
 		//TODO: Delete
 		if(ViewController.debug)
@@ -251,6 +251,41 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
             }
 		return products;
 	}
+	*/
 
+
+    public ArrayList<SupplyAgreementProduct> getDeliveryType(Product product) throws SQLException {
+		ArrayList<SupplyAgreementProduct> products = new ArrayList<>();
+		//TODO: Delete
+		if(ViewController.debug)
+			System.out.println(product.get_id());
+		String sql = "SELECT PRICE , SUPPLYID , Supplier_Product_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCTID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLYID= SUPPLY_AGREEMENT.ID"
+				+ "AND PRODUCT.ID="+ product.get_id()+"AND SUPPLY_AGREEMENT.DELIVERYTYPE= 'deliver' AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' ;";
+
+		//TODO: Delete
+		if(ViewController.debug)
+			System.out.println(sql);
+		_stm = _c.createStatement();
+		ResultSet rs = _stm.executeQuery(sql);
+		while(rs.next())
+		{
+			products.add(create(rs));
+		}
+		if (products.size()==0){
+            sql = "SELECT PRICE , SUPPLYID , Supplier_Product_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCTID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLYID= SUPPLY_AGREEMENT.ID"
+                    + "AND PRODUCT.ID="+ product.get_id()+"AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' AND SUPPLY_AGREEMENT.DELIVERYTYPE= 'cometake';";
+
+            //TODO: Delete
+            if(ViewController.debug)
+                System.out.println(sql);
+            _stm = _c.createStatement();
+            rs = _stm.executeQuery(sql);
+            while(rs.next())
+            {
+                products.add(create(rs));
+            }
+        }
+		return products;
+	}
 
 }
