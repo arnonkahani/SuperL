@@ -4,8 +4,10 @@ import com.Common.Models.LicenseType;
 import com.Common.IWorkers;
 import com.Common.Models.Driver;
 import com.Workers.DatabaseObjects.DAL;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.SQLException;
+import java.time.DayOfWeek;
 import java.util.Date;
 import java.util.List;
 
@@ -36,5 +38,15 @@ public class Workers implements IWorkers {
     @Override
     public boolean isStockWorkerAvailable(Date time) {
         return dal.isStockWorkerAvailable(time);
+    }
+
+    @Override
+    public Date getEarliestDeleveryDate(Date time) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void setWeeklyDeleveryShifts(List<DayOfWeek> dayOfWeeks) {
+        throw new NotImplementedException();
     }
 }

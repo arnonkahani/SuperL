@@ -58,6 +58,4 @@ public interface ISupplierStorage {
      */
     Order getOrder(String id);
 
-
-
 }

@@ -7,14 +7,16 @@ import com.Common.DB.IDBHandler;
 import com.Common.IWorkers;
 import com.Common.Models.Driver;
 import com.Workers.Objects.*;
+import com.Workers.Objects.Date;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.util.*;
 
 public class DAL extends DALInitiateConstants implements DALInterface, IWorkers {
 
@@ -834,6 +836,16 @@ public class DAL extends DALInitiateConstants implements DALInterface, IWorkers 
             }
         }
         return true;
+    }
+
+    @Override
+    public java.util.Date getEarliestDeleveryDate(java.util.Date time) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void setWeeklyDeleveryShifts(List<DayOfWeek> dayOfWeeks) {
+        throw new NotImplementedException();
     }
 
 
