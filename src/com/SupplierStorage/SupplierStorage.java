@@ -1,6 +1,7 @@
 package com.SupplierStorage;
 
 import com.Common.ISupplierStorage;
+import com.Common.Models.Order;
 import com.SupplierStorage.BE.OrderProduct;
 import com.SupplierStorage.PL.ViewController;
 
@@ -39,5 +40,10 @@ public class SupplierStorage implements ISupplierStorage {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public Order getOrder(String id) {
+        return null;
     }
 }

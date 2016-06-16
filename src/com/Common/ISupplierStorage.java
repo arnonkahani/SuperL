@@ -1,5 +1,6 @@
 package com.Common;
 
+import com.Common.Models.Order;
 import com.SupplierStorage.BE.OrderProduct;
 
 import java.sql.Connection;
@@ -47,5 +48,16 @@ public interface ISupplierStorage {
      * @return
      */
     void initiateSupplierStorage(boolean first_time,Connection c);
+
+
+    /**
+     * Presents a supplier menu.
+     *
+     * @param
+     * @return
+     */
+    Order getOrder(String id);
+
+
 
 }

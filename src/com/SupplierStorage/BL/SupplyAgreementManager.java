@@ -4,6 +4,7 @@ package com.SupplierStorage.BL;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.Common.IWorkers;
@@ -38,7 +39,7 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,Supp
 	}
 
     public DelevryType getDelevryType(String id) throws SQLException {
-        _db.getDelevryType(id);
+       return  _db.getDelevryType(id);
     }
 	public SupplyAgreement getSupplyAgreementByID(String id) throws SQLException{
 		return getFromPK(new String[]{id});
@@ -110,7 +111,7 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 			ArrayList<OrderProduct> to_order = new ArrayList<>();
 			
 			for (Product product : products.keySet()) {
-				to_order.add(getCheapstProduct(_db.getProductOnDemand(product),products.get(product).intValue()));
+				to_order.add(getCheapstProduct(_apm.getEarliestOnDemend(product),products.get(product).intValue()));
 			}
 			return to_order;
 		}
@@ -165,6 +166,9 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 			return min_product;
 			
 		}
+        public ArrayList<SupplyAgreementProduct> getEarliestOnDemend(Product product) throws SQLException {
+            return _db.getDeliveryType(product);
+        }
 
 		
 		

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.Common.ITransportation;
+import com.Common.IWorkers;
 import com.Common.Models.Order;
 import com.SupplierStorage.BE.*;
 import com.SupplierStorage.BE.SupplyAgreement.Day;
@@ -23,6 +24,7 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	SupplyAgreementManager _sam;
 	StorageLogic _storage_logic;
 	ITransportation itransportation;
+    IWorkers iworker;
 
 	public OrderManager(DAOOrder db,StorageLogic storage_logic) {
 		super(db);
@@ -51,14 +53,20 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 		if(wo.getProducts().size()==0)
 			return null;
 		ArrayList<OrderProduct> products = _sam.getCheapstProductsPerDay(wo.getDay(), wo.getProducts());
-		return makeOrder(products);
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = cal.getTime();
+		return makeOrder(products,tomorrow);
 	}
 	
 	
 	
 	
-	private ArrayList<OrderProduct> makeOrder(ArrayList<OrderProduct> products) throws SQLException
+	private ArrayList<OrderProduct> makeOrder(ArrayList<OrderProduct> products,Date driver_date) throws SQLException
 	{
+        ArrayList<Order> orders = new ArrayList<>();
 		ArrayList<OrderProduct> product_list = new ArrayList<>();
 		HashMap<String,ArrayList<OrderProduct>> cn_map = new HashMap();
 		for (OrderProduct product : products) {
@@ -78,14 +86,34 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 				ArrayList<OrderProduct> temp_products = new ArrayList<>();
 				if(i==0)
 				{
-					cn.getValue().forEach((p)-> { if(p.ge) });
+					cn.getValue().forEach((p)-> {
+						try {
+							if(_sam.getDelevryType(p.get_sp()).equals(SupplyAgreement.DelevryType.cometake)) {
+                                temp_products.add(p);
+                            }
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					});
 				}
-				float price = calculateTotalPrice(cn.getValue());
+				else if(i==1)
+				{
+					cn.getValue().forEach((p)-> {
+						try {
+							if(_sam.getDelevryType(p.get_sp()).equals(SupplyAgreement.DelevryType.deliver)) {
+								temp_products.add(p);
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					});
+				}
+				float price = calculateTotalPrice(temp_products);
 				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 				Date date = new Date();
 				Order or = null;
 				try {
-					or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),cn.getValue(),price);
+					or = new Order(_sm.getSupplierByCN(cn.getKey()),format.parse(format.format(date)),temp_products,price);
 					Calendar cl = Calendar.getInstance();
 					cl.set(Calendar.HOUR_OF_DAY, 0);
 					cl.set(Calendar.MINUTE, 0);
@@ -98,12 +126,15 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 
 
 				create(or);
-				if(or.get_amountProduct().get(0).){
-					itransportation.makeTransportation();
+				if(i==0){
+                    orders.add(or);
+
 				}
 			}
 
 		}
+        if(!orders.isEmpty())
+            itransportation.makeTransportation(driver_date,orders);
 		return product_list;
 	
 	}
@@ -118,8 +149,9 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	}
 	
 	public ArrayList<OrderProduct> makeOnDemand(HashMap<Product, Integer> products_to_order) throws SQLException {
+
 		ArrayList<OrderProduct> products = _sam.getCheapestProductOnDemand(products_to_order);
-		return makeOrder(products);
+		return makeOrder(products,iworker.getEarliestDeleveryDate(new Date()));
 	}
 	
 	
@@ -145,11 +177,27 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	
 	public ArrayList<OrderProduct> getWeeklyOrder(int day) throws SQLException
 	{
-		return _db.getWeeklyOrder(day);
+        ArrayList<OrderProduct> products = _db.getWeeklyOrder(day);
+        if(products == null || products.size() == 0)
+            return products;
+        ArrayList<OrderProduct> delevry_products = new ArrayList<>();
+        for (OrderProduct p:products) {
+            if(_sam.getDelevryType(p.get_sp()).equals(SupplyAgreement.DelevryType.deliver))
+                delevry_products.add(p);
+        }
+        return delevry_products;
 	}
 
 	public ArrayList<OrderProduct> getOnDemand() throws SQLException {
-		return _db.getOnDemand();
+        ArrayList<OrderProduct> products = _db.getOnDemand();
+        if(products == null || products.size() == 0)
+            return products;
+        ArrayList<OrderProduct> delevry_products = new ArrayList<>();
+        for (OrderProduct p:products) {
+            if(_sam.getDelevryType(p.get_sp()).equals(SupplyAgreement.DelevryType.deliver))
+                delevry_products.add(p);
+        }
+        return delevry_products;
 	}
 
 	
