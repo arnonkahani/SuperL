@@ -107,4 +107,7 @@ public interface DALInterface {
 	/*historyOfShifts*/
     public boolean deleteShiftsFromHistory(String ID,LinkedList<Shift> slst);
 
+    public boolean  addWeeklyShift(String ID, String Day, WorkerSchedule.TypeEnum type ,Worker.JobEnum job);
+
+    public LinkedList<String> getWeeklyShifts(String ID);
 }

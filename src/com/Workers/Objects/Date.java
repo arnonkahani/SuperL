@@ -1,5 +1,7 @@
 package com.Workers.Objects;
 
+import sun.util.resources.cldr.aa.CalendarData_aa_ER;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
@@ -98,11 +100,37 @@ public class Date {
         return _year;
     }
 
+    public java.util.Date get_date() {
+        return _date;
+    }
+
     private int numOfDayInWeek(java.util.Date time){
         Calendar c = Calendar.getInstance();
         c.setTime(_date);
         return c.get(Calendar.DAY_OF_WEEK) - 1;
 
+    }
+
+    public void increase(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(_date);
+        c.add(Calendar.DATE, 1);
+        _day = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+        _mounth = String.valueOf(c.get(Calendar.MONTH));
+        _year = String.valueOf(c.get(Calendar.YEAR));
+        _date = c.getTime();
+        _dayInWeek = WeekDays[numOfDayInWeek(_date)];
+    }
+
+    public void increaseByWeek(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(_date);
+        c.add(Calendar.DATE, 7);
+        _day = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+        _mounth = String.valueOf(c.get(Calendar.MONTH));
+        _year = String.valueOf(c.get(Calendar.YEAR));
+        _date = c.getTime();
+        _dayInWeek = WeekDays[numOfDayInWeek(_date)];
     }
 
 }

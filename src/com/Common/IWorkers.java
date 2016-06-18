@@ -2,10 +2,12 @@ package com.Common;
 
 import com.Common.Models.Driver;
 import com.Common.Models.LicenseType;
+import com.Workers.Objects.Worker;
 
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -44,4 +46,6 @@ public interface IWorkers {
      * @return
      */
     void setWeeklyDeleveryShifts(List<DayOfWeek> dayOfWeeks);
+
+    public LinkedList<Worker.JobEnum> getJobs(String UserName, String Password);
 }

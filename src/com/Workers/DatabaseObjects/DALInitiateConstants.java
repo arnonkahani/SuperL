@@ -16,6 +16,7 @@ public class DALInitiateConstants {
     protected static final String TABLE_WorkerSchedule = "WorkerSchedule";
     protected static final String TABLE_Driver = "Driver";
     protected static final String TABLE_ShiftsHistory = "ShiftsHistory";
+    protected static final String TABLE_WeeklyShift = "WeeklyShift";
 
     protected static final String CREATE_Worker = START_CREATING + " `Worker` (\n" +
             "\t`ID`\tTEXT,\n" +
@@ -85,6 +86,14 @@ public class DALInitiateConstants {
             "\tPRIMARY KEY(WID,Day,Type)\n" +
             ");";
 
+    protected static final String CREATE_WeeklyShift = START_CREATING + " `WeeklyShift` (\n" +
+            "\t`WID`\tTEXT NOT NULL,\n" +
+            "\t`Day`\tTEXT NOT NULL,\n" +
+            "\t`Type`\tTEXT NOT NULL,\n" +
+            "\t`Ability`\tTEXT NOT NULL,\n" +
+            "\tPRIMARY KEY(WID,Day,Type)\n" +
+            ");";
+
     protected static final String Trigger_ShiftsHistory = ""+
             "CREATE TRIGGER IF NOT EXISTS update_" + TABLE_ShiftsHistory + " " +
             "AFTER INSERT ON " + TABLE_WorkerInShifts + " FOR EACH ROW " +
@@ -102,6 +111,7 @@ public class DALInitiateConstants {
             CREATE_WorkerSchedule,
             CREATE_Driver,
             CREATE_ShiftsHistory,
+            CREATE_WeeklyShift,
             Trigger_ShiftsHistory
     };
 

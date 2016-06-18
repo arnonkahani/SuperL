@@ -18,7 +18,7 @@ import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.util.*;
 
-public class DAL extends DALInitiateConstants implements DALInterface, IWorkers {
+public class DAL extends DALInitiateConstants implements DALInterface {
 
 
     IDBHandler<Worker> workerIDBHandler;
@@ -400,7 +400,11 @@ public class DAL extends DALInitiateConstants implements DALInterface, IWorkers 
         LinkedList<WorkerSchedule> workerScheduleLst = this.getWorkerScheduleByID(ID);
         boolean isAllOk = true;
         boolean isOneOk = false;
+
         for (Shift shift : listShifts) {
+            if(getWeeklyShifts(ID).contains(shift.get_day()))
+                return false;
+
             for (WorkerSchedule workerSchedule : workerScheduleLst) {
                 if (workerSchedule.equals(shift)) {
                     isOneOk = true;
@@ -786,7 +790,7 @@ public class DAL extends DALInitiateConstants implements DALInterface, IWorkers 
     }
 
 
-    @Override
+
     public List<Driver> availableDrivers(LicenseType type, java.util.Date time) {
         LinkedList<Driver> drivers = new LinkedList<>();
         WorkerSchedule.TypeEnum te = WorkerSchedule.getTypeByTime(time);
@@ -816,7 +820,7 @@ public class DAL extends DALInitiateConstants implements DALInterface, IWorkers 
         return drivers;
     }
 
-    @Override
+
     public boolean isStockWorkerAvailable(java.util.Date time) {
         WorkerSchedule.TypeEnum te = WorkerSchedule.getTypeByTime(time);
         Shift relevant = null;
@@ -838,16 +842,6 @@ public class DAL extends DALInitiateConstants implements DALInterface, IWorkers 
         return true;
     }
 
-    @Override
-    public java.util.Date getEarliestDeleveryDate(java.util.Date time) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void setWeeklyDeleveryShifts(List<DayOfWeek> dayOfWeeks) {
-        throw new NotImplementedException();
-    }
-
 
     /*historyOfShifts*/
     @Override
@@ -863,6 +857,42 @@ public class DAL extends DALInitiateConstants implements DALInterface, IWorkers 
         } catch (SQLException e) {
             System.out.println(e);
             return false;
+        }
+    }
+
+    @Override
+    public boolean addWeeklyShift(String ID, String Day, WorkerSchedule.TypeEnum type ,Worker.JobEnum job) {
+        String[] attributes = {"WID", "Day", "Type", "Ability"};
+        String[] object_values = new String[attributes.length];
+        object_values[0] = ID;
+        object_values[1] = Day;
+        object_values[2] = type.name();
+        object_values[3] = job.name();
+
+        try {
+            GeneralSQLiteQuaries.insertInto(TABLE_WeeklyShift, attributes, object_values);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public LinkedList<String> getWeeklyShifts(String ID) {
+        LinkedList<String> lst = new LinkedList<>();
+        try {
+            String query = "SELECT Day FROM WeeklyShift WHERE WID = " + ID;
+            PreparedStatement pst = connection.prepareStatement(query);
+
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                lst.add(rs.getString(1));
+            }
+
+            return lst;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
     }
 }

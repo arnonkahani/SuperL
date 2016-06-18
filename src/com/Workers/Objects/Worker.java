@@ -16,7 +16,9 @@ public class Worker {
         Cahier,
         Cleaner,
         WarehouseWorker,
-
+        StorageManager,
+        SupplierManager,
+        TransportationManager
     }
 
     public String ID;
