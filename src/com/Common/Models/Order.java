@@ -2,6 +2,7 @@ package com.Common.Models;
 
 import com.SupplierStorage.BE.OrderProduct;
 import com.SupplierStorage.BE.Supplier;
+import com.Transpotation.Models.Place;
 
 import java.util.Date;
 
@@ -62,7 +63,9 @@ public class Order {
 	public void set_price(float _price) {
 		this._price = _price;
 	}
-	
+	public Place getPlace(){
+		return _supplier.get_Place();
+	}
 	public String toString(){
 		String str;
 		str = "Supplier CN: " + get_supplier().get_CN() + "\n"
