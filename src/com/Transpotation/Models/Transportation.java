@@ -16,6 +16,7 @@ public class Transportation {
     private Truck truck;
     private Driver driver;
     private Area area;
+    private int arrived;
 
     public Transportation() {
     }
@@ -76,11 +77,9 @@ public class Transportation {
         return truck;
     }
 
-    public void setTruck(Truck truck) throws ValidationException, SQLException, ClassNotFoundException {
+    public void setTruck(Truck truck) throws ValidationException {
         if(driver != null && driver.getDriverLicenseType() != truck.getLicenseType())
             throw new ValidationException("Licence Type does not match with attached driver's Licence Type");
-        if(truck != null && (truck.getMaxWeight() - truck.getNetWeight()) < getTotalWeight())
-            throw new ValidationException("Truck cannot carry this weight");
         this.truck = truck;
     }
 
@@ -149,5 +148,13 @@ public class Transportation {
         } while (textWidth(text.substring(0, newEnd) + "...") < max);
 
         return text.substring(0, end) + "...";
+    }
+
+    public void setArrived(boolean arrived) {
+        this.arrived = arrived ? 1 : 0;
+    }
+
+    public boolean isArrived() {
+        return arrived == 1;
     }
 }

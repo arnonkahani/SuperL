@@ -20,6 +20,7 @@ public class TransportationDBHandler extends DBHandler<Transportation> {
             "truck TEXT," +
             "driver TEXT," +
             "area INTEGER," +
+            "arrived INTEGER," +
             "FOREIGN KEY(driver) REFERENCES Driver(WID) ON DELETE RESTRICT ON UPDATE CASCADE ," +
             "FOREIGN KEY(truck) REFERENCES Truck(LicenceNumber) ON DELETE RESTRICT ON UPDATE CASCADE ," +
             "FOREIGN KEY(area) REFERENCES Area(areaID) ON DELETE RESTRICT ON UPDATE CASCADE " +
@@ -46,7 +47,7 @@ public class TransportationDBHandler extends DBHandler<Transportation> {
 
     @Override
     protected Transportation readRow(ResultSet set) throws SQLException {
-        return new Transportation(
+        Transportation t = new Transportation(
                 set.getInt("ID"),
                 set.getString("Description"),
                 set.getDate("StartTime"),
@@ -55,6 +56,9 @@ public class TransportationDBHandler extends DBHandler<Transportation> {
                 driverIDBHandler.get(set.getString("driver")),
                 areaIDBHandler.get(set.getString("area"))
         );
+        t.setArrived(set.getInt("arrived") == 1);
+
+        return t;
     }
 
     @Override
@@ -81,7 +85,8 @@ public class TransportationDBHandler extends DBHandler<Transportation> {
                 o.getDescription(),
                 o.getTruck() != null ? o.getTruck().getLicenseNumber() : null,
                 o.getDriver() != null ? o.getDriver().getID() : null,
-                o.getArea() != null ? o.getArea().getAreaID() : null
+                o.getArea() != null ? o.getArea().getAreaID() : null,
+                o.isArrived() ? 1 : 0
         };
     }
 
@@ -94,7 +99,8 @@ public class TransportationDBHandler extends DBHandler<Transportation> {
                 "Description",
                 "truck",
                 "driver",
-                "area"
+                "area",
+                "arrived",
         };
     }
 }

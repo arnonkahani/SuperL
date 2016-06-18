@@ -1,11 +1,11 @@
 package com.Transpotation.Models;
 
 public class Product {
-    Integer ID;
-    String name;
-    String description;
-    double weight;
-    OrderDocument order;
+    private Integer ID;
+    private String name;
+    private String description;
+    private double weight;
+    private OrderDocument order;
 
     public Product() {
     }

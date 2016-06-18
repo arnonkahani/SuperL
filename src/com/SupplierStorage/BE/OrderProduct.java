@@ -11,9 +11,6 @@ public class OrderProduct extends SupplyAgreementProduct{
 		this.amount = amount;
 	}
 
-
-
-
 	public OrderProduct(SupplyAgreementProduct ap) {
 		super(ap);
 	}

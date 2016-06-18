@@ -2,9 +2,15 @@ package com.Common;
 
 import com.SupplierStorage.BE.OrderProduct;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import com.Common.Models.*;
+import com.Transpotation.Models.Place;
+import com.Transpotation.Models.ValidationException;
+import com.Transpotation.Transportation;
 
 /**
  * Exposed interface of the transportation module for other modules
@@ -18,7 +24,10 @@ public interface ITransportation {
      * @param  time if null, ignore this requirement
      * @param  orders if null, ignore this requirement
      */
-    void makeTransportation(Date time,ArrayList<Order> orders);
+    void makeTransportation(Date time,ArrayList<Order> orders) throws ClassNotFoundException, SQLException, ValidationException, Transportation.NoTrucksAvailable, Transportation.NoDriversAvailable;
 
-
+    /**
+    * return a list of all places
+     * * */
+    List<Place> getAllPlaces();
 }

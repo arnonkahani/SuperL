@@ -1,6 +1,7 @@
 package com.Transpotation.Models;
 
 import com.Common.DB.DB;
+import com.Common.Models.Order;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,7 @@ public class OrderDocument {
     private Integer ID = null;
     private Place Source;
     private Place Destination;
+    private int orderID;
     private Transportation transportation;
 
     public OrderDocument() {
@@ -72,6 +74,14 @@ public class OrderDocument {
         p.setInt(1,ID);
         ResultSet set = p.executeQuery();
         return set.getInt("COUNT(weight)");
+    }
+
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(int order) {
+        this.orderID = order;
     }
 
     @Override

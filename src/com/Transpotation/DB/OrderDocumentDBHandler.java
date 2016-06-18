@@ -13,9 +13,11 @@ import java.sql.SQLException;
 public class OrderDocumentDBHandler extends DBHandler<OrderDocument> {
     private static final String CREATE = "CREATE TABLE IF NOT EXISTS OrderDocument (" +
             "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
+            "orderID INTEGER,"+
             "Source TEXT," +
             "Destination TEXT," +
             "transportation INTEGER," +
+            "FOREIGN KEY(orderID) REFERENCES Orders(ID) ON DELETE CASCADE ON UPDATE CASCADE ," +
             "FOREIGN KEY(Source) REFERENCES Place(Address) ON DELETE RESTRICT ON UPDATE CASCADE ," +
             "FOREIGN KEY(Destination) REFERENCES Place(Address) ON DELETE RESTRICT ON UPDATE CASCADE ," +
             "FOREIGN KEY(transportation) REFERENCES Transportation(ID) ON DELETE SET NULL ON UPDATE CASCADE " +
@@ -36,12 +38,14 @@ public class OrderDocumentDBHandler extends DBHandler<OrderDocument> {
 
     @Override
     protected OrderDocument readRow(ResultSet set) throws SQLException {
-        return new OrderDocument(
+        OrderDocument d = new OrderDocument(
                 set.getInt("ID"),
                 placeIDBHandler.get(set.getString("Source")),
                 placeIDBHandler.get(set.getString("Destination")),
                 transportationIDBHandler.get(set.getString("transportation"))
         );
+        d.setOrderID(set.getInt("orderID"));
+        return d;
     }
 
     @Override
@@ -63,6 +67,7 @@ public class OrderDocumentDBHandler extends DBHandler<OrderDocument> {
     protected Object[] getColumnValues(OrderDocument o) {
         return new Object[]{
                 o.getID(),
+                o.getOrderID(),
                 o.getSource() != null ? o.getSource().getAddress() : null,
                 o.getDestination() != null ? o.getDestination().getAddress() : null,
                 o.getTransportation() != null ? o.getTransportation().getID() : null
@@ -73,6 +78,7 @@ public class OrderDocumentDBHandler extends DBHandler<OrderDocument> {
     protected String[] getColumnNames() {
         return new String[]{
                 "ID",
+                "orderID",
                 "Source",
                 "Destination",
                 "transportation"
