@@ -9,9 +9,11 @@ import com.SupplierStorage.BE.Contact;
 import com.SupplierStorage.BE.Supplier;
 import com.SupplierStorage.BE.SupplierProduct;
 import com.SupplierStorage.BL.SupplierManager;
+import com.Transpotation.Models.Area;
 
 public class SupplierView {
-	
+
+
 	private SupplierManager _sp;
 	private ProductView _pv;
 	private Scanner scn;
@@ -32,6 +34,8 @@ public class SupplierView {
 		String cn = _vu.tryGetNumber();
 		System.out.println("Please enter supplier Address:");
 		String address = scn.nextLine();
+		System.out.println("Please choose supplier Area:");
+		Area area = chooseArea();
 		System.out.println("Please enter supplier name:");
 		String name = _vu.tryGetOnlyLetters();
 		System.out.println("Please enter supplier payment method (0-10):");
@@ -54,6 +58,7 @@ public class SupplierView {
 			Supplier sp = new Supplier(name, cn, paymentmethod, banknumber);
 			sp.set_contacts(contacts);
 			sp.set_address(address);
+            sp.set_area(area);
 			_sp.create(sp);
 		}
 		catch(SQLException e){
@@ -119,7 +124,23 @@ public class SupplierView {
 				}
 			}
 	}
-	
+
+	public Area chooseArea()
+	{
+		try {
+			ArrayList<Area> area = _sp.getAllAres();
+			if(area.size() == 0)
+				return null;
+			for (int i = 0; i < area.size(); i++) {
+				System.out.println(i + ". " + area.get(i).getAreaID());
+			}
+			System.out.println("Choose area: ");
+			int choise = Integer.parseInt(_vu.tryGetNumber(0, area.size() - 1));
+			return area.get(choise);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	public String chooseCN()
 	{
 		try {

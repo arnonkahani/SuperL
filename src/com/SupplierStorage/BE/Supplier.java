@@ -1,5 +1,6 @@
 package com.SupplierStorage.BE;
 
+import com.Transpotation.Models.Area;
 import com.Transpotation.Models.Place;
 
 import java.util.ArrayList;
@@ -9,11 +10,15 @@ public class Supplier{
 	private String _CN;
 	private String _address;
 	private String _name;
+	private Area _area;
 	private int paymentMethod;
 	private String bankNumber;
 	private ArrayList<Contact> _contacts = new ArrayList<>();
 	private ArrayList<SupplierProduct> _products = new ArrayList<>();
-	private Place _Place;
+
+
+
+    private Place _Place;
 	
 	public Supplier(String _name,String _cn, int paymentMethod,String bankNumber){
 		this._name=_name;
@@ -115,5 +120,16 @@ public class Supplier{
 	public Place get_Place() {
 		return _Place;
 	}
+
+    public void set_Place(Place _Place) {
+        this._Place = _Place;
+    }
+	public void set_area(Area _area) {
+		this._Place = new Place(_address,_area,_contacts.get(0).getTel(),_contacts.get(0).getName());
+	}
+    public Area get_area() {
+        return this._area;
+    }
+
 }
 	

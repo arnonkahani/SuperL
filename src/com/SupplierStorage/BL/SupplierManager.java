@@ -3,11 +3,14 @@ package com.SupplierStorage.BL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.Common.ITransportation;
 import com.SupplierStorage.BE.*;
 import com.SupplierStorage.DB.DAOSupplier;
+import com.Transpotation.Models.Area;
+import com.Transpotation.Transportation;
 
 public class SupplierManager extends LogicManager<DAOSupplier,Supplier>{
-	
+	ITransportation itransportaion = Transportation.getInstance();
 	
 	
 	public SupplierManager(DAOSupplier db) {
@@ -35,5 +38,8 @@ public class SupplierManager extends LogicManager<DAOSupplier,Supplier>{
 	public String[] getSupplierFileds() {
 		return getFileds();
 	}
-	
+
+	public ArrayList<Area> getAllAres() {
+		return itransportaion.getAllAreas();
+	}
 }

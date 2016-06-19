@@ -43,16 +43,6 @@ public interface ISupplierStorage {
     /**
      * Presents a supplier menu.
      *
-     * @param first_time is used to indicate the first time the system is loaded in order to create the tables
-     * @param c is the connection for the DB
-     * @return
-     */
-    void initiateSupplierStorage(boolean first_time,Connection c);
-
-
-    /**
-     * Presents a supplier menu.
-     *
      * @param
      * @return
      */

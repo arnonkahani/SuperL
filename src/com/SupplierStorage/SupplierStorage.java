@@ -14,8 +14,21 @@ import java.util.ArrayList;
  */
 public class SupplierStorage implements ISupplierStorage {
 
-    ViewController vc;
+    static SupplierStorage instance;
+    private ViewController vc;
 
+    public static SupplierStorage getInstance() throws InternalError{
+        if(instance == null)
+            instance = new SupplierStorage();
+        return instance;
+    }
+    public SupplierStorage(){
+        try {
+            ViewController vc = new ViewController(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void showSupplier() {
         vc.showSupplier();
@@ -31,16 +44,6 @@ public class SupplierStorage implements ISupplierStorage {
         vc.getSupply(products);
     }
 
-    @Override
-    public void initiateSupplierStorage(boolean first_time, Connection c) {
-
-        try {
-            vc = new ViewController(first_time,c);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @Override
     public Order getOrder(String id) {

@@ -9,6 +9,9 @@ import com.SupplierStorage.BE.Contact;
 
 import com.SupplierStorage.BE.Supplier;
 import com.SupplierStorage.BE.SupplierProduct;
+import com.Transpotation.Models.Area;
+import com.Transpotation.Models.Place;
+import com.Transpotation.Models.Transportation;
 
 
 public class DAOSupplier extends DAO<Supplier> {
@@ -23,12 +26,12 @@ public class DAOSupplier extends DAO<Supplier> {
 
 	@Override
 	public String[] getSearchFields() {
-		return new String[]{"All","CN","Name","BANKNUMBER","PAYMANETMETHOD","ADDRESS"};
+		return new String[]{"All","CN","Name","BANKNUMBER","PAYMANETMETHOD","ADDRESS","SUPLLIERAREA"};
 	}
 
 	@Override
 	public String[] getSearchFieldsView() {
-		return new String[]{"All","Company Number","Name","Bank Number","Payment Method","Address"};
+		return new String[]{"All","Company Number","Name","Bank Number","Payment Method","Address","SUPLLIER AREA"};
 	}
 
 	@Override
@@ -38,7 +41,8 @@ public class DAOSupplier extends DAO<Supplier> {
 
 	@Override
 	protected String[] getValues(Supplier object) {
-		return new String[]{"'"+object.get_CN()+"'","'"+object.get_name()+"'","'"+object.getBankNumber()+"'",""+object.getPaymentMethod(),"'"+object.get_address()+"'"};
+		return new String[]{"'"+object.get_CN()+"'","'"+object.get_name()+"'","'"+object.getBankNumber()+"'",""+object.getPaymentMethod(),
+                "'"+object.get_address()+"'","'"+object.get_area().getAreaID()+"'"};
 	}
 
 	@Override
@@ -53,6 +57,7 @@ public class DAOSupplier extends DAO<Supplier> {
 			contact.set_supplier_cn(object.get_CN());
 			_contact.insert(contact);
 		}
+		com.Transpotation.Transportation.getInstance().addSupplierPlace(object.get_Place());
 		
 	}
 	
@@ -69,8 +74,20 @@ public class DAOSupplier extends DAO<Supplier> {
 		ArrayList<SupplierProduct> products = _supplierProduct.search(new int[]{4}, new String[]{supplier.get_CN()});
 		supplier.set_products(products);
 		supplier.set_address(rs.getString("ADDRESS"));
-		
+		supplier.set_area(getArea(rs.getInt("SUPLLIERAREA")));
+		supplier.set_Place(new Place(supplier.get_address(),supplier.get_area(),supplier.get_contacts().get(0).getTel(),supplier.get_contacts().get(0).getName()));
 		return supplier;
+	}
+
+	private Area getArea(int id)
+	{
+		Area area = null;
+		for (Area ar: com.Transpotation.Transportation.getInstance().getAllAreas())
+		{
+			if(ar.getAreaID() == id)
+				return ar;
+		}
+		return  area;
 	}
 	
 

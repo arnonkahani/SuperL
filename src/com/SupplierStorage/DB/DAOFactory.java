@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import com.Common.DB.DB;
 import com.SupplierStorage.BE.Product;
 import com.SupplierStorage.BE.SupplyAgreement;
 import com.SupplierStorage.BE.WeeklyOrder;
@@ -15,11 +16,11 @@ import com.SupplierStorage.PL.ViewController;
 public class DAOFactory {
 
 	private Connection _c;
-	public DAOFactory(boolean first_time,Connection c)
+	public DAOFactory(boolean first_time)
 	{
 			try {
 			      Class.forName("org.sqlite.JDBC");
-			      _c = c;
+			      _c = DB.getInstance().getConnection();
 			      Statement stmt = _c.createStatement();
 				    String sql;
 				    sql = "PRAGMA foreign_keys = ON";
@@ -223,6 +224,7 @@ public class DAOFactory {
                   " NAME           VARCHAR(15)    NOT NULL, " + 
                   " PAYMANETMETHOD INT     NOT NULL, " + 
                   " BANKNUMBER        VACRHAR(15) NOT NULL,"+
+				  " SUPLLIERAREA        INTEGER NOT NULL,"+
                   "ADDRESS VARCHAR(20) NOT NULL)"; 
 	      stmt.executeUpdate(sql);
 	      sql = "CREATE TABLE CONTACT " +

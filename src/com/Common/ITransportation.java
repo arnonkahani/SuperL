@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.Common.Models.*;
+import com.Transpotation.Models.Area;
 import com.Transpotation.Models.Place;
 import com.Transpotation.Models.ValidationException;
 import com.Transpotation.Transportation;
@@ -30,4 +31,16 @@ public interface ITransportation {
     * return a list of all places
      * * */
     List<Place> getAllPlaces();
+
+    /**
+     * return a list of all areas
+     * * */
+    ArrayList<Area> getAllAreas();
+
+
+    /**
+     * Create a place for supplier
+     *
+     */
+    void addSupplierPlace(Place place);
 }

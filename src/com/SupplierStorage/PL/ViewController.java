@@ -22,7 +22,7 @@ public class ViewController {
 	private ProductView _pv;
 	private GUI_storage _gs;
 	
-	public ViewController(boolean first_time, Connection c) throws SQLException{
+	public ViewController(boolean first_time) throws SQLException{
 		_vu = new ViewUtils();
 		scn = new Scanner(System.in);
 		System.out.println("Debug? true/false");
@@ -31,7 +31,7 @@ public class ViewController {
 		System.out.println("Is this the first time the program is running? Yes = 1 , No = 0");
 
 		
-		_bc = new BLFactory(first_time,c);
+		_bc = new BLFactory(first_time);
 		_vu = new ViewUtils();
 		_pv = new ProductView((ProductManager) _bc.getSupplierLogic().getManager(Product.class), _vu);
 		_sv = new SupplierView(_vu,_pv,(SupplierManager) _bc.getSupplierLogic().getManager(Supplier.class));

@@ -16,6 +16,9 @@ import com.Common.Models.Order;
 import com.SupplierStorage.BE.*;
 import com.SupplierStorage.BE.SupplyAgreement.Day;
 import com.SupplierStorage.DB.DAOOrder;
+import com.Transpotation.Models.ValidationException;
+import com.Transpotation.Transportation;
+import com.Workers.Workers;
 
 
 public class OrderManager extends LogicManager<DAOOrder,Order>{
@@ -23,8 +26,8 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	SupplierManager _sm;
 	SupplyAgreementManager _sam;
 	StorageLogic _storage_logic;
-	ITransportation itransportation;
-    IWorkers iworker;
+	ITransportation itransportation = Transportation.getInstance();
+    IWorkers iworker = Workers.getInstance();
 
 	public OrderManager(DAOOrder db,StorageLogic storage_logic) {
 		super(db);
@@ -133,8 +136,19 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 			}
 
 		}
-        if(!orders.isEmpty())
-            itransportation.makeTransportation(driver_date,orders);
+        if(!orders.isEmpty()) {
+			try {
+				itransportation.makeTransportation(driver_date, orders);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (ValidationException e) {
+				e.printStackTrace();
+			} catch (Transportation.NoTrucksAvailable noTrucksAvailable) {
+				noTrucksAvailable.printStackTrace();
+			} catch (Transportation.NoDriversAvailable noDriversAvailable) {
+				noDriversAvailable.printStackTrace();
+			}
+		}
 		return product_list;
 	
 	}
