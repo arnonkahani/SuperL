@@ -191,10 +191,10 @@ public class DAOFactory {
 	    String sql;
 	    sql = "PRAGMA foreign_keys = ON";
 	    stmt.execute(sql);
-	    sql = "CREATE TABLE PRODUCER " +
+	    sql = "CREATE TABLE IF NOT EXISTS PRODUCER " +
 	                   "(NAME VARCHAR(15) PRIMARY KEY  NOT NULL)"; 
 	    stmt.executeUpdate(sql);
-	      sql = "CREATE TABLE PRODUCT " +
+	      sql = "CREATE TABLE IF NOT EXISTS PRODUCT " +
                   "(ID INTEGER  PRIMARY KEY AUTOINCREMENT ,"+
 	    		  "NAME VARCHAR(15)  NOT NULL, " + 
                   " SHELFLIFE      INT NOT NULL, " + 
@@ -211,7 +211,7 @@ public class DAOFactory {
                   "FOREIGN KEY (PRODUCERNAME) REFERENCES PRODUCER(NAME),"
                   + "UNIQUE (NAME,PRODUCERNAME,CATAGORY,SUB_CATAGORY,SUB_SUB_CATAGORY))"; 
 	      stmt.executeUpdate(sql);
-	      sql = "CREATE TABLE SUPPLIER_PRODUCT " +
+	      sql = "CREATE TABLE IF NOT EXISTS SUPPLIER_PRODUCT " +
                   "(SN INTEGER PRIMARY KEY AUTOINCREMENT," +
                   "PRODUCT_ID INTEGER NOT NULL,"
                   + "SUPPLIERCN VARCHAR(15) NOT NULL,"+
@@ -219,7 +219,7 @@ public class DAOFactory {
                   + "REFERENCES PRODUCT(ID),"
                   + "FOREIGN KEY (SUPPLIERCN) REFERENCES SUPPLIER(CN))"; 
 	      stmt.executeUpdate(sql);
-	      sql = "CREATE TABLE SUPPLIER " +
+	      sql = "CREATE TABLE IF NOT EXISTS SUPPLIER " +
                   "(CN VARCHAR(15) PRIMARY KEY     NOT NULL," +
                   " NAME           VARCHAR(15)    NOT NULL, " + 
                   " PAYMANETMETHOD INT     NOT NULL, " + 
@@ -227,14 +227,14 @@ public class DAOFactory {
 				  " SUPLLIERAREA        INTEGER NOT NULL,"+
                   "ADDRESS VARCHAR(20) NOT NULL)"; 
 	      stmt.executeUpdate(sql);
-	      sql = "CREATE TABLE CONTACT " +
+	      sql = "CREATE TABLE IF NOT EXISTS CONTACT " +
                   "(TEL VARCHAR(10) PRIMARY KEY     NOT NULL," +
                   " NAME           VARCHAR(20)    NOT NULL, " + 
                   " EMAIL          VARCHAR(20)     NOT NULL, "
                   + "SUPPLIERCN VARCHAR(15) NOT NULL, " + 
                   "FOREIGN KEY (SUPPLIERCN) REFERENCES SUPPLIER(CN))"; 
 	      stmt.executeUpdate(sql);
-	      sql = "CREATE TABLE SUPPLY_AGREEMENT " +
+	      sql = "CREATE TABLE IF NOT EXISTS SUPPLY_AGREEMENT " +
                   "(ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                   "SUPPLYTYPE      VARCHAR(5)    NOT NULL, " + 
                   "DELEVERYTYPE    VARCHAR(5)     NOT NULL, "
@@ -242,7 +242,7 @@ public class DAOFactory {
                   "SUPPLIERCN VARCHAR(20) NOT NULL, " + 
                   "FOREIGN KEY (SUPPLIERCN) REFERENCES SUPPLIER(CN))";
 	      stmt.executeUpdate(sql);
-	      sql = "CREATE TABLE SUPPLY_AGREEMENT_PRODUCT " +
+	      sql = "CREATE TABLE IF NOT EXISTS SUPPLY_AGREEMENT_PRODUCT " +
                   "(SUPPLY_AGREEMENT_ID INTEGER  NOT NULL," +
                   "SUPPLIER_PRODUCT_SN  INTEGER   NOT NULL, " + 
                   "PRICE    REAL    NOT NULL, "+ 
@@ -250,7 +250,7 @@ public class DAOFactory {
                   "FOREIGN KEY (SUPPLIER_PRODUCT_SN) REFERENCES SUPPLIER_PRODUCT(SN), "
                   + "PRIMARY KEY (SUPPLY_AGREEMENT_ID,SUPPLIER_PRODUCT_SN))";
 	      stmt.executeUpdate(sql);
-	    sql = "CREATE TABLE ORDERS " +
+	    sql = "CREATE TABLE IF NOT EXISTS ORDERS " +
 	    		"(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                   "SUPPLIER_CN VARCHAR(15)  NOT NULL, " +
                   "WEIGHT REAL NOT NULL, "+
@@ -259,7 +259,7 @@ public class DAOFactory {
                   "PRICE REAL NOT NULL, "+
                   "FOREIGN KEY (SUPPLIER_CN) REFERENCES SUPPLIER(CN))";
 	      stmt.executeUpdate(sql);
-	     sql = "CREATE TABLE ORDER_PRODUCT " +
+	     sql = "CREATE TABLE IF NOT EXISTS ORDER_PRODUCT " +
                   "(ORDERID INTEGER NOT NULL," + 
                   "SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID INTEGER  NOT NULL, "
                   +"SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN INTEGER NOT NULL," +
@@ -269,7 +269,7 @@ public class DAOFactory {
                   + "FOREIGN KEY (SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID,SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN) REFERENCES SUPPLY_AGREEMENT_PRODUCT(SUPPLY_AGREEMENT_ID,SUPPLIER_PRODUCT_SN),"
                   + "PRIMARY KEY(ORDERID,SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID,SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN))";
 	      stmt.executeUpdate(sql);
-	      sql = "CREATE TABLE SUPPLY_AGREEMENT_PRODUCT_DISCOUNT " +
+	      sql = "CREATE TABLE IF NOT EXISTS SUPPLY_AGREEMENT_PRODUCT_DISCOUNT " +
                   "(SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID INTEGER  NOT NULL," +
                   "SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN   INTEGER  NOT NULL, " + 
                   "AMOUNT    INT   NOT NULL, "
@@ -283,7 +283,7 @@ public class DAOFactory {
 	      
 	      stmt.executeUpdate(sql);
 	      
-	      sql = "CREATE TABLE SUB_CATAGORY " +
+	      sql = "CREATE TABLE IF NOT EXISTS SUB_CATAGORY " +
 	              "(NAME_SCAT CHAR(50)      NOT NULL, " +
 	    		  "NAME_CAT CHAR(50)      NOT NULL,"+
 	              "PRIMARY KEY (NAME_SCAT, NAME_CAT)"+
@@ -291,7 +291,7 @@ public class DAOFactory {
 	    		  
 	    stmt.executeUpdate(sql);
 	      
-	      sql = "CREATE TABLE SUB_SUB_CATAGORY " +
+	      sql = "CREATE TABLE IF NOT EXISTS SUB_SUB_CATAGORY " +
 	              "(NAME_SSCAT CHAR(50)      NOT NULL, " +
 	    		  "NAME_SCAT CHAR(50)      NOT NULL,"+
 	    		  "NAME_CAT CHAR(50)      NOT NULL,"+
@@ -301,14 +301,14 @@ public class DAOFactory {
 	      
 	      stmt.executeUpdate(sql);
 	      
-	      sql = "CREATE TABLE WEEKLY_ORDER " +
+	      sql = "CREATE TABLE IF NOT EXISTS WEEKLY_ORDER " +
 	              "(DAY CHAR(50)      NOT NULL,"
 	              + "PRIMARY KEY (DAY))"; 
 	      
 	      
 	      stmt.executeUpdate(sql);  
 	      
-	      sql = "CREATE TABLE WEEKLY_ORDER_PRODUCT " +
+	      sql = "CREATE TABLE IF NOT EXISTS WEEKLY_ORDER_PRODUCT " +
 	              "(DAY CHAR(50)      NOT NULL,"+
 	              "ID INTEGER      NOT NULL,"+
 	              "AMOUNT INT     NOT NULL,"+
@@ -318,7 +318,7 @@ public class DAOFactory {
 	      
 	      stmt.executeUpdate(sql); 
 	      
-	      sql = "CREATE TABLE INS_PRODUCT " +
+	      sql = "CREATE TABLE IF NOT EXISTS INS_PRODUCT " +
 	    		  "(SERIAL_NUM INTEGER  NOT NULL,"+
                   "ID INTEGER  NOT NULL,"+
                   " DEFECTED   INTEGER     NOT NULL, " + 
@@ -327,7 +327,7 @@ public class DAOFactory {
                   "PRIMARY KEY (SERIAL_NUM))"; 
 	      stmt.executeUpdate(sql);
 	      
-	      sql = "CREATE TABLE ISSUE_CERTIFICATE " +
+	      sql = "CREATE TABLE IF NOT EXISTS ISSUE_CERTIFICATE " +
 	              "(S_ID INT PRIMARY KEY     NOT NULL," +
 	              " S_P_ID         INT     NOT NULL, " +
 	              " S_DATE   TEXT      NOT NULL, " + 
