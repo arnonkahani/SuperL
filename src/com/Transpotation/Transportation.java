@@ -6,8 +6,6 @@ import com.Common.ITransportation;
 import com.Common.Models.Driver;
 import com.Common.Models.Order;
 import com.SupplierStorage.BE.OrderProduct;
-import com.SupplierStorage.BE.SupplierProduct;
-import com.SupplierStorage.BE.SupplyAgreementProduct;
 import com.Transpotation.Models.*;
 import com.Workers.Workers;
 
@@ -140,6 +138,16 @@ public class Transportation implements ITransportation {
     @Override
     public List<Place> getAllPlaces() {
         return db.getPlaceDBHandler().all();
+    }
+
+    @Override
+    public List<Area> getAllAreas() {
+        return db.getAreaDBHandler().all();
+    }
+
+    @Override
+    public void addSupplierPlace(Place place) {
+        db.getPlaceDBHandler().insert(place);
     }
 
     public class NoTrucksAvailable extends Exception {

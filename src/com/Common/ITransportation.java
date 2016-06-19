@@ -1,7 +1,5 @@
 package com.Common;
 
-import com.SupplierStorage.BE.OrderProduct;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +33,7 @@ public interface ITransportation {
     /**
      * return a list of all areas
      * * */
-    ArrayList<Area> getAllAreas();
+    List<Area> getAllAreas();
 
 
     /**

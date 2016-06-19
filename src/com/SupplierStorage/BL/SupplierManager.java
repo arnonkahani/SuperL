@@ -2,6 +2,7 @@ package com.SupplierStorage.BL;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.Common.ITransportation;
 import com.SupplierStorage.BE.*;
@@ -39,7 +40,7 @@ public class SupplierManager extends LogicManager<DAOSupplier,Supplier>{
 		return getFileds();
 	}
 
-	public ArrayList<Area> getAllAres() {
+	public List<Area> getAllAres() {
 		return itransportaion.getAllAreas();
 	}
 }

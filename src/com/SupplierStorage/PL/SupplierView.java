@@ -3,6 +3,7 @@ package com.SupplierStorage.PL;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.SupplierStorage.BE.Contact;
@@ -128,7 +129,7 @@ public class SupplierView {
 	public Area chooseArea()
 	{
 		try {
-			ArrayList<Area> area = _sp.getAllAres();
+			List<Area> area = _sp.getAllAres();
 			if(area.size() == 0)
 				return null;
 			for (int i = 0; i < area.size(); i++) {
