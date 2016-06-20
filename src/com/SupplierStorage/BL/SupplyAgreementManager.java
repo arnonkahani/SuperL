@@ -34,7 +34,7 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,Supp
 				if(d.getValue()==0)
 					days.add(DayOfWeek.of(7));
 				else
-					days.add(DayOfWeek.of(d.getValue()));
+					days.add(DayOfWeek.of(d.getValue()-1));
 			}
 			iworker.setWeeklyDeleveryShifts(days);
 		}
