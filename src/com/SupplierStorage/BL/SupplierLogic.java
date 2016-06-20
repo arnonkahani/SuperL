@@ -65,7 +65,7 @@ public class SupplierLogic {
 	}
 
 	public void deleteOrder(String id){
-
+		_om.deleteOrder(id);
 	}
 	public ArrayList<Order> getOrders(){
 		ArrayList<Order> orders = new ArrayList<>();

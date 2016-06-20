@@ -2,6 +2,7 @@ package com.Common.Models;
 
 import com.SupplierStorage.BE.OrderProduct;
 import com.SupplierStorage.BE.Supplier;
+import com.SupplierStorage.BE.SupplyAgreement;
 import com.Transpotation.Models.Place;
 
 import java.util.Date;
@@ -110,4 +111,6 @@ public class Order {
 	public void setSent(int sent) {
 		this.sent = sent;
 	}
+
+
 }

@@ -63,6 +63,25 @@ public class DAOOrder extends DAO<Order> {
 			_product.insert(orderProduct);
 		}
 	}
+
+    public void deleteOrder(String id) throws SQLException {
+        Order or = getFromPK(new String[]{id});
+        for (OrderProduct pr:or.get_amountProduct())
+        {
+            _product.delete(pr);
+        }
+        try{
+            String sql;
+            Statement stmt;
+            sql = "DELETE from ORDERS where ID="+id+";";
+            stmt = _c.createStatement();
+            stmt.executeUpdate(sql);
+
+        } catch (SQLException e) {
+            System.err.println("");
+        }
+
+    }
 	
 	@Override
 	public Order create(ResultSet rs) throws SQLException {
@@ -173,6 +192,8 @@ public class DAOOrder extends DAO<Order> {
 	public ArrayList<OrderProduct> getOnDemand() throws SQLException {
 		return _product.getOnDemand();
 	}
+
+
 
 	public void updateOrder(String id) throws SQLException{
 		try{

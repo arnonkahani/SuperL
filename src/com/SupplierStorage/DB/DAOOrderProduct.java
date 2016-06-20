@@ -3,6 +3,7 @@ package com.SupplierStorage.DB;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -105,4 +106,19 @@ public class DAOOrderProduct extends DAO<OrderProduct>{
 		return products;
 	}
 
+	public void delete(OrderProduct pr) {
+		try{
+			String sql;
+			Statement stmt;
+			sql = "DELETE from ORDERID,SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID,SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN WHERE" +
+					" ORDERID =" + pr.getOrderID() +
+					" AND SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID =" + pr.get_sp() +
+					" AND SUPPLY_AGREEMENT_PRODUCT_PRODUCT_SN = "+ pr.get_serial_number() + ";";
+			stmt = _c.createStatement();
+			stmt.executeUpdate(sql);
+
+		} catch (SQLException e) {
+			System.err.println("");
+		}
+	}
 }

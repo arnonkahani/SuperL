@@ -21,7 +21,7 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,Supp
 	IWorkers iworker = Workers.getInstance();
 	public SupplyAgreementManager(DAOSupplyAgreement db){
 		super(db);
-		
+
 		
 
 	}
@@ -81,14 +81,21 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 	}
 	public void setAgreementProductManager(DAOSupplyAgreementProduct db){
 		_apm = new AgreementProductManager(db);
+		_apm.set_supplyagreement(_db);
+
 	}
 	
 	
 	class AgreementProductManager extends LogicManager<DAOSupplyAgreementProduct,SupplyAgreementProduct>
 	{
 
+
 		public AgreementProductManager(DAOSupplyAgreementProduct db) {
 			super(db);
+		}
+
+		public void set_supplyagreement(DAOSupplyAgreement db){
+			_db.set_supplyagreemnt(db);
 		}
 
 		public ArrayList<Product> getAllOnDemandProducts() throws SQLException {
@@ -144,7 +151,9 @@ public String[] getAllProductsSN(String SN) throws SQLException {
 					min_product = product;
 				}
 			}
-			return new OrderProduct(min_product, min_price, amount);
+			OrderProduct orderProduct = new OrderProduct(min_product, min_price, amount);
+			orderProduct.set_supplyAgreement(min_product.get_supplyAgreement());
+			return orderProduct;
 		}
 		public SupplyAgreementProduct getCheapestProductBy(String producer, String name, int amount) throws SQLException {
 			ArrayList<SupplyAgreementProduct> products = _db.getProductByNameProducer(producer, name);

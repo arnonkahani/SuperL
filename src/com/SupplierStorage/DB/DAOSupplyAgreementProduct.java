@@ -268,7 +268,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 				" FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT" +
 				" WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCT_ID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN" +
 				" AND SUPPLY_AGREEMENT_PRODUCT.SUPPLY_AGREEMENT_ID= SUPPLY_AGREEMENT.ID " +
-				"AND PRODUCT.ID="+product.get_id()+ " AND SUPPLY_AGREEMENT.DELEVERYTYPE= 'cometake' AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' ";
+				"AND PRODUCT.ID="+product.get_id()+ " AND SUPPLY_AGREEMENT.DELEVERYTYPE= 'deliver' AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' ";
 		//TODO: Delete
 		if(ViewController.debug)
 			System.out.println(sql);
@@ -279,8 +279,9 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 			products.add(create(rs));
 		}
 		if (products.size()==0){
-            sql = "SELECT PRICE , SUPPLYID , Supplier_Product_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCTID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLYID= SUPPLY_AGREEMENT.ID"
-                    + "AND PRODUCT.ID="+ product.get_id()+"AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' AND SUPPLY_AGREEMENT.DELIVERYTYPE= 'cometake';";
+            sql = "SELECT  SUPPLY_AGREEMENT_PRODUCT.PRICE , SUPPLY_AGREEMENT_PRODUCT.SUPPLY_AGREEMENT_ID , SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCT_ID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLY_AGREEMENT_ID= SUPPLY_AGREEMENT.ID " +
+					"AND PRODUCT.ID = " + product.get_id() +  " AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' AND SUPPLY_AGREEMENT.DELEVERYTYPE= 'cometake' ;" ;
+
 
             //TODO: Delete
             if(ViewController.debug)
@@ -292,7 +293,10 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
                 products.add(create(rs));
             }
         }
-		return products;
+        for (SupplyAgreementProduct pr :products) {
+            pr.set_supplyAgreement(_supplyagreemnt.getFromPK(new String[]{pr.get_sp()}));
+        }
+        return products;
 	}
 
 }

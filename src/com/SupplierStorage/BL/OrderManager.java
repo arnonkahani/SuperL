@@ -127,9 +127,9 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 
 				}
 
-
-				create(or);
-				if(i==0){
+				if(!or.get_amountProduct().isEmpty())
+					create(or);
+				if(i==0 && !or.get_amountProduct().isEmpty()){
                     orders.add(or);
 
 				}
@@ -164,8 +164,14 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	
 	public ArrayList<OrderProduct> makeOnDemand(HashMap<Product, Integer> products_to_order) throws SQLException {
 
+
 		ArrayList<OrderProduct> products = _sam.getCheapestProductOnDemand(products_to_order);
-		return makeOrder(products,iworker.getEarliestDeleveryDate(new Date()));
+		if(products != null && products.size() > 0 && products.get(0).get_supplyAgreement().get_dType().equals(SupplyAgreement.DelevryType.deliver)){
+			return makeOrder(products,new Date());
+		}
+		else {
+			return makeOrder(products,iworker.getEarliestDeleveryDate(new Date()));
+		}
 	}
 	
 	
@@ -225,11 +231,17 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 	public ArrayList<Order> getOrders() throws SQLException
 	{
 		ArrayList<Order> orders = new ArrayList<>();
-		_db.search(new int[]{},new String[]{});
+		orders = _db.search(new int[]{7},new String[]{"0"});
 	return orders;
 
 	}
 
-	
-	
+
+	public void deleteOrder(String id) {
+		try {
+			_db.deleteOrder(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
