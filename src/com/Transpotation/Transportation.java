@@ -63,7 +63,7 @@ public class Transportation implements ITransportation {
 
     @Override
     public void makeTransportation(Date time, ArrayList<Order> orders) throws
-            NoTrucksAvailable, NoDriversAvailable,InternalError {
+            NoTrucksAvailable, InternalError {
         try {
             Truck truck = null;
             Driver driver = null;
@@ -145,7 +145,7 @@ public class Transportation implements ITransportation {
     public class NoTrucksAvailable extends Exception {
     }
 
-    public class NoDriversAvailable extends Exception {
+    public class NoDriversAvailable extends RuntimeException {
     }
 
     public class InternalError extends RuntimeException {

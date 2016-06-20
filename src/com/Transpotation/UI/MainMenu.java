@@ -58,7 +58,12 @@ public class MainMenu extends Menu {
             handler.delete(t.getID()+"");
             list.remove(t);
         });
-        table.setNewAction(()->{
+        table.setEditAction((i,t)->{
+            Transportation transportation = new Editor<>(Transportation.class,t).edit();
+            if(transportation != null)
+                handler.update(transportation);
+        });
+        /*table.setNewAction(()->{
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter the following info to make a new Transportation:");
             Transportation t = new Editor<>(Transportation.class,new Transportation()).edit();
@@ -92,7 +97,7 @@ public class MainMenu extends Menu {
             handler.insert(t);
             list.clear();
             list.addAll(handler.select("StartTime > ?" , new Date()));
-        });
+        });*/
         table.setOptionsAction((i,t)->{
             new TransportationOptionsMenu(db,iWorkers,list,t).show();
         });

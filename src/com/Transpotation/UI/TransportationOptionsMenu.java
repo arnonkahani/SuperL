@@ -40,9 +40,9 @@ public class TransportationOptionsMenu extends Menu {
     protected List<Pair<String, MenuItem>> getMenu() {
         List<Pair<String, MenuItem>> menu = new LinkedList<>();
 
-        menu.add(new Pair<>("Attach all Orders from Area", this::attachOrdersFromArea));
-        menu.add(new Pair<>("Manage Attached Orders", this::manageAttachedOrders));
-        menu.add(new Pair<>("Remove All Attached Orders", this::removeAll));
+        //menu.add(new Pair<>("Attach all Orders from Area", this::attachOrdersFromArea));
+        menu.add(new Pair<>("View Attached Orders", this::manageAttachedOrders));
+        //menu.add(new Pair<>("Remove All Attached Orders", this::removeAll));
         menu.add(new Pair<>("Attach Truck", this::attachTruck));
         menu.add(new Pair<>("Attach Driver", this::attachDriver));
         return menu;
@@ -75,7 +75,7 @@ public class TransportationOptionsMenu extends Menu {
     private void manageAttachedOrders(Integer integer, String s) throws Exception {
         List<OrderDocument> list = db.getOrderDocumentIDBHandler().select("transportation = ?",transportation.getID());
         Table<OrderDocument> table = new Table<>(OrderDocument.class,list);
-        table.setNewAction(()->{
+        /*table.setNewAction(()->{
             System.out.println("Please select an order to attach: <PRESS ENTER TO BEGIN>");
             scanner.nextLine();
             OrderDocument order = new Table<>(OrderDocument.class, db.getOrderDocumentIDBHandler().query(AVAILABLE_ORDERS_FROM_AREA_QUERY,transportation.getArea().getAreaID())).select();
@@ -90,7 +90,7 @@ public class TransportationOptionsMenu extends Menu {
             o.setTransportation(null);
             db.getOrderDocumentIDBHandler().update(o);
             list.remove(o);
-        });
+        });*/
         table.display();
     }
 
