@@ -24,7 +24,7 @@ public class SupplierStorage implements ISupplierStorage {
     }
     public SupplierStorage(){
         try {
-            vc = new ViewController(false);
+            vc = new ViewController();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -16,7 +16,7 @@ import com.SupplierStorage.PL.ViewController;
 public class DAOFactory {
 
 	private Connection _c;
-	public DAOFactory(boolean first_time)
+	public DAOFactory()
 	{
 			try {
 			      Class.forName("org.sqlite.JDBC");
@@ -29,7 +29,7 @@ public class DAOFactory {
 			      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			      System.exit(0);
 			    }
-			    System.out.println("Opened supplier database successfully");
+
 			
 
 			createTables();
@@ -347,7 +347,7 @@ public class DAOFactory {
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	      System.exit(0);
 	    }
-	    System.out.println("Tables were created successfully");
+
 	  }
 
 	

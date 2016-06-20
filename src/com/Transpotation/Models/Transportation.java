@@ -78,8 +78,8 @@ public class Transportation {
     }
 
     public void setTruck(Truck truck) throws ValidationException {
-        if(driver != null && driver.getDriverLicenseType() != truck.getLicenseType())
-            throw new ValidationException("Licence Type does not match with attached driver's Licence Type");
+        //if(driver != null && driver.isLicenseBiggerThan(truck.getLicenseType()))
+        //    throw new ValidationException("Licence Type does not match with attached driver's Licence Type");
         this.truck = truck;
     }
 

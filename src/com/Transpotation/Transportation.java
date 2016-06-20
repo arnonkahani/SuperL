@@ -98,7 +98,7 @@ public class Transportation implements ITransportation {
                 l.add(orderDocument);
 
                 orderDocument.setSource(o.getPlace());
-                orderDocument.setDestination(null);
+                orderDocument.setDestination(o.getPlace());
                 orderDocument.setOrderID(Integer.parseInt(o.getOrderID()));
             }
 
@@ -111,7 +111,7 @@ public class Transportation implements ITransportation {
                 transportation.setArrived(false);
                 transportation.setEndTime(time);
 
-                    transportation.setStartTime(c.getTime());
+                transportation.setStartTime(c.getTime());
 
                 transportation.setDriver(driver);
                 transportation.setTruck(truck);

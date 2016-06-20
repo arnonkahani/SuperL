@@ -34,15 +34,17 @@ public class Main {
         System.out.print("Password:");
         String password = sc.next();
         if(username.compareTo("Super")==0&&password.compareTo("Super")==0) {
-            System.out.println("please enter the module:");
-            System.out.println("1. Workers");
-            System.out.println("2. Storage");
-            System.out.println("3. Supplier");
-            System.out.println("4. Transportation");
-            System.out.println("5. Exit");
-            String s = sc.next();
+
+
             boolean check = false;
             while(!check) {
+                System.out.println("please enter the module:");
+                System.out.println("1. Workers");
+                System.out.println("2. Storage");
+                System.out.println("3. Supplier");
+                System.out.println("4. Transportation");
+                System.out.println("5. Exit");
+                String s = sc.next();
                 switch (Integer.parseInt(s)) {
                     case 1:
                         LoginMenu.main("Admin", "Admin");

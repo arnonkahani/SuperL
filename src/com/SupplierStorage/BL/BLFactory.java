@@ -13,9 +13,9 @@ public class BLFactory {
 	SupplierLogic _supplierLogic;
 	StorageLogic _storageLogic;
 	
-	public BLFactory(boolean first_time) throws SQLException
+	public BLFactory() throws SQLException
 	{
-		_db = new DAOFactory(first_time);
+		_db = new DAOFactory();
 		_storageLogic = new StorageLogic(_db.createStorageController(), _db.createReportController());
 		_supplierLogic = new SupplierLogic(_db, _storageLogic);
 		

@@ -13,11 +13,12 @@ import com.SupplierStorage.BE.SupplyAgreement.*;
 import com.SupplierStorage.DB.DAOSupplyAgreement;
 import com.SupplierStorage.DB.DAOSupplyAgreementProduct;
 import com.SupplierStorage.PL.ViewController;
+import com.Workers.Workers;
 
 
 public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,SupplyAgreement>{
 	private AgreementProductManager _apm;
-	IWorkers iworker;
+	IWorkers iworker = Workers.getInstance();
 	public SupplyAgreementManager(DAOSupplyAgreement db){
 		super(db);
 		
@@ -30,7 +31,10 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,Supp
 		if(value.get_dType().equals(DelevryType.cometake) && value.get_sType().equals(SupplyType.setday)) {
 			ArrayList<DayOfWeek> days = new ArrayList<>();
 			for (Day d:value.get_day()) {
-				days.add(DayOfWeek.of(d.getValue()-1));
+				if(d.getValue()==0)
+					days.add(DayOfWeek.of(7));
+				else
+					days.add(DayOfWeek.of(d.getValue()));
 			}
 			iworker.setWeeklyDeleveryShifts(days);
 		}

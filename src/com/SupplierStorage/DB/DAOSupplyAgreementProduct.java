@@ -23,10 +23,14 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		super(c);
 		_product = new DAOSupplierProduct(c);
 		_discount = new DAODiscount(c);
-        _supplyagreemnt = new DAOSupplyAgreement(c);
-		_supplyagreemnt.setDAOSupplyAgreementProduct(this);
+
 	}
 
+	public void set_supplyagreemnt(DAOSupplyAgreement supplyagreemnt)
+	{
+		_supplyagreemnt = supplyagreemnt;
+		_supplyagreemnt.setDAOSupplyAgreementProduct(this);
+	}
 	@Override
 	public String[] getSearchFields() {
 		return new String[]{"All","SUPPLY_AGREEMENT_ID","SUPPLIER_PRODUCT_SN","PRICE"};
@@ -260,9 +264,11 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		//TODO: Delete
 		if(ViewController.debug)
 			System.out.println(product.get_id());
-		String sql = "SELECT PRICE , SUPPLYID , Supplier_Product_SN  FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCTID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN AND SUPPLY_AGREEMENT_PRODUCT.SUPPLYID= SUPPLY_AGREEMENT.ID"
-				+ "AND PRODUCT.ID="+ product.get_id()+"AND SUPPLY_AGREEMENT.DELIVERYTYPE= 'deliver' AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' ;";
-
+		String sql =  "SELECT  SUPPLY_AGREEMENT_PRODUCT.PRICE , SUPPLY_AGREEMENT_PRODUCT.SUPPLY_AGREEMENT_ID , SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN " +
+				" FROM SUPPLY_AGREEMENT_PRODUCT JOIN PRODUCT JOIN SUPPLY_AGREEMENT JOIN SUPPLIER_PRODUCT" +
+				" WHERE PRODUCT.ID=SUPPLIER_PRODUCT.PRODUCT_ID AND SUPPLIER_PRODUCT.SN=SUPPLY_AGREEMENT_PRODUCT.SUPPLIER_PRODUCT_SN" +
+				" AND SUPPLY_AGREEMENT_PRODUCT.SUPPLY_AGREEMENT_ID= SUPPLY_AGREEMENT.ID " +
+				"AND PRODUCT.ID="+product.get_id()+ " AND SUPPLY_AGREEMENT.DELEVERYTYPE= 'cometake' AND SUPPLY_AGREEMENT.SUPPLYTYPE= 'ondemand' ";
 		//TODO: Delete
 		if(ViewController.debug)
 			System.out.println(sql);

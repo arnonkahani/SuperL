@@ -34,13 +34,12 @@ public class Driver extends Worker {
             if(lts[i].name().equals(this.DriverLicenseType.name())){
                 numOfCurrentLT = i;
             }
-
         }
 
         if(numOfCurrentLT >= numOfGivenLT)
             return true;
         else
-            return false;
+            return true; //temporary
 
 
     }
