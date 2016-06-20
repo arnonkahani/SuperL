@@ -45,19 +45,15 @@ public class Main {
             while(!check) {
                 switch (Integer.parseInt(s)) {
                     case 1:
-                        check = true;
                         LoginMenu.main("Admin", "Admin");
                         break;
                     case 2:
-                        check = true;
                         iSupplierStorage.showStorage();
                         break;
                     case 3:
-                        check = true;
                         iSupplierStorage.showSupplier();
                         break;
                     case 4:
-                        check = true;
                         DB db = DB.getInstance();
                         new MainMenu(db, iWorkers).show();
                         break;

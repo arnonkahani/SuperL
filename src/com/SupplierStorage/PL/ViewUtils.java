@@ -21,7 +21,7 @@ public class ViewUtils {
 	public boolean isEmail(String email)
 	{
 		String EMAIL_REGEX = "";
-		return email.matches(EMAIL_REGEX);
+		return true;
 	}
 	
 	public boolean isOnlyInt(String num)

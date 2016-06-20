@@ -199,6 +199,10 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
             if(_sam.getDelevryType(p.get_sp()).equals(SupplyAgreement.DelevryType.deliver))
                 delevry_products.add(p);
         }
+		for (OrderProduct pr:delevry_products) {
+			_db.updateOrder(pr.getOrderID());
+		}
+
         return delevry_products;
 
 	}
@@ -212,6 +216,9 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
             if(_sam.getDelevryType(p.get_sp()).equals(SupplyAgreement.DelevryType.deliver))
                 delevry_products.add(p);
         }
+		for (OrderProduct pr:delevry_products) {
+			_db.updateOrder(pr.getOrderID());
+		}
         return delevry_products;
 	}
 

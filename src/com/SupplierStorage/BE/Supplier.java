@@ -124,9 +124,11 @@ public class Supplier{
     public void set_Place(Place _Place) {
         this._Place = _Place;
     }
+
 	public void set_area(Area _area) {
 		this._Place = new Place(_address,_area,_contacts.get(0).getTel(),_contacts.get(0).getName());
-	}
+	    this._area = _area;
+    }
     public Area get_area() {
         return this._area;
     }
