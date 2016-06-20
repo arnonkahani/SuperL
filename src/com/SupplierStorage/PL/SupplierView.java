@@ -92,7 +92,7 @@ public class SupplierView {
 	}
 	
 
-	
+
 	
 	
 	public void supplierSearch(){

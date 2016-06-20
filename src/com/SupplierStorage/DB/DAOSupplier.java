@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.Common.DB.DB;
 import com.SupplierStorage.BE.Contact;
 
 import com.SupplierStorage.BE.Supplier;
@@ -57,11 +58,30 @@ public class DAOSupplier extends DAO<Supplier> {
 			contact.set_supplier_cn(object.get_CN());
 			_contact.insert(contact);
 		}
-		com.Transpotation.Transportation.getInstance().addSupplierPlace(object.get_Place());
-		
-	}
+        try {
+            DB.getInstance().getPlaceDBHandler().insert(object.get_Place());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 	
-	
+	public ArrayList<Area> getAllAreas()
+    {
+        ArrayList<Area> areas = new ArrayList<>();
+        try {
+            ;
+            for (Area r:DB.getInstance().getAreaDBHandler().all())
+            {
+                areas.add(r);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return  areas;
+
+    }
+
 	@Override
 	public Supplier create(ResultSet rs) throws SQLException {
 		Supplier supplier = new Supplier();
@@ -75,8 +95,12 @@ public class DAOSupplier extends DAO<Supplier> {
 		supplier.set_products(products);
 		supplier.set_address(rs.getString("ADDRESS"));
 		supplier.set_area(getArea(rs.getInt("SUPLLIERAREA")));
-		supplier.set_Place(new Place(supplier.get_address(),supplier.get_area(),supplier.get_contacts().get(0).getTel(),supplier.get_contacts().get(0).getName()));
-		return supplier;
+        try {
+            supplier.set_Place(DB.getInstance().getPlaceDBHandler().get(supplier.get_address()));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return supplier;
 	}
 
 	private Area getArea(int id)

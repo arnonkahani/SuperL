@@ -40,7 +40,8 @@ public class SupplierManager extends LogicManager<DAOSupplier,Supplier>{
 		return getFileds();
 	}
 
+
 	public List<Area> getAllAres() {
-		return itransportaion.getAllAreas();
+		return _db.getAllAreas();
 	}
 }
