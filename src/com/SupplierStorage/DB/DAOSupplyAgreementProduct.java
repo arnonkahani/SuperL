@@ -24,6 +24,7 @@ public class DAOSupplyAgreementProduct extends DAO<SupplyAgreementProduct> {
 		_product = new DAOSupplierProduct(c);
 		_discount = new DAODiscount(c);
         _supplyagreemnt = new DAOSupplyAgreement(c);
+		_supplyagreemnt.setDAOSupplyAgreementProduct(this);
 	}
 
 	@Override

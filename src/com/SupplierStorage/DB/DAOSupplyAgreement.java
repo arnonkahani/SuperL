@@ -17,7 +17,11 @@ public class DAOSupplyAgreement extends DAO<SupplyAgreement> {
 	public DAOSupplyAgreement(Connection c) {
 		super(c);
 		_supplier = new DAOSupplier(c);
-		_product = new DAOSupplyAgreementProduct(c);
+
+	}
+	public void setDAOSupplyAgreementProduct(DAOSupplyAgreementProduct product)
+	{
+		_product = product;
 	}
 
 	@Override
