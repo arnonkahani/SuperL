@@ -25,13 +25,6 @@ public class Main {
     public static void main(String[] args) throws Exception{
         db = DB.getInstance();
         iWorkers = Workers.getInstance();
-
-
-        iWorkers.getEarliestDeleveryDate(new Date(2016,12,12));
-
-
-
-
         iTransportation = Transportation.getInstance();
         iSupplierStorage = SupplierStorage.getInstance();
         Scanner sc = new Scanner(System.in);
