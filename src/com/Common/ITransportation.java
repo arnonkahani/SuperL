@@ -18,10 +18,7 @@ import com.Transpotation.Transportation;
 public interface ITransportation {
 
     /**
-     * Create a transportation.
-     *
-     * @param  time if null, ignore this requirement
-     * @param  orders if null, ignore this requirement
+     * Create a transportation.s
      */
     void makeTransportation(Date time,ArrayList<Order> orders) throws ClassNotFoundException, SQLException, ValidationException, Transportation.NoTrucksAvailable, Transportation.NoDriversAvailable;
 

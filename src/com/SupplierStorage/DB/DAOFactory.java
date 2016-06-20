@@ -31,10 +31,9 @@ public class DAOFactory {
 			    }
 			    System.out.println("Opened supplier database successfully");
 			
-			if(first_time){	
-			drop();
+
 			createTables();
-			}
+
 		
 	}
 	public StorageController createStorageController() throws SQLException

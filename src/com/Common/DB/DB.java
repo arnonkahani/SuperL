@@ -36,7 +36,6 @@ public class DB {
     private IDBHandler<Place> placeDBHandler;
     private IDBHandler<OrderDocument> orderDocumentIDBHandler;
     private IDBHandler<Transportation> transportationIDBHandler;
-    private IDBHandler<Product> productIDBHandler;
 
     private DB(String databaseName) throws ClassNotFoundException{
         Class.forName("org.sqlite.JDBC");
@@ -52,7 +51,6 @@ public class DB {
             placeDBHandler = new PlaceDBHandler(connection, areaDBHandler);
             transportationIDBHandler = new TransportationDBHandler(connection, truckDBHandler, driverIDBHandler, areaDBHandler);
             orderDocumentIDBHandler = new OrderDocumentDBHandler(connection, placeDBHandler, transportationIDBHandler);
-            productIDBHandler = new ProductDBHandler(connection, orderDocumentIDBHandler);
         }
         catch (SQLException e){
             throw new UnexpectedSQLException(e);
@@ -94,11 +92,6 @@ public class DB {
     public IDBHandler<Transportation> getTransportationIDBHandler() {
         return transportationIDBHandler;
     }
-
-    public IDBHandler<Product> getProductIDBHandler() {
-        return productIDBHandler;
-    }
-
 
     public void close() {
         try{

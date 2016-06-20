@@ -25,14 +25,14 @@ public class OrderOptionsMenu extends Menu {
     protected List<Pair<String, MenuItem>> getMenu() {
         List<Pair<String, MenuItem>> menu = new LinkedList<>();
 
-        menu.add(new Pair<>("Manage Products", this::manageProducts));
+        //menu.add(new Pair<>("Manage Products", this::manageProducts));
         menu.add(new Pair<>("Attach To Transportation", this::attachToTransportation));
         menu.add(new Pair<>("Attach Source", this::attachSource));
         menu.add(new Pair<>("Attach Destination", this::attachDestination));
         return menu;
     }
 
-    private void manageProducts(Integer integer, String s) throws Exception {
+    /*private void manageProducts(Integer integer, String s) throws Exception {
         IDBHandler<Product> handler = db.getProductIDBHandler();
         List<Product> list = handler.select("orderID = ?", document.getID());
 
@@ -57,7 +57,7 @@ public class OrderOptionsMenu extends Menu {
             }
         });
         table.display();
-    }
+    }*/
 
     private void attachToTransportation(Integer integer, String s) throws Exception {
         List<Transportation> list = db.getTransportationIDBHandler().select("area = ?", document.getSource().getShipmentArea().getAreaID());

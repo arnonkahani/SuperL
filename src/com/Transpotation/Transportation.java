@@ -98,14 +98,6 @@ public class Transportation implements ITransportation {
                 orderDocument.setSource(o.getPlace());
                 orderDocument.setDestination(null);
                 orderDocument.setOrderID(Integer.parseInt(o.getOrderID()));
-
-                for(OrderProduct op : o.get_amountProduct()){
-                    Product p = new Product();
-                    p.setWeight(op.get_weight());
-                    p.setOrder(orderDocument);
-                    p.setName(op.get_name());
-                    db.getProductIDBHandler().insert(p);
-                }
             }
 
             for(Area a : map.keySet()){
