@@ -66,7 +66,7 @@ public class Workers implements IWorkers {
             System.out.println("Please Enter a driver ID from the following list");
             LinkedList<Worker> workers = dal.getAllUsers();
             System.out.println("ID        |Name            |Licence");
-            System.out.println("----------------------------");
+            System.out.println("-----------------------------------");
             for(Worker w : workers) {
                 if(dal.getJobsByID(w.ID).contains(Worker.JobEnum.Driver)) {
                     System.out.print(w.getID() + " |");
@@ -192,7 +192,7 @@ public class Workers implements IWorkers {
                 System.out.println("Please Enter a Driver ID for a driver who will be working in this shift");
                 LinkedList<Worker> workers = dal.getAllUsers();
                 System.out.println("ID        |Name            |Licence");
-                System.out.println("----------------------------");
+                System.out.println("-----------------------------------");
                 for(Worker w : workers) {
                     if(dal.getJobsByID(w.ID).contains(Worker.JobEnum.Driver)) {
                         System.out.print(w.getID() + " |");
