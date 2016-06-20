@@ -87,7 +87,7 @@ public class Transportation implements ITransportation {
             }
 
             for(Truck t : trucks){
-                List<Driver> drivers = Workers.getInstance().availableDrivers(t.getLicenseType(),time);
+                List<Driver> drivers = Workers.getInstance().availableDrivers(t.getLicenseType(),time, isWeekly);
                 if(drivers.size() > 0){
                     driver = drivers.get(0);
                     truck = t;

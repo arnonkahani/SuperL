@@ -112,7 +112,7 @@ public class TransportationOptionsMenu extends Menu {
     }
 
     private void attachDriver(Integer integer, String s) throws Exception {
-        List<Driver> list = Workers.getInstance().availableDrivers(null,new java.util.Date());
+        List<Driver> list = Workers.getInstance().availableDrivers(null,new java.util.Date(), false);
         Driver t = new Table<>(Driver.class,list).select();
         if(t != null){
             try {

@@ -141,12 +141,8 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 		}
         if(!orders.isEmpty()) {
 			try {
-				itransportation.makeTransportation(driver_date, orders);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (ValidationException e) {
-				e.printStackTrace();
-			} catch (Transportation.NoTrucksAvailable noTrucksAvailable) {
+				itransportation.makeTransportation(driver_date, orders, false);//TODO
+			}catch (Transportation.NoTrucksAvailable noTrucksAvailable) {
 				noTrucksAvailable.printStackTrace();
 			} catch (Transportation.NoDriversAvailable noDriversAvailable) {
 				noDriversAvailable.printStackTrace();

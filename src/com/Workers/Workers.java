@@ -35,8 +35,10 @@ public class Workers implements IWorkers {
         }
     }
     @Override
-    public List<Driver> availableDrivers(LicenseType type, java.util.Date time) {
-       return dal.availableDrivers(type, time);
+    public List<Driver> availableDrivers(LicenseType type, java.util.Date time, boolean isWeekly) {
+        List<Driver> lst = dal.availableDrivers(type, time);
+        if(lst != null) {}
+        return null;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class Workers implements IWorkers {
         d.increase();
         week.increaseByWeek();
         for(; !(d.equals(week)); d.increase()) {
-            if(!availableDrivers(LicenseType.A ,d.get_date()).isEmpty())//TODO: get a real type
+            if(!availableDrivers(LicenseType.A ,d.get_date(), false).isEmpty())//TODO: get a real type
                 return d.get_date();
         }
 

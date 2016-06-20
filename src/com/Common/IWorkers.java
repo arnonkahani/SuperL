@@ -23,7 +23,7 @@ public interface IWorkers {
      * @param  time if null, ignore this requirement
      * @return      the list of drivers
      */
-    List<Driver> availableDrivers(LicenseType type, Date time) throws SQLException, ClassNotFoundException;
+    List<Driver> availableDrivers(LicenseType type, Date time, boolean isWeekly) throws SQLException, ClassNotFoundException;
 
     /**
      * @param  time if null, ignore this requirement
