@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import com.Common.Models.Order;
 import com.SupplierStorage.BE.*;
 import com.SupplierStorage.BE.SupplyAgreement.Day;
 import com.SupplierStorage.PL.ViewController;
@@ -76,6 +77,18 @@ public class StorageLogic {
 		sc.getSupply(ins_products);
 		}
 		
+	}
+
+
+	public ArrayList<Order> getOrders(){
+		ArrayList<Order> orders;
+		sl.getOrders(orders);
+		return orders;
+
+	}
+
+	public void deleteOrder(String id){
+		sl.deleteOrder(id);
 	}
 	
 	

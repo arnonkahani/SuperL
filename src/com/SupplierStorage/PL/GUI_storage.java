@@ -157,7 +157,7 @@ public void start(int n){
 		{
 		System.out.println("Please select an option:");
 		System.out.println("1. Update product condition"+'\n'+"2. add transportation"
-				+'\n'+"3. Reports"+'\n'+"PRESS # TO EXIT"+'\n');
+				+'\n'+"3. Reports"+"4. remove order\n"+"PRESS # TO EXIT"+'\n');
 		}
 		else
 		{
@@ -177,6 +177,9 @@ public void start(int n){
 	         case "3" :
 	        	 reports(0);
 	            break;
+			  case "4" :
+				  delete_order();
+				  break;
 	         case "#" :
 	        	return;
 	         default :
@@ -459,39 +462,40 @@ public void rep_by_cat(int n,String search){
 	rep_by_cat_a(n,search,0);
 }
 
-public void rep_by_cat_a(int n,String search,int m){
-	if (m==1)
-	{
+public void rep_by_cat_a(int n,String search,int m) {
+	if (m == 1) {
 		System.out.println("Invalid option. Please try again");
 	}
-	if (n<4)
-		{
-			System.out.println("Please select an option:");
-			System.out.println("1. Another filter"+'\n'+"2. Send report"+'\n'+"PRESS # FOR MAIN MENU");
-			@SuppressWarnings("resource")
-			Scanner scanner = new Scanner(System.in);
-			String ans = scanner.next();
-			 switch(ans)
-		     {
-		        case "1" :
-		        	rep_by_cat(n+1,search);
-		           break;
-		        case "2" :
-		        	display_report(n,search);
-		        case "#" :
-		        	start(0);
-		       	 break;
-		        default :
-		        	rep_by_cat_a(n,search,1);
-		     }
+	if (n < 4) {
+		System.out.println("Please select an option:");
+		System.out.println("1. Another filter" + '\n' + "2. Send report" + '\n' + "PRESS # FOR MAIN MENU");
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
+		String ans = scanner.next();
+		switch (ans) {
+			case "1":
+				rep_by_cat(n + 1, search);
+				break;
+			case "2":
+				display_report(n, search);
+			case "#":
+				start(0);
+				break;
+			default:
+				rep_by_cat_a(n, search, 1);
 		}
-	else
-	{
-		display_report(n,search);
+	} else {
+		display_report(n, search);
 	}
-	
+
+
+
 }
 
+public void delete_order(){
+
+
+}
 public void display_report(int n,String search){
 	
 	System.out.println("PRESS # FOR MAIN MENU");
