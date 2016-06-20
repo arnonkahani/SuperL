@@ -137,7 +137,7 @@ public class Workers implements IWorkers {
                 c.setTime(time);
                 for(int i = 1; i <= 7; i++){
                     for(WorkerSchedule ws: schedule) {
-                        if(ws.get_day().compareTo(WeekDays[(c.get(Calendar.DAY_OF_WEEK))]) == 0) {
+                        if(ws.get_day().compareTo(WeekDays[(c.get(Calendar.DAY_OF_WEEK))%7]) == 0) {
                             Shift newShift = null;
                             try {
                                 newShift = new Shift(ws.get_day(), WorkerSchedule.getTypeByTime(time), new Date(c.getTime()), Worker.JobEnum.Driver);
