@@ -49,4 +49,9 @@ public class SupplierStorage implements ISupplierStorage {
     public Order getOrder(String id) {
         return null;
     }
+
+    @Override
+    public void sentOrder(String id) {
+
+    }
 }

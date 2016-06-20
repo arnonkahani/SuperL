@@ -200,6 +200,7 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
                 delevry_products.add(p);
         }
         return delevry_products;
+
 	}
 
 	public ArrayList<OrderProduct> getOnDemand() throws SQLException {
