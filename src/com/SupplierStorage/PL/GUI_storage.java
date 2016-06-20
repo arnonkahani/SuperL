@@ -495,19 +495,23 @@ public void rep_by_cat_a(int n,String search,int m) {
 
 public void delete_order(){
 	ArrayList<Order> orders = logic.getOrders();
-    System.out.print("Please choose number of order\n");
-	for (int i=0; i<orders.size();i++)
-	{
-        System.out.print(i+1+ ". ");
-		orders.get(i).toString();
-	}
+    if (orders.size()==0){
+        System.out.print("There are no future orders available to remove \n");
+    }
+    else {
+        System.out.print("Please choose number of order\n");
+        for (int i = 0; i < orders.size(); i++) {
+            System.out.print(i + 1 + ". ");
+            orders.get(i).toString();
+        }
 
-    Scanner scanner = new Scanner(System.in);
-    String ans = scanner.next();
-    int num_order = Integer.parseInt(ans);
-    num_order--;
-    logic.deleteOrder(orders.get(num_order).getOrderID());
-    System.out.print("The order has been removed\n");
+        Scanner scanner = new Scanner(System.in);
+        String ans = scanner.next();
+        int num_order = Integer.parseInt(ans);
+        num_order--;
+        logic.deleteOrder(orders.get(num_order).getOrderID());
+        System.out.print("The order has been removed\n");
+    }
     start(0);
 
 }
