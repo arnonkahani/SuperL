@@ -256,6 +256,7 @@ public class DAOFactory {
                   "ORDERDATE DATE NOT NULL, "
                   + "DELEVRYDATE DATE NOY NULL," + 
                   "PRICE REAL NOT NULL, "+
+                    "SENT INTEGER NOT NULL, "+
                   "FOREIGN KEY (SUPPLIER_CN) REFERENCES SUPPLIER(CN))";
 	      stmt.executeUpdate(sql);
 	     sql = "CREATE TABLE IF NOT EXISTS ORDER_PRODUCT " +

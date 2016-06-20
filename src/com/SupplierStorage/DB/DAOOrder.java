@@ -45,7 +45,7 @@ public class DAOOrder extends DAO<Order> {
 	@Override
 	protected String[] getValues(Order object) {
 		return new String[]{object.getOrderID(),"'"+object.get_supplier().get_CN()+"'",
-				""+object.get_weight(),dateConvert(object.get_order_date()),""+object.get_price(),dateConvert(object.get_delevery_date())};
+				""+object.get_weight(),dateConvert(object.get_order_date()),""+object.get_price(),dateConvert(object.get_delevery_date()),""+object.getSent()};
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class DAOOrder extends DAO<Order> {
 		order.set_supplier(_supplier.getFromPK(new String[]{""+rs.getInt("SUPPLIER_CN")}));
 		order.set_weight(rs.getFloat("WEIGHT"));
 		order.set_price(rs.getFloat("PRICE"));
-		
+		order.setSent(rs.getInt("SENT"));
 		ArrayList<OrderProduct> products = _product.search(new int[]{1}, new String[]{order.getOrderID()});
 		order.set_amountProduct(products);
 		return order;

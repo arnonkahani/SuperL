@@ -37,24 +37,7 @@ public class ViewUtils {
 
 	public void clear()
 	{
-		final String operatingSystem = System.getProperty("os.name");
 
-		if (operatingSystem .contains("Windows")) {
-		    try {
-				Runtime.getRuntime().exec("cls");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else {
-		    try {
-				Runtime.getRuntime().exec("clear");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 	public void printList(Enum [] list)
 	{
