@@ -112,7 +112,7 @@ public class Workers implements IWorkers {
                     c.setTime(time);
                     int dayNum = -1;
                     for(int i = 1; i <= 7; i++){
-                        if(WeekDays[i].compareTo(day) == 0)
+                        if(WeekDays[i-1].compareTo(day) == 0)
                             dayNum = i;
                     }
 
