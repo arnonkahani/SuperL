@@ -29,6 +29,7 @@ public class StorageLogic {
 		this.sl = sl;
 
 	}
+
 	
 	public int remove_from_storage (String catagory,String sub_catagory,String sub_sub_catagory,String product_name,String producer ,int amount) throws SQLException{
 		int check=0;
