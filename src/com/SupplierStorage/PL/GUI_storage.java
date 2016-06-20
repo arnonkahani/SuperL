@@ -156,7 +156,7 @@ public void start(int n){
 		if (n==0)
 		{
 		System.out.println("Please select an option:");
-		System.out.println("1. Update product condition"+'\n'+"2. Remove product from the storage"
+		System.out.println("1. Update product condition"+'\n'+"2. add transportation"
 				+'\n'+"3. Reports"+'\n'+"PRESS # TO EXIT"+'\n');
 		}
 		else
@@ -186,32 +186,51 @@ public void start(int n){
 	      
 	}
 	
-public void add_remove(int n){
-		
-		if (n==1)
-			{
-				System.out.println("-UPDATE PRODUCT CONDITION-");
-			}
-		else 
-			{
-				System.out.println("-REMOVE PRODUCT FROM STORAGE-");
-			}
-		
+public void add_remove(int n) {
+	int amount = 0;
+	int check;
+	if (n == 1) {
+		System.out.println("-UPDATE PRODUCT CONDITION-");
 		get_cat(0);
-		
-		get_sub_cat(0);
-		
-		get_sub_sub_cat(0);
-		
-		get_prod(0);
-		
-		get_producer_prod(0);
-		
-		add_remove_a(n,0);
-		
-	}
 
-public void add_remove_a(int n,int m){
+		get_sub_cat(0);
+
+		get_sub_sub_cat(0);
+
+		get_prod(0);
+
+		get_producer_prod(0);
+
+		add_remove_a(n, 0,0);
+	} else {
+		System.out.println("-ADD TRANSPORTATION-");
+		System.out.println("Please enter number of products");
+		Scanner scanner = new Scanner(System.in);
+		String option = scanner.next();
+		amount = Integer.parseInt(option);
+		for (int i = 0; i < amount; i++) {
+			get_cat(0);
+
+			get_sub_cat(0);
+
+			get_sub_sub_cat(0);
+
+			get_prod(0);
+
+			get_producer_prod(0);
+
+			check=add_remove_a(n, 0,amount-i);
+			if (check==0){
+				i--;
+			}
+		}
+
+
+	}
+}
+
+public int add_remove_a(int n,int m,int indx){
+		int check=0;
 		int amount;
 
 		if (m==1)
@@ -232,15 +251,15 @@ public void add_remove_a(int n,int m){
 			{
 				amount = Integer.parseInt(option);
 				if (amount < 0)
-					add_remove_a(n,2);
+					add_remove_a(n,2,indx);
 				else
 					{
-					add_remove_c(n,0,amount,new Date());
+						check=add_remove_c(n,0,amount,new Date(),indx);
 					}
 			}
 			catch(Exception e)
 			{
-				add_remove_a(n,1);
+				add_remove_a(n,1,indx);
 			}
 		}
 		
@@ -248,8 +267,9 @@ public void add_remove_a(int n,int m){
 			{
 				   update_defected();
 			}
-				
-		
+
+	return check;
+
 	}
 
 public void update_defected(){
@@ -314,62 +334,26 @@ public void update_defected(){
 		
 	}
 	
-public void add_remove_c(int n,int m,int amount,Date date) throws SQLException{
-		//int is_defected;
-		//if(n==0)
-		//{
-			int check=logic.remove_from_storage(catagory, sub_catagory, sub_sub_catagory, product_name,producer_name, amount);
-			if (check==0){
-				System.err.println("The proccess failed -the amount is higher then the current amount");
-				start(0);
-			}
-			else if (check==1){
-				System.err.println("The proccess succeed -NOTICE!! THE CURRENT AMOUNT IS LESS THEN THE MINIMUM ");
-				System.err.println("Automatic reservation has been made!!");
-				start(0);
-			}
-			else{
-				cont_supply(n,0);
-			}
-		//}
-		/*else if (m==1)
-		{
-			System.out.println("Invalid input. Please enter a number");
+public int add_remove_c(int n,int m,int amount,Date date,int index) throws SQLException{
+		int check=logic.remove_from_storage(catagory, sub_catagory, sub_sub_catagory, product_name,producer_name, amount);
+		if (check==0){
+			System.err.println("The proccess failed -the amount is higher then the current amount");
+			start(0);
 		}
-		else if (m==2)
-		{
-			System.out.println("Invalid input. Please enter 0 or 1");
+		else if (check==1){
+			System.err.println("The proccess succeed -NOTICE!! THE CURRENT AMOUNT IS LESS THEN THE MINIMUM ");
+			System.err.println("Automatic reservation has been made!!");
+			start(0);
 		}
-		else
-		{
-			System.out.println("Please press 1 if the product is defected, otherwise press 0");
+		else{
+			System.out.println("The product "+product_name+" add to the transportation successfully!");
+			if (index==1) {
+				cont_supply(n, 0);
+			}
 		}
+	return check;
 		
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String option = scanner.next();
-		try
-		{
-			is_defected = Integer.parseInt(option);
-			if ((is_defected!=0) && (is_defected!=1))
-			{
-				add_remove_c(n,2,amount,date);
-			}
-			else
-			{
-				
-				logic.getSupply(catagory,sub_catagory,sub_sub_catagory,product_name,amount,date,is_defected);
-					
-					cont_supply(n,0);
-			}
-				
-		}
-		catch(Exception e)
-		{
-			add_remove_c(n,1,amount,date);
-		}*/
-		
-	}
+}
 	
 public void cont_supply(int n,int m){
 		
@@ -383,8 +367,8 @@ public void cont_supply(int n,int m){
 			}
 		else 
 			{
-				System.out.println("-REMOVE PRODUCT FROM STORAGE-");
-				System.out.println("The product "+product_name+" removed successfully!");
+				System.out.println("-ADD TRANSPORTATION-");
+				System.out.println("The transportation added successfully!");
 			}
 		
 		System.out.println("PRESS 1 TO CONTINUE OR # FOR MAIN MENU");
