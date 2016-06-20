@@ -34,18 +34,17 @@ public class Main {
         System.out.print("Password:");
         String password = sc.next();
         LinkedList<Worker.JobEnum> jobs = iWorkers.getJobs(username, password);
-        if(jobs.contains(Worker.JobEnum.HRManager) || jobs.contains(Worker.JobEnum.ShiftManager)) {
-            LoginMenu.main(username, password);
-        }
-        else if(jobs.contains(Worker.JobEnum.StorageManager)) {
-            iSupplierStorage.showStorage();
-        }
-        else if(jobs.contains(Worker.JobEnum.SupplierManager)) {
-            iSupplierStorage.showSupplier();
-        }
-        else if(jobs.contains(Worker.JobEnum.TransportationManager)) {
-            DB db = DB.getInstance();
-            new MainMenu(db,iWorkers).show();
+        if(jobs != null) {
+            if (jobs.contains(Worker.JobEnum.HRManager) || jobs.contains(Worker.JobEnum.ShiftManager)) {
+                LoginMenu.main(username, password);
+            } else if (jobs.contains(Worker.JobEnum.StorageManager)) {
+                iSupplierStorage.showStorage();
+            } else if (jobs.contains(Worker.JobEnum.SupplierManager)) {
+                iSupplierStorage.showSupplier();
+            } else if (jobs.contains(Worker.JobEnum.TransportationManager)) {
+                DB db = DB.getInstance();
+                new MainMenu(db, iWorkers).show();
+            }
         }
     }
 }

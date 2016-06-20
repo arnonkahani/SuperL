@@ -197,6 +197,9 @@ public class Workers implements IWorkers {
     }
 
     public LinkedList<Worker.JobEnum> getJobs(String UserName, String Password) {
-        return dal.getJobsByID(dal.getUserByUsernameAndPassword(UserName,Password).ID);
+        com.Workers.Objects.User u = dal.getUserByUsernameAndPassword(UserName,Password);
+        if(u == null)
+            return null;
+        return dal.getJobsByID(u.ID);
     }
 }

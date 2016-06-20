@@ -11,6 +11,11 @@ public class LoginMenu {
 	public static void main(String username, String password) {
 		User me;
 		DALInterface dal = null;
+		try {
+			 dal = DAL.getDAL();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Scanner sc = new Scanner(System.in);
 		MenuManager menu;
 
