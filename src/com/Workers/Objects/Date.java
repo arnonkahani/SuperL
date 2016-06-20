@@ -67,9 +67,9 @@ public class Date {
 
 
     public boolean equals(Date other) {
-        return other.get_year() == _year &&
-                other.get_mounth() == _mounth &&
-                other.get_day() == _day;
+        return other.get_year().compareTo(_year) == 0 &&
+                other.get_mounth().compareTo(_mounth) == 0 &&
+                other.get_day().compareTo(_day) == 0;
 
     }
 
