@@ -61,13 +61,13 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
         cal.setTime(now);
         cal.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrow = cal.getTime();
-		return makeOrder(products,tomorrow);
+		return makeOrder(products,tomorrow,true);
 	}
 	
 	
 	
 	
-	private ArrayList<OrderProduct> makeOrder(ArrayList<OrderProduct> products,Date driver_date) throws SQLException
+	private ArrayList<OrderProduct> makeOrder(ArrayList<OrderProduct> products,Date driver_date,boolean isWeekly) throws SQLException
 	{
         ArrayList<Order> orders = new ArrayList<>();
 		ArrayList<OrderProduct> product_list = new ArrayList<>();
@@ -141,7 +141,8 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 		}
         if(!orders.isEmpty()) {
 			try {
-				itransportation.makeTransportation(driver_date, orders, false);//TODO
+
+				itransportation.makeTransportation(driver_date, orders, isWeekly);
 			}catch (Transportation.NoTrucksAvailable noTrucksAvailable) {
 				noTrucksAvailable.printStackTrace();
 			} catch (Transportation.NoDriversAvailable noDriversAvailable) {
@@ -166,10 +167,10 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 
 		ArrayList<OrderProduct> products = _sam.getCheapestProductOnDemand(products_to_order);
 		if(products != null && products.size() > 0 && products.get(0).get_supplyAgreement().get_dType().equals(SupplyAgreement.DelevryType.deliver)){
-			return makeOrder(products,new Date());
+			return makeOrder(products,new Date(),false);
 		}
 		else {
-			return makeOrder(products,iworker.getEarliestDeleveryDate(new Date()));
+			return makeOrder(products,iworker.getEarliestDeleveryDate(new Date()),false);
 		}
 	}
 	
