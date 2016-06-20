@@ -337,3 +337,23 @@ INSERT INTO Place ( ADDRESS,SHIPMENTAREA, PHONENUMBER, CONTACTPERSON) VALUES ('m
 INSERT INTO Truck ( LicenceNumber,LicenceType, Model, Color, MaxWeight, NetWeight) VALUES ('1234567893' ,'A' ,'mitsubishi' ,'blue', 1000,200);
 INSERT INTO Truck ( LicenceNumber,LicenceType, Model, Color, MaxWeight, NetWeight) VALUES ('987654321' ,'B' ,'ford' ,'red', 2000,400);
 INSERT INTO Truck ( LicenceNumber,LicenceType, Model, Color, MaxWeight, NetWeight) VALUES ('312879465' ,'C' ,'folkswagen' ,'greeb', 1500,100);
+
+INSERT INTO Worker (ID, BankNo, EmploymentDate, EmploymentTerms, Name) VALUES ('111111111', '111111111', '11/11/2015', '', 'Driver One');
+INSERT INTO WorkerAbilities (WID, Ability) VALUES ('111111111', 'Driver');
+INSERT INTO Driver (WID, DriverLicence) VALUES ('111111111', 'A');
+INSERT INTO WorkerSchedule (WID, Day, Type) Values ('111111111', 'Sunday', 'Morning');
+INSERT INTO WorkerSchedule (WID, Day, Type) Values ('111111111', 'Monday', 'Evening');
+INSERT INTO WorkerSchedule (WID, Day, Type) Values ('111111111', 'Friday', 'Morning');
+INSERT INTO WorkerInShifts (WID, Day, Type, Date, Ability) VALUES ('111111111', 'Sunday', 'Morning', '26/06/2016', 'Driver');
+INSERT INTO WorkerInShifts (WID, Day, Type, Date, Ability) VALUES ('111111111', 'Monday', 'Evening', '27/06/2016', 'Driver');
+INSERT INTO WorkerInShifts (WID, Day, Type, Date, Ability) VALUES ('111111111', 'Friday', 'Morning', '01/07/2016', 'Driver');
+
+INSERT INTO Worker (ID, BankNo, EmploymentDate, EmploymentTerms, Name) VALUES ('222222222', '222222222', '12/12/2015', '', 'Driver Two');
+INSERT INTO WorkerAbilities (WID, Ability) VALUES ('222222222', 'Driver');
+INSERT INTO Driver (WID, DriverLicence) VALUES ('222222222', 'C');
+INSERT INTO WorkerSchedule (WID, Day, Type) Values ('222222222', 'Sunday', 'Morning');
+INSERT INTO WorkerSchedule (WID, Day, Type) Values ('222222222', 'Saturday', 'Evening');
+INSERT INTO WorkerSchedule (WID, Day, Type) Values ('222222222', 'Friday', 'Morning');
+INSERT INTO WorkerInShifts (WID, Day, Type, Date, Ability) VALUES ('222222222', 'Sunday', 'Morning', '26/06/2016', 'Driver');
+INSERT INTO WorkerInShifts (WID, Day, Type, Date, Ability) VALUES ('222222222', 'Saturday', 'Evening', '02/07/2016', 'Driver');
+INSERT INTO WorkerInShifts (WID, Day, Type, Date, Ability) VALUES ('222222222', 'Friday', 'Morning', '01/07/2016', 'Driver');
