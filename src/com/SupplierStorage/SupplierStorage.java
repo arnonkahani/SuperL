@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class SupplierStorage implements ISupplierStorage {
 
-    static SupplierStorage instance;
+    static SupplierStorage instance = null;
     private ViewController vc;
 
     public static SupplierStorage getInstance() throws InternalError{
@@ -24,7 +24,7 @@ public class SupplierStorage implements ISupplierStorage {
     }
     public SupplierStorage(){
         try {
-            ViewController vc = new ViewController(false);
+            vc = new ViewController(false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
