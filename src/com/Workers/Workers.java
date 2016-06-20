@@ -63,7 +63,17 @@ public class Workers implements IWorkers {
         String ID;
         Scanner scan = new Scanner(System.in);
         while(!check) {
-            System.out.print("Please Enter a driver ID: ");
+            System.out.println("Please Enter a driver ID from the following list");
+            LinkedList<Worker> workers = dal.getAllUsers();
+            System.out.println("ID        |Name            |Licence");
+            System.out.println("----------------------------");
+            for(Worker w : workers) {
+                if(dal.getJobsByID(w.ID).contains(Worker.JobEnum.Driver)) {
+                    System.out.print(w.getID() + " |");
+                    System.out.print(w.getName().substring(0,Math.min(16, w.getName().length())) + "                ".substring(0,Math.max(0, 16-w.getName().length())) + "|");
+                    System.out.println(dal.getDrivetByID(w.getID()).getDriverLicenseType().toString());
+                }
+            }
             ID = scan.next();
             if(dal.getDrivetByID(ID) == null) {
                 System.out.println("A Driver with such an ID doesn't exist!, Please try again");
@@ -180,6 +190,16 @@ public class Workers implements IWorkers {
             if(!found) {
                 System.out.println("There is no Driver available for this day");
                 System.out.println("Please Enter a Driver ID for a driver who will be working in this shift");
+                LinkedList<Worker> workers = dal.getAllUsers();
+                System.out.println("ID        |Name            |Licence");
+                System.out.println("----------------------------");
+                for(Worker w : workers) {
+                    if(dal.getJobsByID(w.ID).contains(Worker.JobEnum.Driver)) {
+                        System.out.print(w.getID() + " |");
+                        System.out.print(w.getName().substring(0,Math.min(16, w.getName().length())) + "                ".substring(0,Math.max(0, 16-w.getName().length())) + "|");
+                        System.out.println(dal.getDrivetByID(w.getID()).getDriverLicenseType().toString());
+                    }
+                }
                 Scanner scan = new Scanner(System.in);
                 String dID = scan.next();
                 boolean done = false;
