@@ -124,4 +124,14 @@ public class SupplierLogic {
 				System.err.println("Error in factory");
 			return managar;
 	}
+
+	public Order getOrder(String id) {
+		Order or = null;
+		try {
+			or = _om.getOrderByID(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return or;
+	}
 }
