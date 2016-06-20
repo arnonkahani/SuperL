@@ -82,7 +82,7 @@ public class StorageLogic {
 
 	public ArrayList<Order> getOrders(){
 		ArrayList<Order> orders;
-		sl.getOrders(orders);
+		orders=sl.getOrders();
 		return orders;
 
 	}
