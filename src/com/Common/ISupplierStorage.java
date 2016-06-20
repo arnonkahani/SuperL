@@ -6,9 +6,6 @@ import com.SupplierStorage.BE.OrderProduct;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-/**
- * Created by arnon on 11/06/2016.
- */
 public interface ISupplierStorage {
 
 

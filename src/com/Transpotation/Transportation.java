@@ -50,7 +50,9 @@ public class Transportation implements ITransportation {
                     products.addAll(supplierStorage.getOrder(d.getOrderID()+"").get_amountProduct());
                 }
                 supplierStorage.getSupply(products);
-
+                for(OrderDocument d : orderDocuments){
+                    supplierStorage.sentOrder(d.getOrderID()+"");
+                }
                 t.setArrived(true);
                 db.getTransportationIDBHandler().update(t);
             }
