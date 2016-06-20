@@ -64,11 +64,16 @@ public class StorageLogic {
 				if(ViewController.debug && products!=null && products.size() > 0)
 		{System.out.println(products.get(0).getAmount());};
 		if (products!=null && products.size() > 0){
-			System.err.println("Order Arrived - Press Enter To Recive");
+			System.err.println("Order Arrived - Press Enter To Receive");
 			Scanner scn = new Scanner(System.in);
 			scn.nextLine();
 			ArrayList<INS_product> ins_products = new ArrayList<INS_product>();
 		for (int i=0;i<products.size();i++){
+			System.out.println("please enter the amount of defected or missing products of: "+products.get(i).get_name()+"that you don't want to add them to the storage. otherwise enter 0");
+			Scanner scanner = new Scanner(System.in);
+			String ans = scanner.next();
+			int remove_amount = Integer.parseInt(ans);
+			products.get(i).setAmount(products.get(i).get_min_amount()-remove_amount);
 			for(int j=0;j<products.get(i).getAmount();j++){
 				INS_product ins = new INS_product(products.get(i).get_id(),products.get(i).get_category(),products.get(i).get_sub_category(),products.get(i).get_sub_sub_category(),products.get(i).get_name(),products.get(i).get_producer(),products.get(i).get_weight(),products.get(i).get_price(),0,products.get(i).get_shelf_life());
 				ins_products.add(ins);
