@@ -48,4 +48,5 @@ public interface ISupplierStorage {
      */
     Order getOrder(String id);
 
+    void sentOrder(String id);
 }

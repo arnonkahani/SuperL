@@ -173,5 +173,21 @@ public class DAOOrder extends DAO<Order> {
 	public ArrayList<OrderProduct> getOnDemand() throws SQLException {
 		return _product.getOnDemand();
 	}
+
+	public void updateOrder(String id) throws SQLException{
+		try{
+			String sql;
+			Statement stmt;
+			sql = "UPDATE ORDERS" +
+                    " SET SENT=1" +
+                    " WHERE ID="+ id;
+			stmt = _c.createStatement();
+			stmt.executeUpdate(sql);
+
+		} catch (SQLException e) {
+			System.err.println("");
+		}
+
+	}
 	
 }
