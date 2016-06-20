@@ -19,7 +19,7 @@ public class Order {
 	private Date _delevery_date;
 	private ArrayList<OrderProduct> _amountProduct = new ArrayList<>();
 	private float _price = 0;
-	
+	private int sent = 0;
 	public Order(Supplier samID,Date date,ArrayList<OrderProduct> amountProduct,float price) {
 		this._supplier = samID;
 		this._order_date = date;
@@ -67,10 +67,14 @@ public class Order {
 	}
 	public String toString(){
 		String str;
+		String was_sent = "Sent";
+		if(sent == 0)
+			was_sent = "Not Sent";
 		str = "Supplier CN: " + get_supplier().get_CN() + "\n"
 				+ "Date: " + get_order_date().toString() + "\n"
 				+ "Weight: " +  get_weight() + "\n"
 				+ "Price: " + get_price() +"\n"
+				+ "Status: " + was_sent +"\n"
 				+ "Product    Amount     Price\n"
 				+ "---------------------------- \n";
 		String productlist = "";
@@ -98,5 +102,12 @@ public class Order {
 		this._delevery_date = _delevery_date;
 	}
 
-	
+
+	public int getSent() {
+		return sent;
+	}
+
+	public void setSent(int sent) {
+		this.sent = sent;
+	}
 }

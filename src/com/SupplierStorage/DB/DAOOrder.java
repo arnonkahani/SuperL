@@ -29,12 +29,12 @@ public class DAOOrder extends DAO<Order> {
 
 	@Override
 	public String[] getSearchFields() {
-		return new String[]{"All","ID","SUPPLIER_CN","WEIGHT","ORDERDATE","PRICE","DELEVRYDATE"};
+		return new String[]{"All","ID","SUPPLIER_CN","WEIGHT","ORDERDATE","PRICE","DELEVRYDATE","SENT"};
 	}
 
 	@Override
 	public String[] getSearchFieldsView() {
-		return new String[]{"All","ID","SUPPLIER CN","Weight","Date","Price","Delevery Date"};
+		return new String[]{"All","ID","SUPPLIER CN","Weight","Date","Price","Delevery Date","Status"};
 	}
 
 	@Override

@@ -222,6 +222,14 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
         return delevry_products;
 	}
 
+	public ArrayList<Order> getOrders() throws SQLException
+	{
+		ArrayList<Order> orders = new ArrayList<>();
+		_db.search(new int[]{},new String[]{});
+	return orders;
+
+	}
+
 	
 	
 }

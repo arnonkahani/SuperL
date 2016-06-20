@@ -1,6 +1,7 @@
 package com.SupplierStorage.BL;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -63,6 +64,18 @@ public class SupplierLogic {
 		
 	}
 
+	public void deleteOrder(String id){
+
+	}
+	public ArrayList<Order> getOrders(){
+		ArrayList<Order> orders = new ArrayList<>();
+		try {
+			orders =  _om.getOrders();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return  orders;
+	}
 
 
 	public void supplyOnDemand(HashMap<Product, Integer> products) throws SQLException{
