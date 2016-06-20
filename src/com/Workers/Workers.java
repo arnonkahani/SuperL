@@ -164,6 +164,7 @@ public class Workers implements IWorkers {
             boolean found = false;
             LinkedList<Worker> workerList =  dal.getAllUsers();
             for(Worker w : workerList) {
+                w.setAbilities(dal.getJobsByID(w.ID));
                  if(!found && w.getAbilities().contains(Worker.JobEnum.Driver)) {
                     LinkedList<WorkerSchedule> ws = dal.getWorkerScheduleByID(w.ID);
                     for(WorkerSchedule s : ws) {
