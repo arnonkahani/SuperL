@@ -79,7 +79,7 @@ public class Workers implements IWorkers {
                 System.out.println("Would you like to add a a new day to the schedule or to choose a new driver?");
                 System.out.println("Type \"add\" to add a new day or \"new\" to choose a new driver");
                 String choice = scan.next();
-                while(choice.compareTo("add") == 0 || choice.compareTo("new") == 0) {
+                while(choice.compareTo("add") != 0 && choice.compareTo("new") != 0) {
                     System.out.println("Error parsing answer, please try again");
                     choice = scan.next();
                 }
