@@ -19,4 +19,5 @@ public interface IDBHandler<T> {
     List<T> query(String query, Object... args) throws SQLException;
     int executeUpdate(String query, Object... args) throws SQLException;
     boolean execute(String query, Object... args) throws SQLException;
+    Object getLastGeneratedID();
 }

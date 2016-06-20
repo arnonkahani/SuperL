@@ -35,6 +35,10 @@ public class Transportation {
         return ID;
     }
 
+    public void setID(Integer ID) {
+        this.ID = ID;
+    }
+
     public Date getStartTime() {
         return StartTime;
     }
@@ -101,21 +105,21 @@ public class Transportation {
         this.area = area;
     }
 
-    public double getTotalWeight() throws SQLException, ClassNotFoundException {
+    /*public double getTotalWeight() throws SQLException, ClassNotFoundException {
         List<OrderDocument> l = DB.getInstance().getOrderDocumentIDBHandler().select("transportation = ?",ID);
         double sum = 0;
         for(OrderDocument d : l)
             sum += d.getTotalWeight();
         return sum;
-    }
+    }*/
 
-    public int getNumberOfOrders() throws SQLException, ClassNotFoundException {
+    /*public int getNumberOfOrders() throws SQLException, ClassNotFoundException {
         return DB.getInstance().getOrderDocumentIDBHandler().select("transportation = ?",ID).size();
-    }
+    }*/
 
     @Override
     public String toString() {
-        return String.format("%d(%s)",ID ,ellipsize(Description,30));
+        return String.format("%d(%s)",ID ,ellipsize(Description != null ? Description : "",30));
     }
 
     private final static String NON_THIN = "[^iIl1\\.,']";

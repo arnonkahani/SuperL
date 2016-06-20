@@ -117,12 +117,13 @@ public class Transportation implements ITransportation {
                 transportation.setTruck(truck);
                 transportation.setArea(a);
 
+                db.getTransportationIDBHandler().insert(transportation);
+                transportation.setID((Integer) db.getTransportationIDBHandler().getLastGeneratedID());
+
                 for(OrderDocument o : map.get(a)){
                     o.setTransportation(transportation);
                     db.getOrderDocumentIDBHandler().insert(o);
                 }
-
-                db.getTransportationIDBHandler().insert(transportation);
             }
         } catch (ValidationException | ClassNotFoundException | SQLException e) {
             throw new InternalError(e.getMessage());

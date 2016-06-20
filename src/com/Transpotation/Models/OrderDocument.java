@@ -55,26 +55,26 @@ public class OrderDocument {
     public void setTransportation(Transportation transportation) throws ValidationException, SQLException, ClassNotFoundException {
         if(transportation!= null && !transportation.getArea().equals(Source.getShipmentArea()))
             throw new ValidationException("Areas do not match");
-        if(transportation!= null && transportation.getTruck() != null && transportation.getTotalWeight() + getTotalWeight() > (transportation.getTruck().getMaxWeight() - transportation.getTruck().getNetWeight()))
-            throw new ValidationException("Truck cannot carry more weight");
+        /*if(transportation!= null && transportation.getTruck() != null && transportation.getTotalWeight() + getTotalWeight() > (transportation.getTruck().getMaxWeight() - transportation.getTruck().getNetWeight()))
+            throw new ValidationException("Truck cannot carry more weight");*/
         this.transportation = transportation;
     }
 
-    public double getTotalWeight() throws SQLException, ClassNotFoundException {
+    /*public double getTotalWeight() throws SQLException, ClassNotFoundException {
         PreparedStatement p = DB.getInstance().getConnection()
                 .prepareStatement("SELECT SUM(weight) FROM Product WHERE orderID = ?");
         p.setInt(1,ID);
         ResultSet set = p.executeQuery();
         return set.getDouble("SUM(weight)");
-    }
+    }*/
 
-    public int getNumberOfProducts() throws SQLException, ClassNotFoundException {
+    /*public int getNumberOfProducts() throws SQLException, ClassNotFoundException {
         PreparedStatement p = DB.getInstance().getConnection()
                 .prepareStatement("SELECT COUNT(weight) FROM Product WHERE orderID = ?");
         p.setInt(1,ID);
         ResultSet set = p.executeQuery();
         return set.getInt("COUNT(weight)");
-    }
+    }*/
 
     public int getOrderID() {
         return orderID;

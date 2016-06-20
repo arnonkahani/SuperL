@@ -3,6 +3,7 @@ package com.Common.DB;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * implements IDBHandler by injecting subclass's data to premade SQL queries
@@ -10,6 +11,8 @@ import java.util.List;
  * @param <T> : type of object this handler is responsible for
  */
 public abstract class DBHandler<T> implements IDBHandler<T>{
+    Object lastGeneratedID = null;
+
     protected Connection connection;
 
     private static final String SELECT = "SELECT * FROM %s WHERE ";
@@ -135,15 +138,23 @@ public abstract class DBHandler<T> implements IDBHandler<T>{
         return l;
     }
     public int executeUpdate(String query, Object... args) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
         for(int i = 0 ; i < args.length ; i++)
             statement.setObject(i+1,args[i]);
-        return statement.executeUpdate();
+        int res = statement.executeUpdate();
+        if(statement.getGeneratedKeys().next())
+            lastGeneratedID = statement.getGeneratedKeys().getObject(1);
+        return res;
     }
     public boolean execute(String query, Object... args) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(query);
         for(int i = 0 ; i < args.length ; i++)
             statement.setObject(i+1,args[i]);
         return statement.execute();
+    }
+
+    public Object getLastGeneratedID(){
+        return lastGeneratedID;
     }
 }
