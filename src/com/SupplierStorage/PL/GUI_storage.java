@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
+import com.Common.Models.Order;
 import com.SupplierStorage.BE.INS_product;
 import com.SupplierStorage.BL.StorageLogic;
 
@@ -493,7 +494,21 @@ public void rep_by_cat_a(int n,String search,int m) {
 }
 
 public void delete_order(){
+	ArrayList<Order> orders = logic.getOrders();
+    System.out.print("Please choose number of order\n");
+	for (int i=0; i<orders.size();i++)
+	{
+        System.out.print(i+1+ ". ");
+		orders.get(i).toString();
+	}
 
+    Scanner scanner = new Scanner(System.in);
+    String ans = scanner.next();
+    int num_order = Integer.parseInt(ans);
+    num_order--;
+    logic.deleteOrder(orders.get(num_order).getOrderID());
+    System.out.print("The order has been removed\n");
+    start(0);
 
 }
 public void display_report(int n,String search){
