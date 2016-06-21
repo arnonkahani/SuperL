@@ -25,7 +25,11 @@ public class Transportation implements ITransportation {
     }
 
     public Transportation(){
-
+        try {
+            db = DB.getInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initialize(){

@@ -92,8 +92,8 @@ public class DAOOrderProduct extends DAO<OrderProduct>{
 		ArrayList<OrderProduct> products = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
 		int d = calendar.get(Calendar.DAY_OF_WEEK); 
-		String sql = "SELECT * FROM ORDER_PRODUCT WHERE ORDERID IN (SELECT ID FROM ORDERS WHERE DELEVRYDATE = " + getDate() +") "
-				+ "AND SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID IN (SELECT ID FROM SUPPLY_AGREEMENT WHERE DAY = 0)";
+		String sql = "SELECT * FROM ORDER_PRODUCT WHERE ORDERID IN (SELECT ID FROM ORDERS WHERE DELEVRYDATE = " + getDate() +" AND SENT = 0) "
+				+ "AND SUPPLY_AGREEMENT_PRODUCT_AGREEMENT_ID IN (SELECT ID FROM SUPPLY_AGREEMENT WHERE DAY = 0 AND DELEVERYTYPE = 'deliver')";
 		//TODO: Delete
 		if(ViewController.debug)
 		System.out.println("DAOOrderPRoduct: QUERY: " + sql);

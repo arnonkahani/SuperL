@@ -122,7 +122,10 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 					cl.set(Calendar.MINUTE, 0);
 					cl.set(Calendar.SECOND, 0);
 					cl.add(Calendar.DAY_OF_MONTH, 1);
-					or.set_delevery_date(format.parse(format.format(cl.getTime())));
+					if(i==1)
+						or.set_delevery_date(format.parse(format.format(cl.getTime())));
+					else
+						or.set_delevery_date(driver_date);
 				} catch (ParseException e) {
 
 				}
