@@ -921,4 +921,23 @@ public class DAL extends DALInitiateConstants implements DALInterface {
             return null;
         }
     }
+
+    public boolean deleteJobByID(String ID, Worker.JobEnum job){
+        String[] attributes = {"WID", "Ability"};
+        String[] valuesOfAtribues = {ID, job.toString()};
+        try {
+            GeneralSQLiteQuaries.deleteFrom(TABLE_WorkerAbilities, attributes, valuesOfAtribues);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean checkBankNo(String bankNo){
+        return GeneralSQLiteQuaries.isExists(
+                TABLE_Worker,
+                new String[]{"BankNO"},
+                bankNo
+        );
+    }
 }
