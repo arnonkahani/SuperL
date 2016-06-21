@@ -364,4 +364,16 @@ public class Workers implements IWorkers {
             return null;
         return dal.getJobsByID(u.ID);
     }
+
+    public LinkedList<Driver> getAllDrivers() {
+        LinkedList<Worker> workers = dal.getAllUsers();
+        LinkedList<Driver> drivers = new LinkedList<>();
+
+        for(Worker w : workers) {
+            if(dal.getJobsByID(w.getID()).contains(Worker.JobEnum.Driver))
+                drivers.add(dal.getDrivetByID(w.getID()));
+        }
+
+        return drivers;
+    }
 }

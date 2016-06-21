@@ -47,5 +47,7 @@ public interface IWorkers {
      */
     void setWeeklyDeleveryShifts(List<DayOfWeek> dayOfWeeks);
 
-    public LinkedList<Worker.JobEnum> getJobs(String UserName, String Password);
+    LinkedList<Worker.JobEnum> getJobs(String UserName, String Password);
+
+    LinkedList<Driver> getAllDrivers();
 }
