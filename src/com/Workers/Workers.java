@@ -25,7 +25,7 @@ public class Workers implements IWorkers {
     }
     final private String[] WeekDays = new String[]{"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday", "Saturday"};
 
-    public Workers(){
+    private Workers(){
         try {
             dal = DAL.getDAL();
         } catch (SQLException e) {
@@ -189,7 +189,6 @@ public class Workers implements IWorkers {
         Date week = new Date(time);
         d.increase();
         week.increase();
-        d.increase();
         week.increaseByWeek();
         for(; !(d.equals(week)); d.increase()) {
             if(!availableDrivers(LicenseType.A ,d.get_date(), false).isEmpty())
