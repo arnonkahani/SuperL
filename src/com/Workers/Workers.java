@@ -46,10 +46,11 @@ public class Workers implements IWorkers {
 
     @Override
     public java.util.Date getEarliestDeleveryDate(java.util.Date time) {
-        Date d;
+        Date d = new Date(time);
         Date week = new Date(time);
+        d.increase();
         week.increaseByWeek();
-        for(d = new Date(time); !(d.equals(week)); d.increase()) {
+        for(; !(d.equals(week)); d.increase()) {
             if(!availableDrivers(LicenseType.A ,d.get_date()).isEmpty())//TODO: get a real type
                 return d.get_date();
         }
