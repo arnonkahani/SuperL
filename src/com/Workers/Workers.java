@@ -62,10 +62,8 @@ public class Workers implements IWorkers {
                     dID = scan.next();
                 }
 
-                LinkedList<WorkerSchedule> wsLst = dal.getWorkerScheduleByID(dID);
-                for (WorkerSchedule ws : wsLst) {
-                    //dal.addShiftsToWorkerBYid(dID, new Shift())
-                }
+                //new Shift(dID, WorkerSchedule.getTypeByTime(time), time, Worker.JobEnum.Driver);
+
                 lst = new LinkedList<>();
                 lst.add(dal.getDrivetByID(dID));
                 done = true;

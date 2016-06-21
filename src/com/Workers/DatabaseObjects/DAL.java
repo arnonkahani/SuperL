@@ -901,9 +901,10 @@ public class DAL extends DALInitiateConstants implements DALInterface {
         LinkedList<String> lst = new LinkedList<>();
         LinkedList<Driver> drivers = new LinkedList<>();
         try {
-            String query = "SELECT WID FROM WeeklyShift WHERE Day = " + day;
+            String query = "SELECT WID FROM WeeklyShift WHERE Day = ?";
             PreparedStatement pst = connection.prepareStatement(query);
 
+            pst.setString(0, day);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 lst.add(rs.getString(1));
