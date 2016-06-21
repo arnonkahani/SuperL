@@ -36,14 +36,78 @@ public class Workers implements IWorkers {
     }
     @Override
     public List<Driver> availableDrivers(LicenseType type, java.util.Date time, boolean isWeekly) {
-        List<Driver> lst = dal.availableDrivers(type, time);
-        if(lst != null) {}
-        return null;
+        if(!isWeekly) {
+            List<Driver> lst = dal.availableDrivers(type, time);
+            if (lst != null) {
+                return lst;
+            }
+            System.out.println("There is no Driver available for this day");
+            System.out.println("Please Enter a Driver ID for a driver who will be working in this shift");
+            LinkedList<Worker> workers = dal.getAllUsers();
+            System.out.println("ID        |Name            |Licence");
+            System.out.println("-----------------------------------");
+            for (Worker w : workers) {
+                if (dal.getJobsByID(w.ID).contains(Worker.JobEnum.Driver)) {
+                    System.out.print(w.getID() + " |");
+                    System.out.print(w.getName().substring(0, Math.min(16, w.getName().length())) + "                ".substring(0, Math.max(0, 16 - w.getName().length())) + "|");
+                    System.out.println(dal.getDrivetByID(w.getID()).getDriverLicenseType().toString());
+                }
+            }
+            Scanner scan = new Scanner(System.in);
+            String dID = scan.next();
+            boolean done = false;
+            while (!done) {
+                while (dal.getDrivetByID(dID) == null) {
+                    System.out.println("Error parsing answer, please try again");
+                    dID = scan.next();
+                }
+
+                LinkedList<WorkerSchedule> wsLst = dal.getWorkerScheduleByID(dID);
+                for (WorkerSchedule ws : wsLst) {
+                    //dal.addShiftsToWorkerBYid(dID, new Shift())
+                }
+                lst = new LinkedList<>();
+                lst.add(dal.getDrivetByID(dID));
+                done = true;
+            }
+            return lst;
+        }
+        else {
+            return dal.getWeeklyWorkers(WeekDays[time.getDay()%7]);
+        }
     }
 
     @Override
     public boolean isStockWorkerAvailable(java.util.Date time) {
-        return dal.isStockWorkerAvailable(time);
+        boolean b = dal.isStockWorkerAvailable(time);
+        if(b)
+            return b;
+        System.out.println("There is no Stock Worker available for this day");
+        System.out.println("Please Enter a Stock Worker ID for a driver who will be working in this shift");
+        LinkedList<Worker> workers = dal.getAllUsers();
+        System.out.println("ID        |Name            |Licence");
+        System.out.println("-----------------------------------");
+        for(Worker w : workers) {
+            if(dal.getJobsByID(w.ID).contains(Worker.JobEnum.WarehouseWorker)) {
+                System.out.print(w.getID() + " |");
+                System.out.print(w.getName().substring(0,Math.min(16, w.getName().length())) + "                ".substring(0,Math.max(0, 16-w.getName().length())) + "|");
+                System.out.println(dal.getDrivetByID(w.getID()).getDriverLicenseType().toString());
+            }
+        }
+        Scanner scan = new Scanner(System.in);
+        String dID = scan.next();
+        boolean done = false;
+        while(!done) {
+            while (dal.getWorkerByID(dID) == null && !dal.getJobsByID(dID).contains(Worker.JobEnum.WarehouseWorker)) {
+                System.out.println("Error parsing answer, please try again");
+                dID = scan.next();
+            }
+
+
+            //dal.addShiftsToWorkerBYid(dID, new Shift())
+            done = true;
+        }
+        return true;
     }
 
     @Override
@@ -51,9 +115,11 @@ public class Workers implements IWorkers {
         Date d = new Date(time);
         Date week = new Date(time);
         d.increase();
+        week.increase();
+        d.increase();
         week.increaseByWeek();
         for(; !(d.equals(week)); d.increase()) {
-            if(!availableDrivers(LicenseType.A ,d.get_date(), false).isEmpty())//TODO: get a real type
+            if(!availableDrivers(LicenseType.A ,d.get_date(), false).isEmpty())
                 return d.get_date();
         }
 
@@ -172,7 +238,6 @@ public class Workers implements IWorkers {
 
     @Override
     public void setWeeklyDeleveryShifts(List<DayOfWeek> dayOfWeeks) {
-        //TODO: ask for Morning/Evening
         for(DayOfWeek day : dayOfWeeks) {
             boolean found = false;
             LinkedList<Worker> workerList =  dal.getAllUsers();

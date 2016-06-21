@@ -8,6 +8,7 @@ import com.Common.IWorkers;
 import com.Common.Models.Driver;
 import com.Workers.Objects.*;
 import com.Workers.Objects.Date;
+import com.Workers.Workers;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.Connection;
@@ -889,6 +890,29 @@ public class DAL extends DALInitiateConstants implements DALInterface {
             }
 
             return lst;
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public LinkedList<Driver> getWeeklyWorkers(String day) {
+        LinkedList<String> lst = new LinkedList<>();
+        LinkedList<Driver> drivers = new LinkedList<>();
+        try {
+            String query = "SELECT WID FROM WeeklyShift WHERE Day = " + day;
+            PreparedStatement pst = connection.prepareStatement(query);
+
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                lst.add(rs.getString(1));
+            }
+
+            for(String s : lst) {
+                drivers.add(dal.getDrivetByID(s));
+            }
+            return drivers;
 
         } catch (Exception e) {
             System.out.println(e);
