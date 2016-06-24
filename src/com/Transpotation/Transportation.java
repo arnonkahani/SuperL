@@ -75,7 +75,7 @@ public class Transportation implements ITransportation {
     }
 
     @Override
-    public void makeTransportation(Date time, ArrayList<Order> orders) throws
+    public void makeTransportation(Date time, ArrayList<Order> orders,boolean isWeekly) throws
             NoTrucksAvailable, InternalError {
         try {
             Truck truck = null;

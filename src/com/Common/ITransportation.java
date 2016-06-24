@@ -20,7 +20,7 @@ public interface ITransportation {
     /**
      * Create a transportation.s
      */
-    void makeTransportation(Date time,ArrayList<Order> orders) throws ClassNotFoundException, SQLException, ValidationException, Transportation.NoTrucksAvailable, Transportation.NoDriversAvailable;
+    void makeTransportation(Date time,ArrayList<Order> orders,boolean isWeekly) throws Transportation.NoTrucksAvailable, Transportation.InternalError;
 
     /**
     * return a list of all places
