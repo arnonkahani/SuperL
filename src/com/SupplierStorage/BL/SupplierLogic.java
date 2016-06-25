@@ -46,7 +46,7 @@ public class SupplierLogic {
 		_om.setStorageLogic(_storage_logic);
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK); 
-		WeeklyOrder wo = db.get_daily_order(day+1);
+		WeeklyOrder wo = db.get_daily_order((day+1)%7);
 		_om.makeWeekelyOrder(wo);
 		
 		_storage_logic.getSupply(_om.getWeeklyOrder(day));
