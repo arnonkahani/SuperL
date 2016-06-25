@@ -25,6 +25,10 @@ public class Transportation implements ITransportation {
     }
 
     public Transportation(){
+        long l = 1467393615429L;
+        Date d = new Date(l);
+
+
         try {
             db = DB.getInstance();
         } catch (ClassNotFoundException e) {
