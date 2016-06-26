@@ -34,14 +34,14 @@ public class Transportation implements ITransportation {
             todayStart.set(Calendar.SECOND,0);
 
             GregorianCalendar todayEnd = new GregorianCalendar();
-            todayStart.setTime(new Date());
-            todayStart.set(Calendar.HOUR_OF_DAY,24);
-            todayStart.set(Calendar.MINUTE,0);
-            todayStart.set(Calendar.SECOND,0);
+            todayEnd.setTime(new Date());
+            todayEnd.set(Calendar.HOUR_OF_DAY,24);
+            todayEnd.set(Calendar.MINUTE,0);
+            todayEnd.set(Calendar.SECOND,0);
 
             List<com.Transpotation.Models.Transportation> todaysTransportations = db
                     .getTransportationIDBHandler()
-                    .select("? < EndTime AND EndTime < ? AND arrived = 0",todayStart.getTime(),todayEnd.getTime());
+                    .select("? < EndTime AND EndTime < ? AND arrived = 0",todayStart.getTime().getTime(),todayEnd.getTime().getTime());
 
             for(com.Transpotation.Models.Transportation t : todaysTransportations){
                 List<OrderDocument> orderDocuments = db.getOrderDocumentIDBHandler().select("transportation = ?",t.getID());
