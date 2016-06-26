@@ -28,6 +28,8 @@ public class Main {
 
         iTransportation = Transportation.getInstance();
         iSupplierStorage = SupplierStorage.getInstance();
+
+        iTransportation.initialize();
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to Super-Lee Managment System.");
         System.out.println("To continue, please login.");

@@ -38,4 +38,6 @@ public interface ITransportation {
      *
      */
     void addSupplierPlace(Place place);
+
+    void initialize();
 }

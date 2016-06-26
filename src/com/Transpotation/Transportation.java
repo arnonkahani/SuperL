@@ -6,6 +6,7 @@ import com.Common.ITransportation;
 import com.Common.Models.Driver;
 import com.Common.Models.Order;
 import com.SupplierStorage.BE.OrderProduct;
+import com.SupplierStorage.SupplierStorage;
 import com.Transpotation.Models.*;
 import com.Workers.Workers;
 
@@ -24,6 +25,11 @@ public class Transportation implements ITransportation {
     }
 
     public Transportation(){
+
+    }
+
+    public void initialize(){
+        supplierStorage = SupplierStorage.getInstance();
         try{
             db = DB.getInstance();
 
@@ -39,7 +45,7 @@ public class Transportation implements ITransportation {
 
             List<com.Transpotation.Models.Transportation> todaysTransportations = db
                     .getTransportationIDBHandler()
-                    .select("? < EndTime AND EndTime < ? AND arrived = 0",todayStart.getTime().getTime(),todayEnd.getTime().getTime());
+                    .select("arrived = 0");
 
             for(com.Transpotation.Models.Transportation t : todaysTransportations){
                 List<OrderDocument> orderDocuments = db.getOrderDocumentIDBHandler().select("transportation = ?",t.getID());
@@ -58,7 +64,6 @@ public class Transportation implements ITransportation {
         } catch (ClassNotFoundException e) {
             throw new InternalError(e.getMessage());
         }
-
     }
 
     @Override
@@ -127,6 +132,8 @@ public class Transportation implements ITransportation {
             throw new InternalError(e.getMessage());
         }
     }
+
+
 
     @Override
     public List<Place> getAllPlaces() {
