@@ -35,7 +35,7 @@ public class Transportation implements ITransportation {
 
             GregorianCalendar todayStart = new GregorianCalendar();
             todayStart.setTime(new Date());
-            todayStart.set(Calendar.HOUR_OF_DAY,0);
+            todayStart.set(Calendar.HOUR_OF_DAY,24);
             todayStart.set(Calendar.MINUTE,0);
             todayStart.set(Calendar.SECOND,0);
 
@@ -45,7 +45,7 @@ public class Transportation implements ITransportation {
 
             List<com.Transpotation.Models.Transportation> todaysTransportations = db
                     .getTransportationIDBHandler()
-                    .select("arrived = 0");
+                    .select("EndTime < ? AND arrived = 0",todayStart.getTime());
 
             for(com.Transpotation.Models.Transportation t : todaysTransportations){
                 List<OrderDocument> orderDocuments = db.getOrderDocumentIDBHandler().select("transportation = ?",t.getID());
