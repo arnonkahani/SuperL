@@ -34,10 +34,8 @@ public class Transportation implements ITransportation {
             todayStart.set(Calendar.SECOND,0);
 
             GregorianCalendar todayEnd = new GregorianCalendar();
-            todayEnd.setTime(new Date());
-            todayEnd.set(Calendar.HOUR_OF_DAY,24);
-            todayEnd.set(Calendar.MINUTE,0);
-            todayEnd.set(Calendar.SECOND,0);
+            todayEnd.setTime(todayStart.getTime());
+            todayEnd.add(Calendar.DAY_OF_MONTH,1);
 
             List<com.Transpotation.Models.Transportation> todaysTransportations = db
                     .getTransportationIDBHandler()
