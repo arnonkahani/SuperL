@@ -205,6 +205,7 @@ public class Transportation implements ITransportation {
         try {
 
             while(truck == null){
+                table.display();
                 truck = table.select();
 
                 if(!licenseType.isBigger(truck.getLicenseType())){
