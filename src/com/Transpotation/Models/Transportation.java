@@ -44,8 +44,6 @@ public class Transportation {
     }
 
     public void setStartTime(Date startTime) throws ValidationException {
-        if(startTime.getTime() < new Date().getTime())
-            throw new ValidationException("Start time must be in the future");
         if(EndTime != null && EndTime.before(startTime))
             throw new ValidationException("Start time must be before End time");
         StartTime = startTime;

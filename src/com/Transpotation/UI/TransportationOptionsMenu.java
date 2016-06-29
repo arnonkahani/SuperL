@@ -76,7 +76,7 @@ public class TransportationOptionsMenu extends Menu {
         List<OrderDocument> list = db.getOrderDocumentIDBHandler().select("transportation = ?",transportation.getID());
         Table<OrderDocument> table = new Table<>(OrderDocument.class,list);
         table.setOptionsAction((i,t)->{
-            new OrderDocumentOptionsMenu(t);
+            new OrderDocumentOptionsMenu(t).show();
         });
         /*table.setNewAction(()->{
             System.out.println("Please select an order to attach: <PRESS ENTER TO BEGIN>");

@@ -898,13 +898,14 @@ public class DAL extends DALInitiateConstants implements DALInterface {
     }
 
     public LinkedList<Driver> getWeeklyWorkers(String day) {
+        day = day.toUpperCase();
         LinkedList<String> lst = new LinkedList<>();
         LinkedList<Driver> drivers = new LinkedList<>();
         try {
             String query = "SELECT WID FROM WeeklyShift WHERE Day = ?";
             PreparedStatement pst = connection.prepareStatement(query);
 
-            pst.setString(0, day);
+            pst.setString(1, day);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 lst.add(rs.getString(1));
