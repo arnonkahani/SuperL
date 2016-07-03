@@ -128,7 +128,7 @@ public class Transportation implements ITransportation {
                 l.add(orderDocument);
 
                 orderDocument.setSource(o.getPlace());
-                orderDocument.setDestination(o.getPlace());
+                orderDocument.setDestination(Place.MAIN_BRANCH);
                 orderDocument.setOrderID(Integer.parseInt(o.getOrderID()));
             }
 

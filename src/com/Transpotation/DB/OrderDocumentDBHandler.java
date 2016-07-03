@@ -41,7 +41,7 @@ public class OrderDocumentDBHandler extends DBHandler<OrderDocument> {
         OrderDocument d = new OrderDocument(
                 set.getInt("ID"),
                 placeIDBHandler.get(set.getString("Source")),
-                placeIDBHandler.get(set.getString("Destination")),
+                set.getString("Destination") != null ? placeIDBHandler.get(set.getString("Destination")) : Place.MAIN_BRANCH,
                 transportationIDBHandler.get(set.getString("transportation"))
         );
         d.setOrderID(set.getInt("orderID"));
@@ -69,7 +69,7 @@ public class OrderDocumentDBHandler extends DBHandler<OrderDocument> {
                 o.getID(),
                 o.getOrderID(),
                 o.getSource() != null ? o.getSource().getAddress() : null,
-                o.getDestination() != null ? o.getDestination().getAddress() : null,
+                o.getDestination() != null ? o.getDestination().Address : null,
                 o.getTransportation() != null ? o.getTransportation().getID() : null
         };
     }

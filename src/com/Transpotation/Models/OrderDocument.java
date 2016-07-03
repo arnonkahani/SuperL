@@ -43,7 +43,7 @@ public class OrderDocument {
     }
 
     public void setDestination(Place destination) throws ValidationException {
-        if(destination.getShipmentArea()  == null)
+        if(destination != Place.MAIN_BRANCH && destination.getShipmentArea()  == null)
             throw new ValidationException("Cannot set a destination without an area");
         Destination = destination;
     }

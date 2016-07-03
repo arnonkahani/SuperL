@@ -2,8 +2,15 @@ package com.Transpotation.Models;
 
 
 public class Place {
+    public static final Place MAIN_BRANCH;
 
-    private String Address ; //key
+    static{
+        MAIN_BRANCH = new Place();
+        MAIN_BRANCH.setAddress(null);
+        MAIN_BRANCH.setShipmentArea(null);
+    }
+
+    public String Address ; //key
     private Area ShipmentArea ;
     private String PhoneNumber ;
     private String ContactPerson ;
@@ -19,6 +26,8 @@ public class Place {
     }
 
     public String getAddress() {
+        if(this == MAIN_BRANCH)
+            return "Main Branch";
         return Address;
     }
 
@@ -52,6 +61,8 @@ public class Place {
 
     @Override
     public String toString() {
-        return Address + (ShipmentArea != null ? "("+ShipmentArea+")" : "no area");
+        if(this == MAIN_BRANCH)
+            return getAddress();
+        return getAddress() + (ShipmentArea != null ? "("+ShipmentArea+")" : "no area");
     }
 }

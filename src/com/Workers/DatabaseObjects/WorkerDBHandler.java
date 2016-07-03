@@ -25,10 +25,10 @@ public class WorkerDBHandler extends DBHandler<Worker> {
     protected Worker readRow(ResultSet set) throws SQLException {
        Worker w = new Worker(
                set.getString("ID"),
+               set.getString("Name"),
                set.getString("BankNO"),
                set.getString("EmploymentTerms"),
                set.getString("EmploymentDate"),
-               set.getString("Name"),
                null
        );
         return w;
