@@ -25,65 +25,84 @@ public class Main {
     public static void main(String[] args) throws Exception{
         db = DB.getInstance();
         iWorkers = Workers.getInstance();
-
-        iTransportation = Transportation.getInstance();
-        iSupplierStorage = SupplierStorage.getInstance();
-
-        iTransportation.initialize();
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to Super-Lee Managment System.");
         System.out.println("To continue, please login.");
-        System.out.print("Username:");
-        String username = sc.next();
-        System.out.print("Password:");
-        String password = sc.next();
-        if(username.compareTo("Super")==0&&password.compareTo("Super")==0) {
+
+        boolean toExit = false;
+        while(!toExit) {
+
+            System.out.print("Username:");
+            String username = sc.next();
+            System.out.print("Password:");
+            String password = sc.next();
+            if (username.compareTo("Super") == 0 && password.compareTo("Super") == 0) {
 
 
-            boolean check = false;
-            while(!check) {
-                System.out.println("please enter the module:");
-                System.out.println("1. Workers");
-                System.out.println("2. Storage");
-                System.out.println("3. Supplier");
-                System.out.println("4. Transportation");
-                System.out.println("5. Exit");
-                String s = sc.next();
-                switch (Integer.parseInt(s)) {
-                    case 1:
-                        LoginMenu.main("Admin", "Admin");
-                        break;
-                    case 2:
-                        iSupplierStorage.showStorage();
-                        break;
-                    case 3:
-                        iSupplierStorage.showSupplier();
-                        break;
-                    case 4:
-                        DB db = DB.getInstance();
-                        new MainMenu(db, iWorkers).show();
-                        break;
-                    case 5:
-                        check = true;
-                        break;
-                    default:
-                        System.out.println("Error!");
-                        break;
+                iTransportation = Transportation.getInstance();
+                iSupplierStorage = SupplierStorage.getInstance();
+
+                iTransportation.initialize();
+
+                boolean check = false;
+                while (!check) {
+                    System.out.println("please enter the module:");
+                    System.out.println("1. Workers");
+                    System.out.println("2. Storage");
+                    System.out.println("3. Supplier");
+                    System.out.println("4. Transportation");
+                    System.out.println("5. Exit");
+                    String s = sc.next();
+                    switch (Integer.parseInt(s)) {
+                        case 1:
+                            LoginMenu.main("Admin", "Admin");
+                            break;
+                        case 2:
+                            iSupplierStorage.showStorage();
+                            break;
+                        case 3:
+                            iSupplierStorage.showSupplier();
+                            break;
+                        case 4:
+                            DB db = DB.getInstance();
+                            new MainMenu(db, iWorkers).show();
+                            break;
+                        case 5:
+                            check = true;
+                            toExit = true;
+                            break;
+                        default:
+                            System.out.println("Error!");
+                            break;
+                    }
                 }
-            }
-        }
-        else {
-            LinkedList<Worker.JobEnum> jobs = iWorkers.getJobs(username, password);
-            if (jobs != null) {
-                if (jobs.contains(Worker.JobEnum.HRManager) || jobs.contains(Worker.JobEnum.ShiftManager)) {
-                    LoginMenu.main(username, password);
-                } else if (jobs.contains(Worker.JobEnum.StorageManager)) {
-                    iSupplierStorage.showStorage();
-                } else if (jobs.contains(Worker.JobEnum.SupplierManager)) {
-                    iSupplierStorage.showSupplier();
-                } else if (jobs.contains(Worker.JobEnum.TransportationManager)) {
-                    DB db = DB.getInstance();
-                    new MainMenu(db, iWorkers).show();
+            } else {
+                if (!iWorkers.isUser(username, password)) {
+                    System.out.println("A user with such a name does not exist!");
+                    System.out.println("Please try again");
+                }
+                else {
+                    toExit = true;
+
+                    LinkedList<Worker.JobEnum> jobs = iWorkers.getJobs(username, password);
+
+                    iTransportation = Transportation.getInstance();
+                    iSupplierStorage = SupplierStorage.getInstance();
+
+                    iTransportation.initialize();
+
+                    if (jobs != null) {
+                        if (jobs.contains(Worker.JobEnum.HRManager) || jobs.contains(Worker.JobEnum.ShiftManager)) {
+                            LoginMenu.main(username, password);
+                        } else if (jobs.contains(Worker.JobEnum.StorageManager)) {
+                            iSupplierStorage.showStorage();
+                        } else if (jobs.contains(Worker.JobEnum.SupplierManager)) {
+                            iSupplierStorage.showSupplier();
+                        } else if (jobs.contains(Worker.JobEnum.TransportationManager)) {
+                            DB db = DB.getInstance();
+                            new MainMenu(db, iWorkers).show();
+                        }
+                    }
                 }
             }
         }

@@ -48,4 +48,6 @@ public interface IWorkers {
     void setWeeklyDeleveryShifts(List<DayOfWeek> dayOfWeeks);
 
     LinkedList<Worker.JobEnum> getJobs(String UserName, String Password);
+
+    boolean isUser(String username, String password);
 }

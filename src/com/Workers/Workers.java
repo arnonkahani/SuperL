@@ -363,4 +363,8 @@ public class Workers implements IWorkers {
             return null;
         return dal.getJobsByID(u.ID);
     }
+    @Override
+    public boolean isUser(String username, String password) {
+        return (dal.getUserByUsernameAndPassword(username, password) != null);
+    }
 }
