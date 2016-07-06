@@ -35,7 +35,6 @@ public class MainMenu extends Menu {
 
         menu.add(new Pair<>("Manage Future Transportations", this::manageFutureTransportations));
         menu.add(new Pair<>("View Current Transportations", this::viewCurrentTransportations));
-        menu.add(new Pair<>("Manage Unattached Orders", this::manageOrders));
         menu.add(new Pair<>("Manage Trucks", this::manageTrucks));
         menu.add(new Pair<>("Manage Places & Areas", this::managePlacesAndAreas));
         menu.add(new Pair<>("Archive", this::archive));
@@ -54,10 +53,6 @@ public class MainMenu extends Menu {
         List<Transportation> list = handler.select("StartTime > ?", new Date());
 
         Table<Transportation> table = new Table<>(Transportation.class,list);
-        table.setDeleteAction((i,t)->{
-            handler.delete(t.getID()+"");
-            list.remove(t);
-        });
         table.setEditAction((i,t)->{
             Transportation transportation = new Editor<>(Transportation.class,t).edit();
             if(transportation != null)
@@ -108,6 +103,7 @@ public class MainMenu extends Menu {
         List<Transportation> l = db.getTransportationIDBHandler().select("StartTime < ? AND EndTime > ?",new Date(),new Date());
         new Table<>(Transportation.class,l).display();
     }
+/*
 
     private void manageOrders(Integer integer, String s) throws Exception {
         IDBHandler<OrderDocument> handler = db.getOrderDocumentIDBHandler();
@@ -149,6 +145,7 @@ public class MainMenu extends Menu {
         });
         table.display();
     }
+*/
 
     private void manageTrucks(Integer integer, String s) throws Exception {
         IDBHandler<Truck> handler = db.getTruckDBHandler();

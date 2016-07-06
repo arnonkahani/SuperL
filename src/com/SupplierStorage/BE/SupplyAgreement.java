@@ -81,7 +81,7 @@ public class SupplyAgreement{
 	public void set_day(String string) {
 		_day = new ArrayList<>();
 		for (int i = 0; i < string.length(); i++) {
-			_day.add(Day.values()[Integer.parseInt(String.valueOf(string.charAt(i)))-1]);
+			_day.add(Day.values()[(Integer.parseInt(String.valueOf(string.charAt(i)))+6) % 7]);
 		}		
 	}
 

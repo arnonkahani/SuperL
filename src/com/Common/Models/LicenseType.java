@@ -5,6 +5,6 @@ public enum LicenseType{
     A,B,C;
 
     public boolean isBigger(LicenseType other){
-        return !(this.compareTo(other) < 0);
+        return other == null || !(this.compareTo(other) < 0);
     }
 }

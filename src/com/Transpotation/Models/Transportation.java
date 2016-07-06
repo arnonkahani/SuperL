@@ -2,9 +2,12 @@ package com.Transpotation.Models;
 
 import com.Common.DB.DB;
 import com.Common.Models.Driver;
+import com.Common.UI.Hide;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -60,10 +63,23 @@ public class Transportation {
     public void setEndTime(Date endTime) throws ValidationException {
         if(endTime.getTime() < new Date().getTime())
             throw new ValidationException("End time must be in the future");
-        if(StartTime != null && endTime.before(StartTime))
-            throw new ValidationException("End time must be after Start time");
-        /*if(!Workers.getInstance().isStockWorkerAvailable(endTime))
-            throw new ValidationException("No Stock Worker available at that time");*/
+
+        if(StartTime != null){
+            GregorianCalendar startplusday = new GregorianCalendar();
+            startplusday.setTime(StartTime);
+            startplusday.add(Calendar.DAY_OF_MONTH,1);
+
+            GregorianCalendar startplusweek = new GregorianCalendar();
+            startplusweek.setTime(StartTime);
+            startplusweek.add(Calendar.DAY_OF_MONTH,7);
+
+            if(endTime.before(startplusday.getTime()))
+                throw new ValidationException("End time must be at least a day after Start time");
+
+            if(endTime.after(startplusweek.getTime()))
+                throw new ValidationException("End time must be at most a week after Start time");
+        }
+
         EndTime = endTime;
     }
 
@@ -152,6 +168,7 @@ public class Transportation {
         return text.substring(0, end) + "...";
     }
 
+    @Hide
     public void setArrived(boolean arrived) {
         this.arrived = arrived ? 1 : 0;
     }
