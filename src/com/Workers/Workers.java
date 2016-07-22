@@ -49,7 +49,9 @@ public class Workers implements IWorkers {
             for (Worker w : workers) {
                 if (dal.getJobsByID(w.ID).contains(Worker.JobEnum.Driver)) {
                     System.out.print(w.getID() + " |");
-                    System.out.print(w.getName().substring(0, Math.min(16, w.getName().length())) + "                ".substring(0, Math.max(0, 16 - w.getName().length())) + "|");
+                    System.out.print(w.getName().substring(0, Math.min(16, w.getName().length())) +
+                            "                ".substring(0, Math.max(0, 16 - w.getName().length())) +
+                            "|");
                     System.out.println(dal.getDrivetByID(w.getID()).getDriverLicenseType().toString());
                 }
             }
@@ -62,7 +64,44 @@ public class Workers implements IWorkers {
                     dID = scan.next();
                 }
 
-                //new Shift(dID, WorkerSchedule.getTypeByTime(time), time, Worker.JobEnum.Driver);
+                LinkedList<WorkerSchedule> schedule = dal.getWorkerScheduleByID(dID);
+                for(WorkerSchedule ws : schedule) {
+                    if(ws.get_day().compareTo(new Date(time).get_day()) != 0)
+                        schedule.remove(ws);
+                }
+
+                if(schedule.isEmpty()) {
+                    System.out.println("No schedule found for the driver");
+                    System.out.println("Write \"add\" to add a schedule day or \"new\" to select another driver");
+
+                    String s = scan.next();
+                    while(s.compareTo("add") != 0 && s.compareTo("new") != 0) {
+                        System.out.println("Error!");
+                        System.out.println("Please type \"add\" or \"new\"");
+                        s = scan.next();
+                    }
+
+                    if(s.compareTo("new") == 0)
+                        break;
+
+                    if(s.compareTo("add") == 0) {
+                        try {
+                        schedule.add(new WorkerSchedule(WeekDays[time.getDay()%7], WorkerSchedule.getTypeByTime(time)));
+                        } catch (WorkerSchedule.NotValidDayException e) { }
+                        dal.addWorkerScheduleByID(dID, schedule);
+                    }
+                }
+
+                Shift s = null;
+                try {
+                    s = new Shift(dID, WorkerSchedule.getTypeByTime(time), new Date(time), Worker.JobEnum.Driver);
+                } catch (WorkerSchedule.NotValidDayException e) {
+
+                }
+                LinkedList<Shift> shiftList = new LinkedList<>();
+                shiftList.add(s);
+
+                dal.addShiftsToWorkerBYid(dID, shiftList);
 
                 lst = new LinkedList<>();
                 lst.add(dal.getDrivetByID(dID));
@@ -81,15 +120,15 @@ public class Workers implements IWorkers {
         if(b)
             return b;
         System.out.println("There is no Stock Worker available for this day");
-        System.out.println("Please Enter a Stock Worker ID for a driver who will be working in this shift");
+        System.out.println("Please Enter a worker ID for a stock worker who will be working in this shift");
         LinkedList<Worker> workers = dal.getAllUsers();
-        System.out.println("ID        |Name            |Licence");
-        System.out.println("-----------------------------------");
+        System.out.println("ID        |Name            ");
+        System.out.println("---------------------------");
         for(Worker w : workers) {
             if(dal.getJobsByID(w.ID).contains(Worker.JobEnum.WarehouseWorker)) {
                 System.out.print(w.getID() + " |");
-                System.out.print(w.getName().substring(0,Math.min(16, w.getName().length())) + "                ".substring(0,Math.max(0, 16-w.getName().length())) + "|");
-                System.out.println(dal.getDrivetByID(w.getID()).getDriverLicenseType().toString());
+                System.out.print(w.getName().substring(0,Math.min(16, w.getName().length())) +
+                        "                ".substring(0,Math.max(0, 16-w.getName().length())));
             }
         }
         Scanner scan = new Scanner(System.in);
@@ -101,8 +140,44 @@ public class Workers implements IWorkers {
                 dID = scan.next();
             }
 
+            LinkedList<WorkerSchedule> schedule = dal.getWorkerScheduleByID(dID);
+            for(WorkerSchedule ws : schedule) {
+                if(ws.get_day().compareTo(new Date(time).get_day()) != 0)
+                    schedule.remove(ws);
+            }
 
-            //dal.addShiftsToWorkerBYid(dID, new Shift())
+            if(schedule.isEmpty()) {
+                System.out.println("No schedule found for the worker");
+                System.out.println("Write \"add\" to add a schedule day or \"new\" to select another worker");
+
+                String s = scan.next();
+                while(s.compareTo("add") != 0 && s.compareTo("new") != 0) {
+                    System.out.println("Error!");
+                    System.out.println("Please type \"add\" or \"new\"");
+                    s = scan.next();
+                }
+
+                if(s.compareTo("new") == 0)
+                    break;
+
+                if(s.compareTo("add") == 0) {
+                    try {
+                        schedule.add(new WorkerSchedule(WeekDays[time.getDay()%7], WorkerSchedule.getTypeByTime(time)));
+                    } catch (WorkerSchedule.NotValidDayException e) { }
+                    dal.addWorkerScheduleByID(dID, schedule);
+                }
+            }
+
+            Shift s = null;
+            try {
+                s = new Shift(dID, WorkerSchedule.getTypeByTime(time), new Date(time), Worker.JobEnum.WarehouseWorker);
+            } catch (WorkerSchedule.NotValidDayException e) {
+
+            }
+            LinkedList<Shift> shiftList = new LinkedList<>();
+            shiftList.add(s);
+
+            dal.addShiftsToWorkerBYid(dID, shiftList);
             done = true;
         }
         return true;

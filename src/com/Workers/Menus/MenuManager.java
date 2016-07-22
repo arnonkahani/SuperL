@@ -1,10 +1,13 @@
 package com.Workers.Menus;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import com.Common.Models.LicenseType;
 import com.Workers.DatabaseObjects.DAL;
@@ -15,6 +18,8 @@ import com.Workers.Objects.Shift;
 import com.Workers.Objects.User;
 import com.Workers.Objects.Worker;
 import com.Workers.Objects.WorkerSchedule;
+import com.Workers.Objects.WorkerSchedule.TypeEnum;
+import com.Workers.Objects.Worker.JobEnum;
 
 public class MenuManager {
     public enum manuNames {
@@ -280,7 +285,7 @@ public class MenuManager {
     public Menu getAddWorker() {
         if (loggedIn.abilities.contains(Worker.JobEnum.HRManager)) {
             Menu temp = new Menu(false,
-                    "Add WorkerDBHandler\n----------\nType \"back\" to return back to the Main Menu\n");
+                    "Add Worker\n----------\nType \"back\" to return back to the Main Menu\n");
 
             temp.addAction("def", new CallBack() {
                 public boolean call(MenuManager manager) {
@@ -291,15 +296,57 @@ public class MenuManager {
                         manager.displayText("\n\n\n\n");
                         return true;
                     }
-                    while (manager.getDAL().getWorkerByID(ID) != null) {
-                        manager.displayText("A worker with such an ID already exists!, please try again\n");
-                        ID = manager.getInput();
-                        if (ID.compareTo("back") == 0) {
-                            manager.setMenu(manuNames.MainManu);
-                            manager.displayText("\n\n\n\n");
-                            return true;
+                    boolean isNumber = true;
+                    for(int i  = 0; i < ID.length(); i++){
+                        if(ID.charAt(i) < '0' || ID.charAt(i) > '9')
+                            isNumber = false;
+                    }
+                    while(ID.length() != 9 || !isNumber ||ID.isEmpty() || manager.getDAL().getWorkerByID(ID) != null) {
+                        if(!isNumber) {
+                            manager.displayText("An ID must consist only numbers!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if (ID.length() != 9) {
+                            manager.displayText("An ID must be 9 digits long!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if (ID.isEmpty()) {
+                            manager.displayText("An ID cannot be empty!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+
+                        else if (manager.getDAL().getWorkerByID(ID) != null) {
+                            manager.displayText("A worker with such an ID already exists!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+
+                        isNumber = true;
+                        for(int i  = 0; i < ID.length(); i++){
+                            if(ID.charAt(i) < '0' || ID.charAt(i) > '9')
+                                isNumber = false;
                         }
                     }
+
 
                     manager.displayText("Please enter the workers name:");
                     String name = manager.getInput();
@@ -309,12 +356,73 @@ public class MenuManager {
                         return true;
                     }
 
+                    while (name.isEmpty()) {
+                        manager.displayText("A workers name cannot be empty!, please try again\n");
+                        name = manager.getInput();
+                        if (ID.compareTo("back") == 0) {
+                            manager.setMenu(manuNames.MainManu);
+                            manager.displayText("\n\n\n\n");
+                            return true;
+                        }
+                    }
+
                     manager.displayText("Please enter the workers bank number:");
                     String bankNo = manager.getInput();
                     if (bankNo.compareTo("back") == 0) {
                         manager.setMenu(manuNames.MainManu);
                         manager.displayText("\n\n\n\n");
                         return true;
+                    }
+
+                    isNumber = true;
+                    for(int i  = 0; i < bankNo.length(); i++){
+                        if(bankNo.charAt(i) < '0' || bankNo.charAt(i) > '9')
+                            isNumber = false;
+                    }
+
+                    while (bankNo.length() != 9 || bankNo.isEmpty() || !isNumber || dal.checkBankNo(bankNo)) {
+                        if(bankNo.length() != 9) {
+                            manager.displayText("A workers bank number must be 9 digits long!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if(!isNumber) {
+                            manager.displayText("A workers bank number must consist only number!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if(bankNo.isEmpty()) {
+                            manager.displayText("A workers bank number cannot be empty!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if(dal.checkBankNo(bankNo)) {
+                            manager.displayText("A workers with such a bank number already exists!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+
+                        isNumber = true;
+                        for(int i  = 0; i < bankNo.length(); i++){
+                            if(bankNo.charAt(i) < '0' || bankNo.charAt(i) > '9')
+                                isNumber = false;
+                        }
                     }
 
                     manager.displayText("Please enter the workers employment terms (can be left blank):");
@@ -336,8 +444,7 @@ public class MenuManager {
                             date.charAt(2) != '/' || date.charAt(5) != '/' ||
                             Integer.parseInt(date.substring(0, 2)) < 0 || Integer.parseInt(date.substring(0, 2)) > 31 ||
                             Integer.parseInt(date.substring(3, 5)) < 0 || Integer.parseInt(date.substring(3, 5)) > 12 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 16) {
+                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120) {
                         manager.displayText("Error regarding the Date!, please insert the date in DD/MM/YYYY format\n");
                         date = manager.getInput();
                         if (date.compareTo("back") == 0) {
@@ -355,7 +462,7 @@ public class MenuManager {
                         manager.displayText(e.toString());
                     }
 
-                    LinkedList<Worker.JobEnum> abilities = new LinkedList<Worker.JobEnum>();
+                    LinkedList<JobEnum> abilities = new LinkedList<JobEnum>();
                     manager.displayText("Please enter the Jobs the worker can do (enter one at a time and finish with the word \"Done\"):\n");
                     manager.displayText("Possible jobs are: ");
                     boolean first = true;
@@ -393,7 +500,7 @@ public class MenuManager {
                     boolean toDrive = false;
                     LicenseType licenceType = null;
 
-                    if(abilities.contains(Worker.JobEnum.Driver)){
+                    if(abilities.contains(JobEnum.Driver)){
                         manager.displayText("Please enter the licence type:");first = true;
                         for (LicenseType type : LicenseType.values()) {
                             if (first) {
@@ -416,7 +523,7 @@ public class MenuManager {
                                 licenceCheck = true;
                             } catch (Exception e) {
                                 manager.displayText("Licence type is not valid, please try again.\n");
-                                manager.getInput();
+                                licence = manager.getInput();
                             }
                         }
                         toDrive = true;
@@ -455,7 +562,7 @@ public class MenuManager {
     public Menu getEditWorker() {
         if (loggedIn.abilities.contains(Worker.JobEnum.HRManager)) {
             Menu temp = new Menu(true,
-                    "Edit WorkerDBHandler\n-----------\nType \"back\" to return back to the Main Menu\n" +
+                    "Edit Worker\n-----------\nType \"back\" to return back to the Main Menu\n" +
                             "Please Type \"edit\" to edit a worker or \"delete\" to delete a worker\n");
 
             temp.addAction("delete", new CallBack() {
@@ -499,7 +606,7 @@ public class MenuManager {
                     }
 
                     if (dal.deleteWorkerByID(editeduser.ID)) {
-                        manager.displayText("WorkerDBHandler deleted from the database!\nPress any key to return back to Main Manu");
+                        manager.displayText("Worker deleted from the database!\nPress any key to return back to Main Manu");
                         manager.getInput();
                         manager.setMenu(manuNames.MainManu);
                         manager.displayText("\n\n\n\n");
@@ -534,15 +641,26 @@ public class MenuManager {
                         editeduser = manager.getDAL().getWorkerByID(ID);
                     }
 
-                    manager.displayText("WorkerDBHandler\n------\n" +
+                    manager.displayText("Worker\n------\n" +
                             "ID: " + editeduser.ID + "\n" +
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-                                        "Jobs: " + TODO:get jobs*/);
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\" or \"back\"\n");
                     return false;
                 }
             });
@@ -577,20 +695,31 @@ public class MenuManager {
                     } else {
                         editeduser.Name = ans;
                         if (dal.updateWorker(editeduser)) {
-                            manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
                             manager.displayText("\n\n\n\n");
                         }
                     }
 
-                    manager.displayText("WorkerDBHandler\n------\n" +
+                    manager.displayText("Worker\n------\n" +
                             "ID: " + editeduser.ID + "\n" +
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/);
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\" or \"back\"\n");
                     return false;
                 }
             });
@@ -607,20 +736,31 @@ public class MenuManager {
                     } else {
                         editeduser.BankNO = ans;
                         if (dal.updateWorker(editeduser)) {
-                            manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
                             manager.displayText("\n\n\n\n");
                         }
                     }
 
-                    manager.displayText("WorkerDBHandler\n------\n" +
+                    manager.displayText("Worker\n------\n" +
                             "ID: " + editeduser.ID + "\n" +
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/);
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\" or \"back\"\n");
                     return false;
                 }
             });
@@ -638,8 +778,7 @@ public class MenuManager {
                             date.charAt(2) != '/' || date.charAt(5) != '/' ||
                             Integer.parseInt(date.substring(0, 2)) < 0 || Integer.parseInt(date.substring(0, 2)) > 31 ||
                             Integer.parseInt(date.substring(3, 5)) < 0 || Integer.parseInt(date.substring(3, 5)) > 12 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 16) {
+                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120) {
                         manager.displayText("Error regarding the Date!, please insert the date in DD/MM/YYYY format\n");
                         date = manager.getInput();
                         if (date.compareTo("back") == 0) {
@@ -652,20 +791,31 @@ public class MenuManager {
 
                     editeduser.EmpDate = date;
                     if (dal.updateWorker(editeduser)) {
-                        manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                        manager.displayText("Worker Updated!, Press any key to continue.\n");
                         manager.displayText("\n\n\n\n");
                     }
 
 
-                    manager.displayText("WorkerDBHandler\n------\n" +
+                    manager.displayText("Worker\n------\n" +
                             "ID: " + editeduser.ID + "\n" +
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/);
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\" or \"back\"\n");
                     return false;
                 }
             });
@@ -680,22 +830,168 @@ public class MenuManager {
                         manager.displayText("\n\n\n\n");
                         return true;
                     } else {
-                        editeduser.Name = ans;
+                        editeduser.EmpTerms = ans;
                         if (dal.updateWorker(editeduser)) {
-                            manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
                             manager.displayText("\n\n\n\n");
                         }
                     }
 
-                    manager.displayText("WorkerDBHandler\n------\n" +
+                    manager.displayText("Worker\n------\n" +
                             "ID: " + editeduser.ID + "\n" +
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/);
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\" or \"back\"\n");
+                    return false;
+                }
+            });
+
+            temp.addAction("Jobs", new CallBack() {
+                public boolean call(MenuManager manager) {
+                    manager.displayText("To add a job write \"add <Job Name>\" and to delete a job write \"delete <Job Name>\"\n");
+                    manager.displayText("Possible jobs are:");
+                    boolean first = true;
+                    for(Worker.JobEnum j : Worker.JobEnum.values()){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    String ans = manager.getInput();
+                    LinkedList<Worker.JobEnum> jobListTemp = manager.getDAL().getJobsByID(editeduser.ID);
+                    if (ans.compareTo("back") == 0) {
+
+                        manager.setMenu(manuNames.MainManu);
+                        manager.displayText("\n\n\n\n");
+                        return true;
+                    }
+                    String[] jobAndWhat = ans.split(" ");
+                    boolean ansCheck = ((jobAndWhat[0].compareTo("delete") == 0)||(jobAndWhat[0].compareTo("add") == 0));
+                    try{
+                        Worker.JobEnum.valueOf(jobAndWhat[1]);
+                    } catch (IllegalArgumentException e){
+                        ansCheck = false;
+                    }
+
+                    while (!ansCheck){
+                        manager.displayText("Error while reading input, please try again.\n");
+                        manager.displayText("To add a job write \"add <Job Name>\" and to delete a job write \"delete <Job Name>\"\n");
+                        ans = manager.getInput();
+                        if (ans.compareTo("back") == 0) {
+
+                            manager.setMenu(manuNames.MainManu);
+                            manager.displayText("\n\n\n\n");
+                            return true;
+                        }
+                        jobAndWhat = ans.split(" ");
+                        ansCheck = ((jobAndWhat[0].compareTo("delete") == 0)||(jobAndWhat[0].compareTo("add") == 0));
+                        try{
+                            Worker.JobEnum.valueOf(jobAndWhat[1]);
+                        } catch (IllegalArgumentException e){
+                            ansCheck = false;
+                        }
+                    }
+
+                    if((jobAndWhat[0].compareTo("delete") == 0)){
+                        for(Worker.JobEnum j : jobListTemp){
+                            if(j.toString().compareTo(jobAndWhat[1]) == 0)
+                                if(jobAndWhat[1].compareTo("Driver") == 0){
+                                    if (dal.deleteJobByID(editeduser.ID , j) && dal.deleteDriverByID(editeduser.ID)) {
+                                        manager.displayText("Worker Updated!, Press any key to continue.\n");
+                                        manager.displayText("\n\n\n\n");
+                                    }
+                                }
+                                else if (dal.deleteJobByID(editeduser.ID , j)) {
+                                    manager.displayText("Worker Updated!, Press any key to continue.\n");
+                                    manager.displayText("\n\n\n\n");
+                                }
+                        }
+                    }
+                    else if((jobAndWhat[0].compareTo("add") == 0)) {
+                        jobListTemp.add(Worker.JobEnum.valueOf(jobAndWhat[1]));
+                        LinkedList<Worker.JobEnum> addList = new LinkedList<JobEnum>();
+                        addList.add(Worker.JobEnum.valueOf(jobAndWhat[1]));
+
+                        LicenseType licenceType = null;
+                        if(jobAndWhat[1].compareTo("Driver") == 0) {
+                            manager.displayText("Please enter the licence type:");
+                            first = true;
+                            for (LicenseType type : LicenseType.values()) {
+                                if (first) {
+                                    manager.displayText(type.toString());
+                                    first = false;
+                                } else
+                                    manager.displayText(", " + type.toString());
+                            }
+                            manager.displayText(".\n");
+                            String licence = manager.getInput();
+                            if (licence.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                            boolean licenceCheck = false;
+                            while (!licenceCheck) {
+                                try {
+                                    licenceType = LicenseType.valueOf(licence);
+                                    licenceCheck = true;
+                                } catch (Exception e) {
+                                    manager.displayText("Licence type is not valid, please try again.\n");
+                                    licence = manager.getInput();
+                                }
+                            }
+                            if (dal.addJobsByID(editeduser.ID, addList) && dal.addDriverLicenceByID(editeduser.ID, licenceType)) {
+                                manager.displayText("Worker Updated!, Press any key to continue.\n");
+                                manager.displayText("\n\n\n\n");
+                            }
+                        }
+                        else if (dal.addJobsByID(editeduser.ID, addList)) {
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
+                            manager.displayText("\n\n\n\n");
+                        }
+                    }
+
+
+
+
+                    manager.displayText("Worker\n------\n" +
+                            "ID: " + editeduser.ID + "\n" +
+                            "Name: " + editeduser.Name + "\n" +
+                            "BankNo: " + editeduser.BankNO + "\n" +
+                            "Employment Date: " + editeduser.EmpDate + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\" or \"back\"\n");
                     return false;
                 }
             });
@@ -720,13 +1016,54 @@ public class MenuManager {
                         manager.displayText("\n\n\n\n");
                         return true;
                     }
-                    while (manager.getDAL().getWorkerByID(ID) != null) {
-                        manager.displayText("A user with such an ID already exists!, please try again\n");
-                        ID = manager.getInput();
-                        if (ID.compareTo("back") == 0) {
-                            manager.setMenu(manuNames.MainManu);
-                            manager.displayText("\n\n\n\n");
-                            return true;
+                    boolean isNumber = true;
+                    for(int i  = 0; i < ID.length(); i++){
+                        if(ID.charAt(i) < '0' || ID.charAt(i) > '9')
+                            isNumber = false;
+                    }
+                    while(ID.length() != 9 || !isNumber ||ID.isEmpty() || manager.getDAL().getWorkerByID(ID) != null) {
+                        if(!isNumber) {
+                            manager.displayText("An ID must consist only numbers!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if (ID.length() != 9) {
+                            manager.displayText("An ID must be 9 digits long!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if (ID.isEmpty()) {
+                            manager.displayText("An ID cannot be empty!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+
+                        else if (manager.getDAL().getWorkerByID(ID) != null) {
+                            manager.displayText("A worker with such an ID already exists!, please try again\n");
+                            ID = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+
+                        isNumber = true;
+                        for(int i  = 0; i < ID.length(); i++){
+                            if(ID.charAt(i) < '0' || ID.charAt(i) > '9')
+                                isNumber = false;
                         }
                     }
 
@@ -738,12 +1075,67 @@ public class MenuManager {
                         return true;
                     }
 
+                    while (name.isEmpty()) {
+                        manager.displayText("A users name cannot be empty!, please try again\n");
+                        name = manager.getInput();
+                        if (ID.compareTo("back") == 0) {
+                            manager.setMenu(manuNames.MainManu);
+                            manager.displayText("\n\n\n\n");
+                            return true;
+                        }
+                    }
+
                     manager.displayText("Please enter the users bank number:");
                     String bankNo = manager.getInput();
                     if (bankNo.compareTo("back") == 0) {
                         manager.setMenu(manuNames.MainManu);
                         manager.displayText("\n\n\n\n");
                         return true;
+                    }
+
+                    while (bankNo.length() != 9 || bankNo.isEmpty() || !isNumber || dal.checkBankNo(bankNo)) {
+                        if(bankNo.length() != 9) {
+                            manager.displayText("A workers bank number must be 9 digits long!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if(!isNumber) {
+                            manager.displayText("A workers bank number must consist only number!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if(bankNo.isEmpty()) {
+                            manager.displayText("A workers bank number cannot be empty!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+                        else if(dal.checkBankNo(bankNo)) {
+                            manager.displayText("A workers with such a bank number already exists!, please try again\n");
+                            bankNo = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        }
+
+                        isNumber = true;
+                        for(int i  = 0; i < bankNo.length(); i++){
+                            if(bankNo.charAt(i) < '0' || bankNo.charAt(i) > '9')
+                                isNumber = false;
+                        }
                     }
 
                     manager.displayText("Please enter the users employment terms:");
@@ -765,8 +1157,7 @@ public class MenuManager {
                             date.charAt(2) != '/' || date.charAt(5) != '/' ||
                             Integer.parseInt(date.substring(0, 2)) < 0 || Integer.parseInt(date.substring(0, 2)) > 31 ||
                             Integer.parseInt(date.substring(3, 5)) < 0 || Integer.parseInt(date.substring(3, 5)) > 12 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 16) {
+                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120) {
                         manager.displayText("Error regarding the Date!, please insert the date in DD/MM/YYYY format\n");
                         date = manager.getInput();
                         if (date.compareTo("back") == 0) {
@@ -784,7 +1175,7 @@ public class MenuManager {
                         manager.displayText(e.toString());
                     }
 
-                    LinkedList<Worker.JobEnum> abilities = new LinkedList<Worker.JobEnum>();
+                    LinkedList<JobEnum> abilities = new LinkedList<JobEnum>();
                     manager.displayText("Please enter the Jobs the user can do (enter one at a time and finish with the word \"Done\"):\n");
                     manager.displayText("Possible jobs are: ");
                     boolean first = true;
@@ -795,6 +1186,7 @@ public class MenuManager {
                         } else
                             manager.displayText(", " + jobType.toString());
                     }
+                    manager.displayText(".\n");
                     String job = manager.getInput();
                     if (job.compareTo("back") == 0) {
                         manager.setMenu(manuNames.MainManu);
@@ -816,30 +1208,82 @@ public class MenuManager {
                             return true;
                         }
                     }
+                    boolean toDrive = false;
+                    LicenseType licenceType = null;
 
-                    manager.displayText("Please enter the users username");
+                    if(abilities.contains(JobEnum.Driver)){
+                        manager.displayText("Please enter the licence type:");first = true;
+                        for (LicenseType type : LicenseType.values()) {
+                            if (first) {
+                                manager.displayText(type.toString());
+                                first = false;
+                            } else
+                                manager.displayText(", " + type.toString());
+                        }
+                        manager.displayText(".\n");
+                        String licence = manager.getInput();
+                        if (licence.compareTo("back") == 0) {
+                            manager.setMenu(manuNames.MainManu);
+                            manager.displayText("\n\n\n\n");
+                            return true;
+                        }
+                        boolean licenceCheck = false;
+                        while(!licenceCheck){
+                            try {
+                                licenceType = LicenseType.valueOf(licence);
+                                licenceCheck = true;
+                            } catch (Exception e) {
+                                manager.displayText("Licence type is not valid, please try again.\n");
+                                licence = manager.getInput();
+                            }
+                        }
+                        toDrive = true;
+                    }
+
+                    manager.displayText("Please enter the users username:");
                     String username = manager.getInput();
                     if (username.compareTo("back") == 0) {
                         manager.setMenu(manuNames.MainManu);
                         manager.displayText("\n\n\n\n");
                         return true;
                     }
-                    while (manager.getDAL().doesUsernameExist(username)) {
-                        manager.displayText("A user with such a username already exists!, please try again\n");
-                        username = manager.getInput();
-                        if (username.compareTo("back") == 0) {
-                            manager.setMenu(manuNames.MainManu);
-                            manager.displayText("\n\n\n\n");
-                            return true;
+                    while(manager.getDAL().doesUsernameExist(username) || username.isEmpty()) {
+                        if (manager.getDAL().doesUsernameExist(username)) {
+                            manager.displayText("A user with such a username already exists!, please try again\n");
+                            username = manager.getInput();
+                            if (username.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                        } else if (username.isEmpty()) {
+                            manager.displayText("A users username cannot be empty!, please try again\n");
+                            username = manager.getInput();
+                            if (ID.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
                         }
                     }
 
-                    manager.displayText("Please enter the users password");
+
+                    manager.displayText("Please enter the users password:");
                     String password = manager.getInput();
                     if (password.compareTo("back") == 0) {
                         manager.setMenu(manuNames.MainManu);
                         manager.displayText("\n\n\n\n");
                         return true;
+                    }
+
+                    while (password.isEmpty()) {
+                        manager.displayText("A users password cannot be empty!, please try again\n");
+                        password = manager.getInput();
+                        if (ID.compareTo("back") == 0) {
+                            manager.setMenu(manuNames.MainManu);
+                            manager.displayText("\n\n\n\n");
+                            return true;
+                        }
                     }
 
                     boolean check = true;
@@ -848,6 +1292,9 @@ public class MenuManager {
                     check = check && dal.updateEmploymentTermsByID(ID, empTerms);
                     if (!abilities.isEmpty())
                         check = check && dal.addJobsByID(ID, abilities);
+                    if(toDrive)
+                        check = check && dal.addDriverLicenceByID(ID,licenceType);
+
                     check = check && dal.addUser(ID, username, password);
 
                     if (check) {
@@ -956,12 +1403,23 @@ public class MenuManager {
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-										"Jobs: " + TODO:get jobs*/ +
-                            "Username: " + ((User) editeduser).userName + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    manager.displayText("Username: " + ((User) editeduser).userName + "\n" +
                             "Password: " + ((User) editeduser).password + "\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Username\", \"Password\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\", \"Username\", \"Password\" or \"back\"\n");
                     return false;
                 }
             });
@@ -1006,12 +1464,24 @@ public class MenuManager {
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/ +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    manager.displayText(
                             "Username: " + ((User) editeduser).userName + "\n" +
-                            "Password: " + ((User) editeduser).password + "\n");
+                                    "Password: " + ((User) editeduser).password + "\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Username\", \"Password\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\", \"Username\", \"Password\" or \"back\"\n");
                     return false;
                 }
             });
@@ -1038,12 +1508,23 @@ public class MenuManager {
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/ +
-                            "Username: " + ((User) editeduser).userName + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    manager.displayText("Username: " + ((User) editeduser).userName + "\n" +
                             "Password: " + ((User) editeduser).password + "\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Username\", \"Password\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\", \"Username\", \"Password\" or \"back\"\n");
                     return false;
                 }
             });
@@ -1061,8 +1542,7 @@ public class MenuManager {
                             date.charAt(2) != '/' || date.charAt(5) != '/' ||
                             Integer.parseInt(date.substring(0, 2)) < 0 || Integer.parseInt(date.substring(0, 2)) > 31 ||
                             Integer.parseInt(date.substring(3, 5)) < 0 || Integer.parseInt(date.substring(3, 5)) > 12 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 16) {
+                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120) {
                         manager.displayText("Error regarding the Date!, please insert the date in DD/MM/YYYY format\n");
                         date = manager.getInput();
                         if (date.compareTo("back") == 0) {
@@ -1074,7 +1554,7 @@ public class MenuManager {
 
 
                     if (dal.updateUser((User) editeduser)) {
-                        manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                        manager.displayText("Worker Updated!, Press any key to continue.\n");
                         manager.displayText("\n\n\n\n");
                     }
 
@@ -1084,12 +1564,23 @@ public class MenuManager {
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-						"Jobs: " + TODO:get jobs*/ +
-                            "Username: " + ((User) editeduser).userName + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    manager.displayText("Username: " + ((User) editeduser).userName + "\n" +
                             "Password: " + ((User) editeduser).password + "\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Username\", \"Password\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\", \"Username\", \"Password\" or \"back\"\n");
                     return false;
                 }
             });
@@ -1104,9 +1595,9 @@ public class MenuManager {
                         manager.displayText("\n\n\n\n");
                         return true;
                     } else {
-                        editeduser.Name = ans;
+                        editeduser.EmpTerms = ans;
                         if (dal.updateUser((User) editeduser)) {
-                            manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
                             manager.displayText("\n\n\n\n");
                         }
                     }
@@ -1116,12 +1607,158 @@ public class MenuManager {
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/ +
-                            "Username: " + ((User) editeduser).userName + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    manager.displayText("Username: " + ((User) editeduser).userName + "\n" +
                             "Password: " + ((User) editeduser).password + "\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Username\", \"Password\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\", \"Username\", \"Password\" or \"back\"\n");
+                    return false;
+                }
+            });
+
+            temp.addAction("Jobs", new CallBack() {
+                public boolean call(MenuManager manager) {
+                    manager.displayText("To add a job write \"add <Job Name>\" and to delete a job write \"delete <Job Name>\"\n");
+                    manager.displayText("Possible jobs are:");
+                    boolean first = true;
+                    for(Worker.JobEnum j : Worker.JobEnum.values()){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    String ans = manager.getInput();
+                    LinkedList<Worker.JobEnum> jobListTemp = manager.getDAL().getJobsByID(editeduser.ID);
+                    if (ans.compareTo("back") == 0) {
+
+                        manager.setMenu(manuNames.MainManu);
+                        manager.displayText("\n\n\n\n");
+                        return true;
+                    }
+                    String[] jobAndWhat = ans.split(" ");
+                    boolean ansCheck = ((jobAndWhat[0].compareTo("delete") == 0)||(jobAndWhat[0].compareTo("add") == 0));
+                    try{
+                        Worker.JobEnum.valueOf(jobAndWhat[1]);
+                    } catch (IllegalArgumentException e){
+                        ansCheck = false;
+                    }
+
+                    while (!ansCheck){
+                        manager.displayText("Error while reading input, please try again.\n");
+                        manager.displayText("To add a job write \"add <Job Name>\" and to delete a job write \"delete <Job Name>\"\n");
+                        ans = manager.getInput();
+                        if (ans.compareTo("back") == 0) {
+
+                            manager.setMenu(manuNames.MainManu);
+                            manager.displayText("\n\n\n\n");
+                            return true;
+                        }
+                        jobAndWhat = ans.split(" ");
+                        ansCheck = ((jobAndWhat[0].compareTo("delete") == 0)||(jobAndWhat[0].compareTo("add") == 0));
+                        try{
+                            Worker.JobEnum.valueOf(jobAndWhat[1]);
+                        } catch (IllegalArgumentException e){
+                            ansCheck = false;
+                        }
+                    }
+
+                    if((jobAndWhat[0].compareTo("delete") == 0)){
+                        for(Worker.JobEnum j : jobListTemp){
+                            if(j.toString().compareTo(jobAndWhat[1]) == 0)
+                                if(jobAndWhat[1].compareTo("Driver") == 0){
+                                    if (dal.deleteJobByID(editeduser.ID , j) && dal.deleteDriverByID(editeduser.ID)) {
+                                        manager.displayText("Worker Updated!, Press any key to continue.\n");
+                                        manager.displayText("\n\n\n\n");
+                                    }
+                                }
+                                else if (dal.deleteJobByID(editeduser.ID , j)) {
+                                    manager.displayText("Worker Updated!, Press any key to continue.\n");
+                                    manager.displayText("\n\n\n\n");
+                                }
+                        }
+                    }
+                    else if((jobAndWhat[0].compareTo("add") == 0)) {
+                        jobListTemp.add(Worker.JobEnum.valueOf(jobAndWhat[1]));
+                        LinkedList<Worker.JobEnum> addList = new LinkedList<JobEnum>();
+                        addList.add(Worker.JobEnum.valueOf(jobAndWhat[1]));
+
+                        LicenseType licenceType = null;
+                        if(jobAndWhat[1].compareTo("Driver") == 0) {
+                            manager.displayText("Please enter the licence type:");
+                            first = true;
+                            for (LicenseType type : LicenseType.values()) {
+                                if (first) {
+                                    manager.displayText(type.toString());
+                                    first = false;
+                                } else
+                                    manager.displayText(", " + type.toString());
+                            }
+                            manager.displayText(".\n");
+                            String licence = manager.getInput();
+                            if (licence.compareTo("back") == 0) {
+                                manager.setMenu(manuNames.MainManu);
+                                manager.displayText("\n\n\n\n");
+                                return true;
+                            }
+                            boolean licenceCheck = false;
+                            while (!licenceCheck) {
+                                try {
+                                    licenceType = LicenseType.valueOf(licence);
+                                    licenceCheck = true;
+                                } catch (Exception e) {
+                                    manager.displayText("Licence type is not valid, please try again.\n");
+                                    licence = manager.getInput();
+                                }
+                            }
+                            if (dal.addJobsByID(editeduser.ID, addList) && dal.addDriverLicenceByID(editeduser.ID, licenceType)) {
+                                manager.displayText("Worker Updated!, Press any key to continue.\n");
+                                manager.displayText("\n\n\n\n");
+                            }
+                        }
+                        else if (dal.addJobsByID(editeduser.ID, addList)) {
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
+                            manager.displayText("\n\n\n\n");
+                        }
+                    }
+
+
+
+
+                    manager.displayText("Worker\n------\n" +
+                            "ID: " + editeduser.ID + "\n" +
+                            "Name: " + editeduser.Name + "\n" +
+                            "BankNo: " + editeduser.BankNO + "\n" +
+                            "Employment Date: " + editeduser.EmpDate + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\" or \"back\"\n");
                     return false;
                 }
             });
@@ -1138,7 +1775,7 @@ public class MenuManager {
                     } else {
                         ((User) editeduser).userName = ans;
                         if (dal.updateUser((User) editeduser)) {
-                            manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
                             manager.displayText("\n\n\n\n");
                         }
                     }
@@ -1148,12 +1785,23 @@ public class MenuManager {
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/ +
-                            "Username: " + ((User) editeduser).userName + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    manager.displayText("Username: " + ((User) editeduser).userName + "\n" +
                             "Password: " + ((User) editeduser).password + "\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Username\", \"Password\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\",\"Jobs\", \"Username\", \"Password\" or \"back\"\n");
                     return false;
                 }
             });
@@ -1170,7 +1818,7 @@ public class MenuManager {
                     } else {
                         ((User) editeduser).password = ans;
                         if (dal.updateUser((User) editeduser)) {
-                            manager.displayText("WorkerDBHandler Updated!, Press any key to continue.\n");
+                            manager.displayText("Worker Updated!, Press any key to continue.\n");
                             manager.displayText("\n\n\n\n");
                         }
                     }
@@ -1180,12 +1828,23 @@ public class MenuManager {
                             "Name: " + editeduser.Name + "\n" +
                             "BankNo: " + editeduser.BankNO + "\n" +
                             "Employment Date: " + editeduser.EmpDate + "\n" +
-                            "Employment Terms: " + editeduser.EmpTerms + "\n"/* +
-							"Jobs: " + TODO:get jobs*/ +
-                            "Username: " + ((User) editeduser).userName + "\n" +
+                            "Employment Terms: " + editeduser.EmpTerms + "\n" +
+                            "Jobs: ");
+                    LinkedList<Worker.JobEnum> jobList = manager.getDAL().getJobsByID(editeduser.ID);
+                    boolean first = true;
+                    for(Worker.JobEnum j : jobList){
+                        if(first){
+                            manager.displayText(j.toString());
+                            first = false;
+                        }
+                        else
+                            manager.displayText(", " + j.toString());
+                    }
+                    manager.displayText(".\n");
+                    manager.displayText("Username: " + ((User) editeduser).userName + "\n" +
                             "Password: " + ((User) editeduser).password + "\n");
 
-                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Username\", \"Password\" or \"back\"\n");
+                    manager.displayText("Please choose \"ID\", \"Name\", \"BankNo\", \"Employment Date\", \"Employment Terms\", \"Jobs\", \"Username\", \"Password\" or \"back\"\n");
                     return false;
                 }
             });
@@ -1225,7 +1884,7 @@ public class MenuManager {
                     boolean another = true;
                     LinkedList<Shift> shiftList = new LinkedList<Shift>();
                     while (another) {
-                        manager.displayText("Please enter a week day for the shift: ");
+                        /*manager.displayText("Please enter a week day for the shift: ");
                         String day = manager.getInput();
                         if (day.compareTo("back") == 0) {
                             manager.setMenu(manuNames.MainManu);
@@ -1245,7 +1904,7 @@ public class MenuManager {
 
                                 return true;
                             }
-                        }
+                        }*/
 
                         manager.displayText("Please enter the shift time (Morning or Evening): ");
                         String time = manager.getInput();
@@ -1255,7 +1914,7 @@ public class MenuManager {
 
                             return true;
                         }
-                        while ((time.compareTo("Morning") != 0) && (day.compareTo("Evening") != 0)) {
+                        while ((time.compareTo("Morning") != 0) && (time.compareTo("Evening") != 0)) {
                             manager.displayText("Can't procces time, Please try again: ");
                             time = manager.getInput();
                             if (time.compareTo("back") == 0) {
@@ -1265,7 +1924,7 @@ public class MenuManager {
                                 return true;
                             }
                         }
-                        WorkerSchedule.TypeEnum shiftTimeVar;
+                        TypeEnum shiftTimeVar;
                         if (time.compareTo("Morning") == 0)
                             shiftTimeVar = WorkerSchedule.TypeEnum.Morning;
                         else
@@ -1294,6 +1953,16 @@ public class MenuManager {
                                 return true;
                             }
                         }
+
+                        SimpleDateFormat format1=new SimpleDateFormat("dd/MM/yyyy");
+                        java.util.Date dt1= null;
+                        try {
+                            dt1 = format1.parse(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        DateFormat format2=new SimpleDateFormat("EEEE", Locale.US);
+                        String day = format2.format(dt1);
 
                         manager.displayText("Please enter the workers job from the following list:\n");
                         LinkedList<Worker.JobEnum> jobList = dal.getJobsByID(editeduser.ID);
@@ -1423,7 +2092,7 @@ public class MenuManager {
                     boolean another = true;
                     LinkedList<Shift> shiftList = new LinkedList<Shift>();
                     while (another) {
-                        manager.displayText("Please enter a week day for the shift: ");
+                        /*manager.displayText("Please enter a week day for the shift: ");
                         String day = manager.getInput();
                         if (day.compareTo("back") == 0) {
                             manager.setMenu(manuNames.MainManu);
@@ -1443,7 +2112,7 @@ public class MenuManager {
 
                                 return true;
                             }
-                        }
+                        }*/
 
                         manager.displayText("Please enter the shift time (Morning or Evening): ");
                         String time = manager.getInput();
@@ -1453,7 +2122,7 @@ public class MenuManager {
 
                             return true;
                         }
-                        while ((time.compareTo("Morning") != 0) && (day.compareTo("Evening") != 0)) {
+                        while ((time.compareTo("Morning") != 0) && (time.compareTo("Evening") != 0)) {
                             manager.displayText("Can't procces time, Please try again: ");
                             time = manager.getInput();
                             if (time.compareTo("back") == 0) {
@@ -1463,7 +2132,7 @@ public class MenuManager {
                                 return true;
                             }
                         }
-                        WorkerSchedule.TypeEnum shiftTimeVar;
+                        TypeEnum shiftTimeVar;
                         if (time.compareTo("Morning") == 0)
                             shiftTimeVar = WorkerSchedule.TypeEnum.Morning;
                         else
@@ -1492,6 +2161,16 @@ public class MenuManager {
                                 return true;
                             }
                         }
+
+                        SimpleDateFormat format1=new SimpleDateFormat("dd/MM/yyyy");
+                        java.util.Date dt1= null;
+                        try {
+                            dt1 = format1.parse(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        DateFormat format2=new SimpleDateFormat("EEEE", Locale.US);
+                        String day = format2.format(dt1);
 
                         Shift shift;
                         try {
@@ -1548,7 +2227,7 @@ public class MenuManager {
     //done
     public Menu getEditSchedule() {
         Menu temp = new Menu(true,
-                "Edit WorkerDBHandler Schedule\n--------------------\nType \"back\" to return back to the Main Menu\n" +
+                "Edit Worker Schedule\n--------------------\nType \"back\" to return back to the Main Menu\n" +
                         "Please Type \"add\" to add a shift to the Schedule or \"delete\" to delete a shift from the Schedule\n");
 
         temp.addAction("delete", new CallBack() {
@@ -1604,7 +2283,7 @@ public class MenuManager {
 
                         return true;
                     }
-                    while ((time.compareTo("Morning") != 0) && (day.compareTo("Evening") != 0)) {
+                    while ((time.compareTo("Morning") != 0) && (time.compareTo("Evening") != 0)) {
                         manager.displayText("Can't procces time, Please try again: ");
                         time = manager.getInput();
                         if (time.compareTo("back") == 0) {
@@ -1744,7 +2423,7 @@ public class MenuManager {
 
                         return true;
                     }
-                    while ((time.compareTo("Morning") != 0) && (day.compareTo("Evening") != 0)) {
+                    while ((time.compareTo("Morning") != 0) && (time.compareTo("Evening") != 0)) {
                         manager.displayText("Can't procces time, Please try again: ");
                         time = manager.getInput();
                         if (time.compareTo("back") == 0) {
@@ -1802,7 +2481,7 @@ public class MenuManager {
 
 
                 if (dal.addWorkerScheduleByID(editeduser.ID, schedList)) {
-                    manager.displayText("WorkerDBHandler schedual added to the database!\nPress any key to return back to Main Manu");
+                    manager.displayText("Worker schedual added to the database!\nPress any key to return back to Main Manu");
                     manager.getInput();
                     manager.setMenu(manuNames.MainManu);
                     manager.displayText("\n\n\n\n");
@@ -1872,7 +2551,7 @@ public class MenuManager {
                 Shift shift;
                 boolean checker = false;
 
-                manager.displayText("Please enter a week day for the shift: ");
+                /*manager.displayText("Please enter a week day for the shift: ");
                 day = manager.getInput();
                 if (day.compareTo("back") == 0) {
                     manager.setMenu(manuNames.MainManu);
@@ -1892,7 +2571,7 @@ public class MenuManager {
 
                         return true;
                     }
-                }
+                }*/
 
                 manager.displayText("Please enter the shift time (Morning or Evening): ");
                 time = manager.getInput();
@@ -1902,7 +2581,7 @@ public class MenuManager {
 
                     return true;
                 }
-                while ((time.compareTo("Morning") != 0) && (day.compareTo("Evening") != 0)) {
+                while ((time.compareTo("Morning") != 0) && (time.compareTo("Evening") != 0)) {
                     manager.displayText("Can't procces time, Please try again: ");
                     time = manager.getInput();
                     if (time.compareTo("back") == 0) {
@@ -1941,6 +2620,16 @@ public class MenuManager {
                     }
                 }
 
+                SimpleDateFormat format1=new SimpleDateFormat("dd/MM/yyyy");
+                java.util.Date dt1= null;
+                try {
+                    dt1 = format1.parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                DateFormat format2=new SimpleDateFormat("EEEE", Locale.US);
+                day = format2.format(dt1);
+
                 try {
                     shift = new Shift(day, shiftTimeVar, new Date(date), Worker.JobEnum.ShiftManager);
                 } catch (WorkerSchedule.NotValidDayException e) {
@@ -1959,7 +2648,7 @@ public class MenuManager {
                 while (checker) {
                     manager.displayText("You cannot enter a shift in which the worker already works\n");
 
-                    manager.displayText("Please enter a week day for the shift: ");
+                    /*manager.displayText("Please enter a week day for the shift: ");
                     day = manager.getInput();
                     if (day.compareTo("back") == 0) {
                         manager.setMenu(manuNames.MainManu);
@@ -1979,7 +2668,7 @@ public class MenuManager {
 
                             return true;
                         }
-                    }
+                    }*/
 
                     manager.displayText("Please enter the shift time (Morning or Evening): ");
                     time = manager.getInput();
@@ -2016,8 +2705,7 @@ public class MenuManager {
                             date.charAt(2) != '/' || date.charAt(5) != '/' ||
                             Integer.parseInt(date.substring(0, 2)) < 0 || Integer.parseInt(date.substring(0, 2)) > 31 ||
                             Integer.parseInt(date.substring(3, 5)) < 0 || Integer.parseInt(date.substring(3, 5)) > 12 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 16) {
+                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120) {
                         manager.displayText("Can't procces date, Please try again: ");
                         date = manager.getInput();
                         if (date.compareTo("back") == 0) {
@@ -2027,6 +2715,18 @@ public class MenuManager {
                             return true;
                         }
                     }
+
+
+
+                    format1=new SimpleDateFormat("dd/MM/yyyy");
+                    dt1= null;
+                    try {
+                        dt1 = format1.parse(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    format2=new SimpleDateFormat("EEEE", Locale.US);
+                    day = format2.format(dt1);
 
                     try {
                         shift = new Shift(day, shiftTimeVar, new Date(date), Worker.JobEnum.ShiftManager);
@@ -2061,7 +2761,8 @@ public class MenuManager {
     }
 
     //done
-    public Menu getSearchShifts() {
+    public Menu getSearchShifts()
+    {
         if (loggedIn.abilities.contains(Worker.JobEnum.HRManager)) {
             Menu temp = new Menu(false,
                     "Search Shifts\n-------------\nType \"back\" to return back to the Main Menu\n");
@@ -2069,7 +2770,7 @@ public class MenuManager {
             temp.addAction("def", new CallBack() {
                 public boolean call(MenuManager manager) {
 
-                    manager.displayText("Please enter a week day for the shift: ");
+                    /*manager.displayText("Please enter a week day for the shift: ");
                     String day = manager.getInput();
                     if (day.compareTo("back") == 0) {
                         manager.setMenu(manuNames.MainManu);
@@ -2089,7 +2790,7 @@ public class MenuManager {
 
                             return true;
                         }
-                    }
+                    }*/
 
                     manager.displayText("Please enter the shift time (Morning or Evening): ");
                     String time = manager.getInput();
@@ -2099,7 +2800,7 @@ public class MenuManager {
 
                         return true;
                     }
-                    while ((time.compareTo("Morning") != 0) && (day.compareTo("Evening") != 0)) {
+                    while ((time.compareTo("Morning") != 0) && (time.compareTo("Evening") != 0)) {
                         manager.displayText("Can't procces time, Please try again: ");
                         time = manager.getInput();
                         if (time.compareTo("back") == 0) {
@@ -2109,7 +2810,7 @@ public class MenuManager {
                             return true;
                         }
                     }
-                    WorkerSchedule.TypeEnum shiftTimeVar;
+                    TypeEnum shiftTimeVar;
                     if (time.compareTo("Morning") == 0)
                         shiftTimeVar = WorkerSchedule.TypeEnum.Morning;
                     else
@@ -2127,8 +2828,7 @@ public class MenuManager {
                             date.charAt(2) != '/' || date.charAt(5) != '/' ||
                             Integer.parseInt(date.substring(0, 2)) < 0 || Integer.parseInt(date.substring(0, 2)) > 31 ||
                             Integer.parseInt(date.substring(3, 5)) < 0 || Integer.parseInt(date.substring(3, 5)) > 12 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120 ||
-                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 16) {
+                            Integer.parseInt(date.substring(6, 10)) < Calendar.getInstance().get(Calendar.YEAR) - 120) {
                         manager.displayText("Can't procces date, Please try again: ");
                         date = manager.getInput();
                         if (date.compareTo("back") == 0) {
@@ -2138,6 +2838,16 @@ public class MenuManager {
                             return true;
                         }
                     }
+
+                    SimpleDateFormat format1=new SimpleDateFormat("dd/MM/yyyy");
+                    java.util.Date dt1= null;
+                    try {
+                        dt1 = format1.parse(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DateFormat format2=new SimpleDateFormat("EEEE", Locale.US);
+                    String day = format2.format(dt1);
 
                     Shift shift;
                     try {
@@ -2176,7 +2886,7 @@ public class MenuManager {
                             manager.displayText(space + "|");
                         }
 
-                        Worker.JobEnum newJob = null;
+                        JobEnum newJob = null;
                         LinkedList<Shift> shiftList = manager.dal.getShiftsByWorkerID(w.ID);
 
                         for (Shift s : shiftList) {
@@ -2266,7 +2976,7 @@ public class MenuManager {
 
                             return true;
                         }
-                        while ((time.compareTo("Morning") != 0) && (day.compareTo("Evening") != 0)) {
+                        while ((time.compareTo("Morning") != 0) && (time.compareTo("Evening") != 0)) {
                             manager.displayText("Can't procces time, Please try again: ");
                             time = manager.getInput();
                             if (time.compareTo("back") == 0) {
@@ -2276,7 +2986,7 @@ public class MenuManager {
                                 return true;
                             }
                         }
-                        WorkerSchedule.TypeEnum shiftTimeVar;
+                        TypeEnum shiftTimeVar;
                         if (time.compareTo("Morning") == 0)
                             shiftTimeVar = WorkerSchedule.TypeEnum.Morning;
                         else
@@ -2358,7 +3068,7 @@ public class MenuManager {
                             manager.displayText(space + "|");
                         }
 
-                        Worker.JobEnum newJob = null;
+                        JobEnum newJob = null;
                         LinkedList<Shift> shiftList = manager.dal.getShiftsByWorkerID(w.ID);
 
                         for (Shift s : shiftList) {

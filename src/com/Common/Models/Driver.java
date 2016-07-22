@@ -23,24 +23,6 @@ public class Driver extends Worker {
     }
 
     public boolean isLicenseBiggerThan(LicenseType driverLicenseType){
-        LicenseType[] lts = LicenseType.values();
-        String[] strlts = new String[lts.length];
-        int numOfGivenLT = -1;
-        int numOfCurrentLT = -2;
-        for(int i = 0; i < lts.length; i++){
-            if(lts[i].name().equals(driverLicenseType.name())){
-                numOfGivenLT = i;
-            }
-            if(lts[i].name().equals(this.DriverLicenseType.name())){
-                numOfCurrentLT = i;
-            }
-        }
-
-        if(numOfCurrentLT >= numOfGivenLT)
-            return true;
-        else
-            return true; //temporary
-
-
+        return this.DriverLicenseType.isBigger(driverLicenseType);
     }
 }

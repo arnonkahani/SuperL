@@ -1,15 +1,22 @@
 package com.Transpotation;
 
+import com.Common.DB.AlreadyExistsException;
 import com.Common.DB.DB;
+import com.Common.DB.IDBHandler;
+import com.Common.DB.UsedException;
 import com.Common.ISupplierStorage;
 import com.Common.ITransportation;
 import com.Common.Models.Driver;
+import com.Common.Models.LicenseType;
 import com.Common.Models.Order;
+import com.Common.UI.Editor;
+import com.Common.UI.Table;
 import com.SupplierStorage.BE.OrderProduct;
 import com.SupplierStorage.SupplierStorage;
 import com.Transpotation.Models.*;
 import com.Workers.Workers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -82,10 +89,6 @@ public class Transportation implements ITransportation {
             Driver driver = null;
             List<Truck> trucks = db.getTruckDBHandler().all();
 
-            if(trucks.size() == 0){
-                throw new NoTrucksAvailable();
-            }
-
             for(Truck t : trucks){
                 List<Driver> drivers = Workers.getInstance().availableDrivers(t.getLicenseType(),time, isWeekly);
                 if(drivers.size() > 0){
@@ -95,8 +98,24 @@ public class Transportation implements ITransportation {
                 }
             }
 
-            if(driver == null)
-                throw new NoDriversAvailable();
+            if(truck == null || driver == null){
+                LicenseType min = LicenseType.C;
+                Driver minDriver = null;
+                float weight = 0;
+
+                List<Driver> drivers = Workers.getInstance().availableDrivers(LicenseType.A,time,isWeekly);
+                for(Driver d : drivers)
+                    if(min.isBigger(d.getDriverLicenseType())){
+                        min = d.getDriverLicenseType();
+                        minDriver = d;
+                    }
+
+                for(Order o : orders)
+                    weight += o.get_weight();
+
+                truck = selectMatchingTruck(min,weight);
+                driver = minDriver;
+            }
 
             Map<Area,List<OrderDocument>> map = new HashMap<>();
             for(Order o : orders){
@@ -141,7 +160,68 @@ public class Transportation implements ITransportation {
         }
     }
 
+    private Truck selectMatchingTruck(LicenseType licenseType, double weight){
+        System.out.println("We have not found any trucks matching the criteria for this transportation.");
+        System.out.println("Truck must be of maximum licence type: " + licenseType);
+        System.out.println("and must be able to carry at least: " + weight);
+        System.out.println("Please create or edit a matching truck and then select it:");
 
+        IDBHandler<Truck> handler = db.getTruckDBHandler();
+        List<Truck> list = handler.all();
+
+        Table<Truck> table = new Table<>(Truck.class,list);
+        table.setEditAction((i,t)-> {
+            Truck truck = new Editor<>(Truck.class,t).edit();
+            if(truck != null)
+                handler.update(truck);
+        });
+        table.setDeleteAction((i,t)->{
+            try{
+                handler.delete(t.getLicenseNumber());
+                list.remove(t);
+            }
+            catch (UsedException e){
+                System.out.println("This place is used and referenced by another entity.");
+                System.out.println("<<OPERATION CANCELED>>");
+            }
+        });
+        table.setNewAction(()->{
+            System.out.println("Enter the following info to make a new Truck:");
+            Truck t = new Editor<>(Truck.class,new Truck()).edit();
+            if(t != null){
+                try{
+                    handler.insert(t);
+                    list.clear();
+                    list.addAll(handler.all());
+                }
+                catch (AlreadyExistsException e){
+                    System.out.println("A Truck with this LicenceNumber already exists.");
+                    System.out.println("<<OPERATION CANCELED>>");
+                }
+            }
+        });
+
+        Truck truck = null;
+        try {
+
+            while(truck == null){
+                truck = table.select();
+
+                if(!licenseType.isBigger(truck.getLicenseType())){
+                    System.out.println("Truck must be of maximum licence type: " + licenseType);
+                    truck = null;
+                }
+
+                if((truck.getMaxWeight() - truck.getNetWeight()) < weight){
+                    System.out.println("Truck must be able to carry at least: " + weight);
+                    truck = null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return truck;
+    }
 
     @Override
     public List<Place> getAllPlaces() {
