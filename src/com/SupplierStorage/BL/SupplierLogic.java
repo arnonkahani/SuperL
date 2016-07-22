@@ -136,4 +136,8 @@ public class SupplierLogic {
 		}
 		return or;
 	}
+
+	public void sentOrder(String id) {
+		_om.sentOrder(id);
+	}
 }

@@ -163,5 +163,9 @@ public class ViewController {
 	public Order getOrder(String id) {
 		return _bc.getSupplierLogic().getOrder(id);
 	}
+
+	public void sentOrder(String id) {
+		_bc.getSupplierLogic().sentOrder(id);
+	}
 }
 

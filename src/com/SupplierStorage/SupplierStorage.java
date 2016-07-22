@@ -52,6 +52,6 @@ public class SupplierStorage implements ISupplierStorage {
 
     @Override
     public void sentOrder(String id) {
-
+        vc.sentOrder(id);
     }
 }

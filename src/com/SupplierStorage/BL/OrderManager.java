@@ -244,4 +244,12 @@ public class OrderManager extends LogicManager<DAOOrder,Order>{
 			e.printStackTrace();
 		}
 	}
+
+	public void sentOrder(String id) {
+		try {
+			_db.updateOrder(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
