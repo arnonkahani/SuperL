@@ -31,7 +31,7 @@ public class SupplyAgreementManager extends LogicManager<DAOSupplyAgreement,Supp
 		if(value.get_dType().equals(DelevryType.cometake) && value.get_sType().equals(SupplyType.setday)) {
 			ArrayList<DayOfWeek> days = new ArrayList<>();
 			for (Day d:value.get_day()) {
-				if(d.getValue()==0)
+				if(d.getValue()==1)
 					days.add(DayOfWeek.of(7));
 				else
 					days.add(DayOfWeek.of(d.getValue()-1));
